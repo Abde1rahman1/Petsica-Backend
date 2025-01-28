@@ -1,0 +1,6 @@
+@Petsica.API_HostAddress = http://localhost:5129
+
+GET {{Petsica.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
