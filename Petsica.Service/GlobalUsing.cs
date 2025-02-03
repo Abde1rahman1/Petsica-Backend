@@ -1,0 +1,11 @@
+﻿global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.IdentityModel.Tokens;
+global using Petsica.Infrastructure;
+global using Petsica.Infrastructure.DBModel;
+global using Petsica.Infrastructure.Service.Authrization;
+global using Petsica.Service.Service.Authrization;
+global using Petsica.Shared.Contracts.Authrization;
+global using System.Text;
