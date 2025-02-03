@@ -1,30 +1,42 @@
-using Microsoft.EntityFrameworkCore;
-using Petsica.Core.Persistence;
-using Petsica.Infrastructure;
+﻿using Serilog;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-var app = builder.Build();
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+namespace Petsica.API
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddDependencies(builder.Configuration);
+
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration)
+            );
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseSerilogRequestLogging();
+
+            app.UseHttpsRedirection();
+
+            app.UseCors();
+
+            app.UseAuthorization();
+
+            app.MapControllers();
+
+            app.UseExceptionHandler();
+
+            app.Run();
+
+        }
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
