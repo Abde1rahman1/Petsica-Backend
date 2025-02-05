@@ -20,7 +20,11 @@ namespace Petsica.Infrastructure
             return services;
         }
 
+<<<<<<< HEAD
         public static IServiceCollection AddMapsterConfig(this IServiceCollection services)
+=======
+        private static IServiceCollection AddMapsterConfig(this IServiceCollection services)
+>>>>>>> 329df3e52952832db9600b6bd3928ae61f3da4aa
         {
             var mappingConfig = TypeAdapterConfig.GlobalSettings;
             mappingConfig.Scan(Assembly.GetExecutingAssembly());

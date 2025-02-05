@@ -59,10 +59,17 @@ namespace Petsica.API
 
         //private static IServiceCollection AddMapsterConfig(this IServiceCollection services)
         //{
+<<<<<<< HEAD
         //    var mappingconfig = TypeAdapterConfig.GlobalSettings;
         //    mappingconfig.Scan(Assembly.GetExecutingAssembly());
 
         //    services.AddSingleton<IMapper>(new Mapper(mappingconfig));
+=======
+        //    var mappingConfig = TypeAdapterConfig.GlobalSettings;
+        //    mappingConfig.Scan(Assembly.GetExecutingAssembly());
+
+        //    services.AddSingleton<IMapper>(new Mapper(mappingConfig));
+>>>>>>> 329df3e52952832db9600b6bd3928ae61f3da4aa
 
         //    return services;
         //}
