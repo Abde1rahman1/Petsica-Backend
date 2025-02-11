@@ -25,7 +25,7 @@ namespace Petsica.Infrastructure.Service.Authrization
 
         public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
         {
-<<<<<<< HEAD
+
             var user = await _userManager.FindByEmailAsync(email);
 
             if (user is null)
@@ -51,33 +51,8 @@ namespace Petsica.Infrastructure.Service.Authrization
             var response = new AuthResponse(user.Id, user.Email, token, expiresIn, refreshToken, refreshTokenExpiration);
 
             return Result.Success(response);
-=======
-            if (await _userManager.FindByEmailAsync(email) is not { } user)
-                return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-            var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
 
-            if (result.Succeeded)
-            {
-                var (token, expiresIn) = _jwtProvider.GenerateToken(user);
-                var refreshToken = GenerateRefreshToken();
-                var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpiryDays);
-
-                user.RefreshTokens.Add(new RefreshToken
-                {
-                    Token = refreshToken,
-                    ExpiresOn = refreshTokenExpiration
-                });
-
-                await _userManager.UpdateAsync(user);
-
-                var response = new AuthResponse(user.Id, user.Email, token, expiresIn, refreshToken, refreshTokenExpiration);
-
-                return Result.Success(response);
-            }
-
-            return Result.Failure<AuthResponse>(result.IsNotAllowed ? UserErrors.EmailNotConfirmed : UserErrors.InvalidCredentials);
->>>>>>> 329df3e52952832db9600b6bd3928ae61f3da4aa
         }
 
 

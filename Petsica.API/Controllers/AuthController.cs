@@ -12,11 +12,8 @@ namespace Petsica.API.Controllers
         private readonly IAuthService _authService = authService;
         private readonly ILogger<AuthController> _logger = logger;
 
-<<<<<<< HEAD
         [HttpPost("Login")]
-=======
-        [HttpPost("")]
->>>>>>> 329df3e52952832db9600b6bd3928ae61f3da4aa
+
         public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
         {
             _logger.LogInformation("Logging with email: {email} and password: {password}", request.Email, request.Password);
