@@ -1,19 +1,23 @@
 ﻿using Petsica.Core.Const;
-namespace Petsica.Shared.Contracts.Authrization
+using Petsica.Shared.Contracts.Authrization.Request;
+
+namespace Petsica.Shared.Contracts.Authrization.Validation
 {
-    public class RegisterRequestValidator : AbstractValidator<RegisterRequest>
+    public class ResetPasswordRequestValidator : AbstractValidator<ResetPasswordRequest>
     {
-        public RegisterRequestValidator()
+        public ResetPasswordRequestValidator()
         {
             RuleFor(x => x.Email)
                 .NotEmpty()
                 .EmailAddress();
 
-            RuleFor(x => x.Password)
+            RuleFor(x => x.Code)
+               .NotEmpty();
+
+            RuleFor(x => x.NewPassword)
                 .NotEmpty()
                 .Matches(RegexPatterns.Password)
                 .WithMessage("Password should be at least 8 digits and should contains Lowercase, NonAlphanumeric and Uppercase");
-
         }
     }
 }

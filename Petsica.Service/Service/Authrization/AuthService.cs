@@ -1,26 +1,18 @@
-﻿using Mapster;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Petsica.Shared.Error;
-using Petsica.Shared.Result;
-using System.Security.Cryptography;
-
-namespace Petsica.Infrastructure.Service.Authrization
+﻿namespace Petsica.Service.Service.Authrization
 {
     public class AuthService(
      UserManager<ApplicationUser> userManager,
      SignInManager<ApplicationUser> signInManager,
      IJwtProvider jwtProvider,
-     ILogger<AuthService> logger
+     ILogger<AuthService> logger,
+     ApplicationDbContext context
     ) : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
         private readonly ILogger<AuthService> _logger = logger;
-
+        private readonly ApplicationDbContext _context = context;
         private readonly int _refreshTokenExpiryDays = 14;
 
         public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
@@ -127,6 +119,10 @@ namespace Petsica.Infrastructure.Service.Authrization
 
             var result = await _userManager.CreateAsync(user, request.Password);
 
+            var userContext = new User { UserID = user.Id };
+
+            var resultContext = await _context.Users.AddAsync(userContext);
+
             if (result.Succeeded)
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -189,12 +185,52 @@ namespace Petsica.Infrastructure.Service.Authrization
 
             return Result.Success();
         }
+        public async Task<Result> ResetPasswordAsync(ResetPasswordRequest request)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
 
+            if (user is null || !user.EmailConfirmed)
+                return Result.Failure(UserErrors.InvalidCode);
+
+            IdentityResult result;
+
+            try
+            {
+                var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Code));
+                result = await _userManager.ResetPasswordAsync(user, code, request.NewPassword);
+            }
+            catch (FormatException)
+            {
+                result = IdentityResult.Failed(_userManager.ErrorDescriber.InvalidToken());
+            }
+
+            if (result.Succeeded)
+                return Result.Success();
+
+            var error = result.Errors.First();
+
+            return Result.Failure(new Errors(error.Code, error.Description, StatusCodes.Status401Unauthorized));
+        }
+
+        public async Task<Result> SendResetPasswordCodeAsync(string email)
+        {
+            if (await _userManager.FindByEmailAsync(email) is not { } user)
+                return Result.Success();
+
+            if (!user.EmailConfirmed)
+                return Result.Failure(UserErrors.EmailNotConfirmed);
+
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+            _logger.LogInformation("Reset code: {code}", code);
+
+            return Result.Success();
+        }
         private static string GenerateRefreshToken()
         {
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
         }
-
 
     }
 }

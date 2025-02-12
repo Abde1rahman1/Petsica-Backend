@@ -12,7 +12,7 @@ public class SellerApprovalConfiguration : IEntityTypeConfiguration<SellerApprov
         #region Relationships
         builder.HasOne(s => s.Seller)
                .WithMany()
-               .HasForeignKey(s => s.SellerID);
+               .HasForeignKey(s => s.SellerID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

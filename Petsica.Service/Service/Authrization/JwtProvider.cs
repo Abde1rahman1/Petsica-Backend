@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace Petsica.Infrastructure.Service.Authrization
+namespace Petsica.Service.Service.Authrization
 {
     public class JwtProvider(IOptions<JwtOptions> options) : IJwtProvider
     {

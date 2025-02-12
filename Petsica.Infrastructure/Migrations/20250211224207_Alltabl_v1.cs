@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Petsica.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAllTables : Migration
+    public partial class Alltabl_v1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,7 @@ namespace Petsica.Infrastructure.Migrations
                 name: "Admins",
                 columns: table => new
                 {
-                    AdminID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AdminID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
@@ -27,11 +26,53 @@ namespace Petsica.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetRoles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NationalID = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Clinics",
                 columns: table => new
                 {
-                    ClinicID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClinicID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -52,17 +93,7 @@ namespace Petsica.Infrastructure.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    UserID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NationalID = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,15 +101,143 @@ namespace Petsica.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RefreshToken",
+                columns: table => new
+                {
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpiresOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RevokedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RefreshToken", x => new { x.ApplicationUserId, x.Id });
+                    table.ForeignKey(
+                        name: "FK_RefreshToken_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClinicApprovals",
                 columns: table => new
                 {
-                    ApprovalID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApprovalID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ApprovalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AdminID = table.Column<int>(type: "int", nullable: false),
-                    ClinicID = table.Column<int>(type: "int", nullable: false)
+                    AdminID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClinicID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -87,14 +246,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_ClinicApprovals_Admins_AdminID",
                         column: x => x.AdminID,
                         principalTable: "Admins",
-                        principalColumn: "AdminID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AdminID");
                     table.ForeignKey(
                         name: "FK_ClinicApprovals_Clinics_ClinicID",
                         column: x => x.ClinicID,
                         principalTable: "Clinics",
-                        principalColumn: "ClinicID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ClinicID");
                 });
 
             migrationBuilder.CreateTable(
@@ -103,8 +260,8 @@ namespace Petsica.Infrastructure.Migrations
                 {
                     MessageID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClinicReceiverID = table.Column<int>(type: "int", nullable: false),
-                    ClinicSenderID = table.Column<int>(type: "int", nullable: true),
+                    ClinicReceiverID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClinicSenderID = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -115,8 +272,7 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_ClinicMessageClinics_Clinics_ClinicReceiverID",
                         column: x => x.ClinicReceiverID,
                         principalTable: "Clinics",
-                        principalColumn: "ClinicID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ClinicID");
                     table.ForeignKey(
                         name: "FK_ClinicMessageClinics_Clinics_ClinicSenderID",
                         column: x => x.ClinicSenderID,
@@ -132,7 +288,7 @@ namespace Petsica.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     TotalPrice = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -141,8 +297,7 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_Orders_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -156,7 +311,7 @@ namespace Petsica.Infrastructure.Migrations
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Breed = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -165,8 +320,7 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_Pets_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -178,7 +332,7 @@ namespace Petsica.Infrastructure.Migrations
                     Content = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Photo = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,8 +341,7 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_Posts_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -203,7 +356,7 @@ namespace Petsica.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
-                    SellerID = table.Column<int>(type: "int", nullable: false)
+                    SellerID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -212,20 +365,18 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_Products_Users_SellerID",
                         column: x => x.SellerID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
                 name: "SellerApprovals",
                 columns: table => new
                 {
-                    ApprovalID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApprovalID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ApprovalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AdminID = table.Column<int>(type: "int", nullable: false),
-                    SellerID = table.Column<int>(type: "int", nullable: false)
+                    AdminID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SellerID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -234,14 +385,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_SellerApprovals_Admins_AdminID",
                         column: x => x.AdminID,
                         principalTable: "Admins",
-                        principalColumn: "AdminID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AdminID");
                     table.ForeignKey(
                         name: "FK_SellerApprovals_Users_SellerID",
                         column: x => x.SellerID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -250,7 +399,7 @@ namespace Petsica.Infrastructure.Migrations
                 {
                     ServiceID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    SitterID = table.Column<int>(type: "int", nullable: false),
+                    SitterID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
@@ -263,20 +412,18 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_Services_Users_SitterID",
                         column: x => x.SitterID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
                 name: "SitterApprovals",
                 columns: table => new
                 {
-                    ApprovalID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ApprovalID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ApprovalDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AdminID = table.Column<int>(type: "int", nullable: false),
-                    SitterID = table.Column<int>(type: "int", nullable: false)
+                    AdminID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    SitterID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -285,14 +432,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_SitterApprovals_Admins_AdminID",
                         column: x => x.AdminID,
                         principalTable: "Admins",
-                        principalColumn: "AdminID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "AdminID");
                     table.ForeignKey(
                         name: "FK_SitterApprovals_Users_SitterID",
                         column: x => x.SitterID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -301,8 +446,8 @@ namespace Petsica.Infrastructure.Migrations
                 {
                     MessageID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(type: "int", nullable: false),
-                    ClinicID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClinicID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -313,14 +458,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_UserMessageClinics_Clinics_ClinicID",
                         column: x => x.ClinicID,
                         principalTable: "Clinics",
-                        principalColumn: "ClinicID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ClinicID");
                     table.ForeignKey(
                         name: "FK_UserMessageClinics_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -329,8 +472,8 @@ namespace Petsica.Infrastructure.Migrations
                 {
                     MessageID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserReceiverID = table.Column<int>(type: "int", nullable: false),
-                    UserSenderID = table.Column<int>(type: "int", nullable: false),
+                    UserReceiverID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserSenderID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -341,21 +484,19 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_UserMessageUsers_Users_UserReceiverID",
                         column: x => x.UserReceiverID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                     table.ForeignKey(
                         name: "FK_UserMessageUsers_Users_UserSenderID",
                         column: x => x.UserSenderID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
                 name: "UserMakeOrders",
                 columns: table => new
                 {
-                    UserID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OrderID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -365,14 +506,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_UserMakeOrders_Orders_OrderID",
                         column: x => x.OrderID,
                         principalTable: "Orders",
-                        principalColumn: "OrderID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "OrderID");
                     table.ForeignKey(
                         name: "FK_UserMakeOrders_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -380,7 +519,7 @@ namespace Petsica.Infrastructure.Migrations
                 columns: table => new
                 {
                     PetID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -391,14 +530,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_UserRemindPets_Pets_PetID",
                         column: x => x.PetID,
                         principalTable: "Pets",
-                        principalColumn: "PetID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "PetID");
                     table.ForeignKey(
                         name: "FK_UserRemindPets_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -406,7 +543,7 @@ namespace Petsica.Infrastructure.Migrations
                 columns: table => new
                 {
                     PetID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -416,14 +553,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_UserRequestPets_Pets_PetID",
                         column: x => x.PetID,
                         principalTable: "Pets",
-                        principalColumn: "PetID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "PetID");
                     table.ForeignKey(
                         name: "FK_UserRequestPets_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -435,7 +570,7 @@ namespace Petsica.Infrastructure.Migrations
                     Content = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PostID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -444,14 +579,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_UserCommentPosts_Posts_PostID",
                         column: x => x.PostID,
                         principalTable: "Posts",
-                        principalColumn: "PostID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "PostID");
                     table.ForeignKey(
                         name: "FK_UserCommentPosts_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -461,7 +594,7 @@ namespace Petsica.Infrastructure.Migrations
                     LikeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PostID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -470,14 +603,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_UserLikePosts_Posts_PostID",
                         column: x => x.PostID,
                         principalTable: "Posts",
-                        principalColumn: "PostID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "PostID");
                     table.ForeignKey(
                         name: "FK_UserLikePosts_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -485,7 +616,7 @@ namespace Petsica.Infrastructure.Migrations
                 columns: table => new
                 {
                     ProductID = table.Column<int>(type: "int", nullable: false),
-                    SellerID = table.Column<int>(type: "int", nullable: false)
+                    SellerID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -494,14 +625,12 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_SellerManageProducts_Products_ProductID",
                         column: x => x.ProductID,
                         principalTable: "Products",
-                        principalColumn: "ProductID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ProductID");
                     table.ForeignKey(
                         name: "FK_SellerManageProducts_Users_SellerID",
                         column: x => x.SellerID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateTable(
@@ -509,7 +638,7 @@ namespace Petsica.Infrastructure.Migrations
                 columns: table => new
                 {
                     ServiceID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -518,15 +647,52 @@ namespace Petsica.Infrastructure.Migrations
                         name: "FK_UserRequestServices_Services_ServiceID",
                         column: x => x.ServiceID,
                         principalTable: "Services",
-                        principalColumn: "ServiceID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "ServiceID");
                     table.ForeignKey(
                         name: "FK_UserRequestServices_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "UserID");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetRoleClaims_RoleId",
+                table: "AspNetRoleClaims",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "RoleNameIndex",
+                table: "AspNetRoles",
+                column: "NormalizedName",
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserClaims_UserId",
+                table: "AspNetUserClaims",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserLogins_UserId",
+                table: "AspNetUserLogins",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUserRoles_RoleId",
+                table: "AspNetUserRoles",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName",
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ClinicApprovals_AdminID",
@@ -663,10 +829,28 @@ namespace Petsica.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "AspNetRoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserClaims");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserLogins");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
                 name: "ClinicApprovals");
 
             migrationBuilder.DropTable(
                 name: "ClinicMessageClinics");
+
+            migrationBuilder.DropTable(
+                name: "RefreshToken");
 
             migrationBuilder.DropTable(
                 name: "SellerApprovals");
@@ -700,6 +884,12 @@ namespace Petsica.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserRequestServices");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Products");

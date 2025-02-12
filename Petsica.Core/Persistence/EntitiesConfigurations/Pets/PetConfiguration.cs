@@ -18,7 +18,7 @@ public class PetConfiguration : IEntityTypeConfiguration<Pet>
         #region Relationships
         builder.HasOne(p => p.User)
                .WithMany(u => u.Pets)
-               .HasForeignKey(p => p.UserID);
+               .HasForeignKey(p => p.UserID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

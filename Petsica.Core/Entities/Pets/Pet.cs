@@ -11,11 +11,11 @@ public class Pet
 
 
     #region Foreign Key
-    public int UserID { get; set; }
+    public string UserID { get; set; }
     #endregion
 
     #region Navigation Property
-  
+
     public User User { get; set; }
     #endregion
 }

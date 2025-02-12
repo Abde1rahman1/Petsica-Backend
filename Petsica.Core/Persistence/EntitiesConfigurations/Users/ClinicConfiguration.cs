@@ -16,11 +16,11 @@ public class ClinicConfiguration : IEntityTypeConfiguration<Clinic>
         #region Relationships
         builder.HasMany(c => c.ClinicMessages)
                .WithOne(m => m.Sender)
-               .HasForeignKey(m => m.ClinicSenderID);
+               .HasForeignKey(m => m.ClinicSenderID).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(c => c.UserMessages)
                .WithOne(m => m.Clinic)
-               .HasForeignKey(m => m.ClinicID);
+               .HasForeignKey(m => m.ClinicID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

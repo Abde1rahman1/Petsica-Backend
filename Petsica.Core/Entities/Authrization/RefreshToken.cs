@@ -1,5 +1,6 @@
-﻿namespace Petsica.Shared.Contracts.Authrization
+﻿namespace Petsica.Core.Entities.Authrization
 {
+    [Owned]
     public class RefreshToken
     {
         public string Token { get; set; } = string.Empty;

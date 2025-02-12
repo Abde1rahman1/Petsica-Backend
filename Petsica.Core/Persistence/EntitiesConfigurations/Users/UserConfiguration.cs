@@ -7,42 +7,30 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(u => u.UserID);
 
-        builder.Property(u => u.Username)
-               .IsRequired()
-               .HasMaxLength(15);
-
-        builder.Property(u => u.Email)
-               .IsRequired()
-               .HasMaxLength(50);
-
-        builder.Property(u => u.Password)
-               .IsRequired()
-               .HasMaxLength(50);
-
         #region Relationships
         builder.HasMany(u => u.Pets)
                .WithOne(p => p.User)
-               .HasForeignKey(p => p.UserID);
+               .HasForeignKey(p => p.UserID).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(u => u.Posts)
                .WithOne(p => p.User)
-               .HasForeignKey(p => p.UserID);
+               .HasForeignKey(p => p.UserID).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(u => u.Comments)
                .WithOne(c => c.User)
-               .HasForeignKey(c => c.UserID);
+               .HasForeignKey(c => c.UserID).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(u => u.Likes)
                .WithOne(l => l.User)
-               .HasForeignKey(l => l.UserID);
+               .HasForeignKey(l => l.UserID).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(u => u.Orders)
                .WithOne(o => o.User)
-               .HasForeignKey(o => o.UserID);
+               .HasForeignKey(o => o.UserID).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(u => u.RequestedServices)
                .WithOne(r => r.User)
-               .HasForeignKey(r => r.UserID);
+               .HasForeignKey(r => r.UserID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

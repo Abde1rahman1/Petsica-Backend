@@ -10,11 +10,11 @@ public class UserRequestServiceConfiguration : IEntityTypeConfiguration<UserRequ
         #region Relationships
         builder.HasOne(r => r.User)
                .WithMany(u => u.RequestedServices)
-               .HasForeignKey(r => r.UserID);
+               .HasForeignKey(r => r.UserID).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(r => r.Service)
                .WithMany(s => s.Requests)
-               .HasForeignKey(r => r.ServiceID);
+               .HasForeignKey(r => r.ServiceID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Petsica.Service.Service.Authrization;
-using Petsica.Shared.Contracts.Authrization;
+using Petsica.Shared.Contracts.Authrization.Request;
 using Petsica.Shared.Result;
 
 namespace Petsica.API.Controllers
@@ -21,11 +21,6 @@ namespace Petsica.API.Controllers
             var authResult = await _authService.GetTokenAsync(request.Email, request.Password, cancellationToken);
 
             return authResult.IsSuccess ? Ok(authResult.Value) : authResult.ToProblem();
-
-            //return authResult.Match(
-            //    Ok,
-            //    error => Problem(statusCode: StatusCodes.Status400BadRequest, title: error.Code, detail: error.Description)
-            //);
         }
 
         [HttpPost("refresh")]
@@ -64,6 +59,22 @@ namespace Petsica.API.Controllers
         public async Task<IActionResult> ResendConfirmationEmail([FromBody] ResendConfirmationEmailRequest request, CancellationToken cancellationToken)
         {
             var result = await _authService.ResendConfirmationEmailAsync(request);
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
+        }
+
+        [HttpPost("forget-password")]
+        public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordRequest request)
+        {
+            var result = await _authService.SendResetPasswordCodeAsync(request.Email);
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            var result = await _authService.ResetPasswordAsync(request);
 
             return result.IsSuccess ? Ok() : result.ToProblem();
         }

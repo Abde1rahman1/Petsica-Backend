@@ -1,4 +1,4 @@
-﻿namespace Petsica.Shared.Contracts.Authrization
+﻿namespace Petsica.Shared.Contracts.Authrization.Response
 {
     public record AuthResponse(
         string Id,

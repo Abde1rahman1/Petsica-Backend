@@ -1,4 +1,7 @@
-﻿namespace Petsica.Service
+﻿using Petsica.Service.Abstractions.Users;
+using Petsica.Service.Service.Users;
+
+namespace Petsica.Service
 {
     public static class DependencyInjectionService
     {
@@ -8,6 +11,7 @@
 
 
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
 
 
             return services;

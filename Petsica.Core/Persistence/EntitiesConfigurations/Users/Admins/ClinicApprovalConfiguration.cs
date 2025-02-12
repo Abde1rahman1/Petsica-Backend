@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Petsica.Core.Persistence.EntitiesConfigurations.Users.Admins;
+﻿namespace Petsica.Core.Persistence.EntitiesConfigurations.Users.Admins;
 public class ClinicApprovalConfiguration : IEntityTypeConfiguration<ClinicApproval>
 {
     public void Configure(EntityTypeBuilder<ClinicApproval> builder)
@@ -18,7 +12,7 @@ public class ClinicApprovalConfiguration : IEntityTypeConfiguration<ClinicApprov
         #region Relationships
         builder.HasOne(c => c.Clinic)
                .WithMany(c => c.Approvals)
-               .HasForeignKey(c => c.ClinicID);
+               .HasForeignKey(c => c.ClinicID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

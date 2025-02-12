@@ -9,7 +9,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         #region Relationships
         builder.HasOne(o => o.User)
                .WithMany(u => u.Orders)
-               .HasForeignKey(o => o.UserID);
+               .HasForeignKey(o => o.UserID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

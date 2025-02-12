@@ -1,6 +1,4 @@
-﻿using Petsica.Shared.Result;
-
-namespace Petsica.Service.Service.Authrization
+﻿namespace Petsica.Service.Service.Authrization
 {
     public interface IAuthService
     {
@@ -10,5 +8,8 @@ namespace Petsica.Service.Service.Authrization
         Task<Result> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default);
         Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request);
         Task<Result> ResendConfirmationEmailAsync(ResendConfirmationEmailRequest request);
+        Task<Result> SendResetPasswordCodeAsync(string email);
+        Task<Result> ResetPasswordAsync(ResetPasswordRequest request);
+
     }
 }

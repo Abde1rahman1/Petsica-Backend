@@ -12,7 +12,7 @@ public class SitterApprovalConfiguration : IEntityTypeConfiguration<SitterApprov
         #region Relationships
         builder.HasOne(s => s.Sitter)
                .WithMany()
-               .HasForeignKey(s => s.SitterID);
+               .HasForeignKey(s => s.SitterID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

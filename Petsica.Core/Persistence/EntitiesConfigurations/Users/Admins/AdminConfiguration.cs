@@ -16,15 +16,15 @@ public class AdminConfiguration : IEntityTypeConfiguration<Admin>
         #region Relationships
         builder.HasMany(a => a.SitterApprovals)
                .WithOne(s => s.Admin)
-               .HasForeignKey(s => s.AdminID);
+               .HasForeignKey(s => s.AdminID).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(a => a.SellerApprovals)
                .WithOne(s => s.Admin)
-               .HasForeignKey(s => s.AdminID);
+               .HasForeignKey(s => s.AdminID).OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(a => a.ClinicApprovals)
                .WithOne(c => c.Admin)
-               .HasForeignKey(c => c.AdminID);
+               .HasForeignKey(c => c.AdminID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

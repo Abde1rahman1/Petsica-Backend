@@ -12,7 +12,7 @@ public class ClinicMessageClinicConfiguration : IEntityTypeConfiguration<ClinicM
         #region Relationships
         builder.HasOne(m => m.Receiver)
                .WithMany()
-               .HasForeignKey(m => m.ClinicReceiverID);
+               .HasForeignKey(m => m.ClinicReceiverID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }

@@ -12,7 +12,7 @@ public class UserMessageClinicConfiguration : IEntityTypeConfiguration<UserMessa
         #region Relationships
         builder.HasOne(m => m.User)
                .WithMany()
-               .HasForeignKey(m => m.UserID);
+               .HasForeignKey(m => m.UserID).OnDelete(DeleteBehavior.NoAction);
         #endregion
     }
 }
