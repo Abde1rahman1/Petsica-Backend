@@ -11,10 +11,17 @@ public class Product
     public int Quantity { get; set; }
     public string Name { get; set; }
 
+
     #region Foreign Key
     public string SellerID { get; set; }
 
-    #endregion Navigation Property
-    public User Seller { get; set; }
+	public string Category { get; set; }
+
+
+	#endregion
+
+    # region Navigation Property
+	public User Seller { get; set; }
+	#endregion
 
 }

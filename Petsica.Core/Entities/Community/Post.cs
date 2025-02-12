@@ -7,9 +7,15 @@ public class Post
     public DateTime Date { get; set; }
     public string Photo { get; set; }
 
-    #region Foreign Key
-    public string UserID { get; set; }
+	bool IsActive { get; set; }
+	public int LikesCount { get; set; } = 0;
+	public int CommentsCount { get; set; } = 0;
+
+	#region Foreign Key
+	public string UserID { get; set; }
     #endregion
+
+	
 
     #region Navigation Property
     public User User { get; set; }

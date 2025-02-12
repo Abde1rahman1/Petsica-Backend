@@ -1,4 +1,5 @@
-﻿using Petsica.Shared.Error;
+﻿using Petsica.Shared.Contracts.Community;
+using Petsica.Shared.Error;
 
 namespace Petsica.Shared.Result
 {
@@ -22,7 +23,12 @@ namespace Petsica.Shared.Result
 
         public static Result<TValue> Success<TValue>(TValue value) => new(value, true, Errors.None);
         public static Result<TValue> Failure<TValue>(Errors error) => new(default, false, error);
-    }
+
+		public static Result<PostResponse> Failure()
+		{
+			throw new NotImplementedException();
+		}
+	}
 
     public class Result<TValue> : Result
     {

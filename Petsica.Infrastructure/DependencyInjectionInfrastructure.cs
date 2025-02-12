@@ -2,6 +2,7 @@
 using MapsterMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Petsica.Core.Entities.Services;
 using System.Reflection;
 
 namespace Petsica.Infrastructure
@@ -17,7 +18,9 @@ namespace Petsica.Infrastructure
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString));
 
-            return services;
+			services.AddHttpContextAccessor();
+
+			return services;
         }
 
         public static IServiceCollection AddMapsterConfig(this IServiceCollection services)

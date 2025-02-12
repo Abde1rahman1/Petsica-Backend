@@ -25,4 +25,8 @@
     <ProjectReference Include="..\Petsica.Shared\Petsica.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IService\" />
+  </ItemGroup>
+
 </Project>
