@@ -1,7 +1,7 @@
 
 using Petsica.Service.Abstractions.Community;
 using Petsica.Service.Abstractions.Users;
-using Petsica.Service.Community;
+using Petsica.Service.Service.Community;
 using Petsica.Service.Service.Users;
 
 

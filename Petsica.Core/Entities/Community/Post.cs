@@ -1,25 +1,27 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace Petsica.Core.Entities.Community;
 public class Post
 {
     public int PostID { get; set; }
     public string Content { get; set; }
-    public DateTime Date { get; set; }
-    public string Photo { get; set; }
+    public DateTime Date { get; set; } = DateTime.UtcNow;
+    public string? Photo { get; set; }
 
-	bool IsActive { get; set; }
-	public int LikesCount { get; set; } = 0;
-	public int CommentsCount { get; set; } = 0;
+	
 
 	#region Foreign Key
 	public string UserID { get; set; }
     #endregion
 
-	
+
 
     #region Navigation Property
+
     public User User { get; set; }
-    public List<UserCommentPost> Comments { get; set; }
-    public List<UserLikePost> Likes { get; set; }
-    #endregion
+
+	public List<UserCommentPost> Comments { get; set; } = new List<UserCommentPost>();
+	public List<UserLikePost> Likes { get; set; } = new List<UserLikePost>();
+	#endregion
 }

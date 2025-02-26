@@ -13,8 +13,6 @@ public class PostRequestValidetor : AbstractValidator<PostRequest>
 			.NotEmpty().WithMessage("Content is required.")
 			.MaximumLength(300).WithMessage("Content must not exceed 300 characters.");
 
-		RuleFor(x => x.Date)
-			.NotEmpty().WithMessage("Date is required.");
 	}
 }
 

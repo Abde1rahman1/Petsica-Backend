@@ -12,8 +12,8 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250211211351_addLikesCount_CommentsCount")]
-    partial class addLikesCount_CommentsCount
+    [Migration("20250215052928_handel")]
+    partial class handel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,9 +166,6 @@ namespace Petsica.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostID"));
 
-                    b.Property<int>("CommentsCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -177,15 +174,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LikesCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Photo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PostID");
 
@@ -213,8 +208,9 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<int>("PostID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("CommentID");
 
@@ -236,8 +232,9 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<int>("PostID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LikeID");
 
@@ -262,8 +259,9 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<int>("TotalPrice")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("OrderID");
 
@@ -302,8 +300,9 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("SellerID")
-                        .HasColumnType("int");
+                    b.Property<string>("SellerID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -321,8 +320,8 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<int>("ProductID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SellerID")
-                        .HasColumnType("int");
+                    b.Property<string>("SellerID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ProductID", "SellerID");
 
@@ -333,8 +332,8 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.UserMakeOrder", b =>
                 {
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("OrderID")
                         .HasColumnType("int");
@@ -354,11 +353,12 @@ namespace Petsica.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageID"));
 
-                    b.Property<int>("ClinicReceiverID")
-                        .HasColumnType("int");
+                    b.Property<string>("ClinicReceiverID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("ClinicSenderID")
-                        .HasColumnType("int");
+                    b.Property<string>("ClinicSenderID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -385,8 +385,9 @@ namespace Petsica.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageID"));
 
-                    b.Property<int>("ClinicID")
-                        .HasColumnType("int");
+                    b.Property<string>("ClinicID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -396,8 +397,9 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MessageID");
 
@@ -424,11 +426,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserReceiverID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserReceiverID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("UserSenderID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserSenderID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MessageID");
 
@@ -469,8 +473,9 @@ namespace Petsica.Infrastructure.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PetID");
 
@@ -484,8 +489,8 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<int>("PetID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -506,8 +511,8 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<int>("PetID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Type")
                         .IsRequired()
@@ -539,8 +544,9 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<int>("SitterID")
-                        .HasColumnType("int");
+                    b.Property<string>("SitterID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -559,8 +565,8 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<int>("ServiceID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ServiceID", "UserID");
 
@@ -571,11 +577,8 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.Admin", b =>
                 {
-                    b.Property<int>("AdminID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdminID"));
+                    b.Property<string>("AdminID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -598,20 +601,19 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.ClinicApproval", b =>
                 {
-                    b.Property<int>("ApprovalID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ApprovalID")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApprovalID"));
-
-                    b.Property<int>("AdminID")
-                        .HasColumnType("int");
+                    b.Property<string>("AdminID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ApprovalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ClinicID")
-                        .HasColumnType("int");
+                    b.Property<string>("ClinicID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -629,20 +631,19 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.SellerApproval", b =>
                 {
-                    b.Property<int>("ApprovalID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ApprovalID")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApprovalID"));
-
-                    b.Property<int>("AdminID")
-                        .HasColumnType("int");
+                    b.Property<string>("AdminID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ApprovalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SellerID")
-                        .HasColumnType("int");
+                    b.Property<string>("SellerID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -660,20 +661,19 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.SitterApproval", b =>
                 {
-                    b.Property<int>("ApprovalID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("ApprovalID")
+                        .HasColumnType("nvarchar(450)");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApprovalID"));
-
-                    b.Property<int>("AdminID")
-                        .HasColumnType("int");
+                    b.Property<string>("AdminID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("ApprovalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SitterID")
-                        .HasColumnType("int");
+                    b.Property<string>("SitterID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -691,11 +691,8 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.Clinic", b =>
                 {
-                    b.Property<int>("ClinicID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClinicID"));
+                    b.Property<string>("ClinicID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -745,49 +742,8 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.User", b =>
                 {
-                    b.Property<int>("UserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NationalID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Photo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("UserID");
 
@@ -802,6 +758,10 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -813,11 +773,18 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NationalID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -835,6 +802,10 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Photo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -915,7 +886,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -926,13 +897,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Community.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Post");
@@ -945,13 +916,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Community.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany("Likes")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Post");
@@ -964,7 +935,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -975,7 +946,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.User", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Seller");
@@ -986,13 +957,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Marketplace.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Product");
@@ -1005,13 +976,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Marketplace.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -1024,12 +995,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.Clinic", "Receiver")
                         .WithMany()
                         .HasForeignKey("ClinicReceiverID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.Clinic", "Sender")
                         .WithMany("ClinicMessages")
-                        .HasForeignKey("ClinicSenderID");
+                        .HasForeignKey("ClinicSenderID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Receiver");
 
@@ -1041,13 +1013,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.Clinic", "Clinic")
                         .WithMany("UserMessages")
                         .HasForeignKey("ClinicID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Clinic");
@@ -1060,13 +1032,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.User", "Receiver")
                         .WithMany()
                         .HasForeignKey("UserReceiverID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "Sender")
                         .WithMany()
                         .HasForeignKey("UserSenderID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Receiver");
@@ -1079,7 +1051,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany("Pets")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -1090,13 +1062,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Pets.Pet", "Pet")
                         .WithMany()
                         .HasForeignKey("PetID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Pet");
@@ -1109,13 +1081,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Pets.Pet", "Pet")
                         .WithMany()
                         .HasForeignKey("PetID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Pet");
@@ -1128,7 +1100,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.User", "Sitter")
                         .WithMany()
                         .HasForeignKey("SitterID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Sitter");
@@ -1139,13 +1111,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Services.Service", "Service")
                         .WithMany("Requests")
                         .HasForeignKey("ServiceID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
                         .WithMany("RequestedServices")
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Service");
@@ -1158,13 +1130,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.AdminEntity.Admin", "Admin")
                         .WithMany("ClinicApprovals")
                         .HasForeignKey("AdminID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.Clinic", "Clinic")
                         .WithMany("Approvals")
                         .HasForeignKey("ClinicID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Admin");
@@ -1177,13 +1149,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.AdminEntity.Admin", "Admin")
                         .WithMany("SellerApprovals")
                         .HasForeignKey("AdminID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Admin");
@@ -1196,18 +1168,55 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.AdminEntity.Admin", "Admin")
                         .WithMany("SitterApprovals")
                         .HasForeignKey("AdminID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "Sitter")
                         .WithMany()
                         .HasForeignKey("SitterID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Admin");
 
                     b.Navigation("Sitter");
+                });
+
+            modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationUser", b =>
+                {
+                    b.OwnsMany("Petsica.Core.Entities.Authrization.RefreshToken", "RefreshTokens", b1 =>
+                        {
+                            b1.Property<string>("ApplicationUserId")
+                                .HasColumnType("nvarchar(450)");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("int");
+
+                            SqlServerPropertyBuilderExtensions.UseIdentityColumn(b1.Property<int>("Id"));
+
+                            b1.Property<DateTime>("CreatedOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime>("ExpiresOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<DateTime?>("RevokedOn")
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("Token")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ApplicationUserId", "Id");
+
+                            b1.ToTable("RefreshToken");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ApplicationUserId");
+                        });
+
+                    b.Navigation("RefreshTokens");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.Post", b =>

@@ -5,7 +5,7 @@
 namespace Petsica.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class addCategory_isActiveInPost : Migration
+    public partial class handel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

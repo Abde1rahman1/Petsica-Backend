@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="IService\**" />
+    <EmbeddedResource Remove="IService\**" />
+    <None Remove="IService\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.11" />
@@ -23,10 +29,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Petsica.Infrastructure\Petsica.Infrastructure.csproj" />
     <ProjectReference Include="..\Petsica.Shared\Petsica.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="IService\" />
   </ItemGroup>
 
 </Project>

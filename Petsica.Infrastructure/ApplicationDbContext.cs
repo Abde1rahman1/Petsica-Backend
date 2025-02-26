@@ -46,7 +46,7 @@ namespace Petsica.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //  modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new PetConfiguration());

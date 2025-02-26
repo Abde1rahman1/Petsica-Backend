@@ -1,5 +1,7 @@
 ﻿
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Petsica.Core.Entities.Messages;
 public class ClinicMessageClinic
 {
@@ -9,8 +11,10 @@ public class ClinicMessageClinic
     public string Content { get; set; }
     public DateTime Date { get; set; }
 
-    #region Navigation Properties
-    public Clinic Receiver { get; set; }
-    public Clinic Sender { get; set; }
+	#region Navigation Properties
+	[NotMapped]
+	public Clinic Receiver { get; set; }
+	[NotMapped]
+	public Clinic Sender { get; set; }
     #endregion
 }

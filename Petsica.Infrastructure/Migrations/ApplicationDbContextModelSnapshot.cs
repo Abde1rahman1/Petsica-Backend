@@ -163,9 +163,6 @@ namespace Petsica.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostID"));
 
-                    b.Property<int>("CommentsCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -174,11 +171,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LikesCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Photo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserID")
@@ -189,7 +182,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserCommentPost", b =>
@@ -221,7 +214,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserCommentPosts");
+                    b.ToTable("UserCommentPosts", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserLikePost", b =>
@@ -245,7 +238,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserLikePosts");
+                    b.ToTable("UserLikePosts", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Order", b =>
@@ -270,7 +263,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Product", b =>
@@ -315,7 +308,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("SellerID");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.SellerManageProduct", b =>
@@ -330,7 +323,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("SellerID");
 
-                    b.ToTable("SellerManageProducts");
+                    b.ToTable("SellerManageProducts", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.UserMakeOrder", b =>
@@ -345,7 +338,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.ToTable("UserMakeOrders");
+                    b.ToTable("UserMakeOrders", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.ClinicMessageClinic", b =>
@@ -377,7 +370,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ClinicSenderID");
 
-                    b.ToTable("ClinicMessageClinics");
+                    b.ToTable("ClinicMessageClinics", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.UserMessageClinic", b =>
@@ -410,7 +403,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserMessageClinics");
+                    b.ToTable("UserMessageClinics", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.UserMessageUser", b =>
@@ -443,7 +436,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserSenderID");
 
-                    b.ToTable("UserMessageUsers");
+                    b.ToTable("UserMessageUsers", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.Pet", b =>
@@ -484,7 +477,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Pets");
+                    b.ToTable("Pets", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRemindPet", b =>
@@ -506,7 +499,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserRemindPets");
+                    b.ToTable("UserRemindPets", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRequestPet", b =>
@@ -525,7 +518,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserRequestPets");
+                    b.ToTable("UserRequestPets", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Services.Service", b =>
@@ -560,7 +553,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("SitterID");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Services.UserRequestService", b =>
@@ -575,7 +568,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserRequestServices");
+                    b.ToTable("UserRequestServices", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.Admin", b =>
@@ -599,7 +592,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasKey("AdminID");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admins", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.ClinicApproval", b =>
@@ -629,7 +622,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ClinicID");
 
-                    b.ToTable("ClinicApprovals");
+                    b.ToTable("ClinicApprovals", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.SellerApproval", b =>
@@ -659,7 +652,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("SellerID");
 
-                    b.ToTable("SellerApprovals");
+                    b.ToTable("SellerApprovals", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.SitterApproval", b =>
@@ -689,7 +682,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("SitterID");
 
-                    b.ToTable("SitterApprovals");
+                    b.ToTable("SitterApprovals", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.Clinic", b =>
@@ -740,7 +733,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasKey("ClinicID");
 
-                    b.ToTable("Clinics");
+                    b.ToTable("Clinics", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.User", b =>
@@ -750,7 +743,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationUser", b =>
@@ -809,71 +802,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<string>("Photo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -1278,7 +1206,7 @@ namespace Petsica.Infrastructure.Migrations
 
                             b1.HasKey("ApplicationUserId", "Id");
 
-                            b1.ToTable("RefreshToken");
+                            b1.ToTable("RefreshToken", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("ApplicationUserId");

@@ -9,9 +9,7 @@ public record PostResponse
 (
 	int Id,
 	string Content,
-	string Username,
-	int LikesCount,
-	int CommentsCount,
-	DateTime DateTime,
-	string Photo
+	string userId,
+	DateTime Date
+
 );

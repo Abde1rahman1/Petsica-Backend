@@ -10,7 +10,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-        optionsBuilder.UseSqlServer("Server=.;Database=Petsica;Trusted_Connection=True;Encrypt=False");
+        optionsBuilder.UseSqlServer("Server=.;Database=Petsicaa;Trusted_Connection=True;Encrypt=False");
 
         return new ApplicationDbContext(optionsBuilder.Options);
     }
