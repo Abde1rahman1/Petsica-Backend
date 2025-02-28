@@ -19,15 +19,15 @@ namespace Petsica.API.Controllers
         {
             var result = await _userService.GetProfileAsync(User.GetUserId()!);
 
-            return Ok(result.Value);
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
         [HttpPut("info")]
         public async Task<IActionResult> Info([FromBody] UpdateProfileRequest request)
         {
-            await _userService.UpdateProfileAsync(User.GetUserId()!, request);
+            var result = await _userService.UpdateProfileAsync(User.GetUserId()!, request);
 
-            return NoContent();
+            return result.IsSuccess ? NoContent() : result.ToProblem();
         }
 
         [HttpPut("change-password")]

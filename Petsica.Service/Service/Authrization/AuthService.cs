@@ -2,14 +2,12 @@
 {
     public class AuthService(
      UserManager<ApplicationUser> userManager,
-     SignInManager<ApplicationUser> signInManager,
      IJwtProvider jwtProvider,
      ILogger<AuthService> logger,
      ApplicationDbContext context
     ) : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
         private readonly ILogger<AuthService> _logger = logger;
         private readonly ApplicationDbContext _context = context;
@@ -119,10 +117,15 @@
 
             var result = await _userManager.CreateAsync(user, request.Password);
 
-            var userContext = new User { UserID = user.Id };
+            var userContext = new User
+            {
+                UserID = user.Id
+            };
 
-            var resultContext = await _context.Users.AddAsync(userContext);
 
+            await _context.Users.AddAsync(userContext, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
             if (result.Succeeded)
             {
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

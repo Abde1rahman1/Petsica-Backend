@@ -44,7 +44,7 @@ namespace Petsica.API.Controllers
         {
             var result = await _authService.RegisterAsync(request, cancellationToken);
 
-            return result.IsSuccess ? Ok() : result.ToProblem();
+            return result.IsSuccess ? Created() : result.ToProblem();
         }
 
         [HttpPost("confirm-email")]
