@@ -9,7 +9,7 @@ public class Post
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public string? Photo { get; set; }
 
-	
+    public bool IsDeleted { get; set; } = false; 
 
 	#region Foreign Key
 	public string UserID { get; set; }

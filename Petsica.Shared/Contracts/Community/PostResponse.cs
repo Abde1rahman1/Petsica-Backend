@@ -10,6 +10,6 @@ public record PostResponse
 	int Id,
 	string Content,
 	string userId,
-	DateTime Date
-
+	DateTime Date,
+	string Photo
 );
