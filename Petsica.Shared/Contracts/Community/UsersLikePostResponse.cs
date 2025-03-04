@@ -5,14 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Petsica.Shared.Contracts.Community;
-public record PostResponse
+public record UsersLikePostResponse
 (
-	int Id,
-	string Content,
-	string userId,
-	DateTime Date,
-	string Photo,
-	int LikesCount,
-	int CommentsCount
-
+	string UserId
 );
+

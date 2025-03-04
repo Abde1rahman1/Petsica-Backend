@@ -10,10 +10,9 @@ namespace Petsica.API.Controllers.Community;
 [Route("api/[controller]")]
 [ApiController]
 [Authorize]
-public class PostsController(/*ApplicationDbContext context,*/ IPostService postService) : ControllerBase
+public class PostsController(IPostService postService) : ControllerBase
 {
     private readonly IPostService _postService = postService;
-    //	private readonly ApplicationDbContext _context = context;
     [HttpPost("")]
     public async Task<IActionResult> Add(PostRequest postRequest, CancellationToken cancellationToken)
     {

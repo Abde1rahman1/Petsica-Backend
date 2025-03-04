@@ -20,6 +20,8 @@ namespace Petsica.Service
 
             services.AddScoped<IPostService, PostService>();
 
+            services.AddScoped<ILikeService, LikeService>();
+
 
 
             return services;

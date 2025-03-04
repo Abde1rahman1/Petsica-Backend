@@ -1,0 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Petsica.Shared.Contracts.Community
+{
+    public record LikeResponse
+    (
+	    int PostID,
+        string UserID 
+    );
+}
