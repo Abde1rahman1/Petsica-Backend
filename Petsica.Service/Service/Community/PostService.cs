@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Petsica.Core.Entities.Community;
 using Petsica.Service.Abstractions.Community;
-using Petsica.Shared.Contracts.Community;
+using Petsica.Shared.Contracts.Community.Request;
+using Petsica.Shared.Contracts.Community.Response;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -59,29 +60,23 @@ public class PostService(
 
         var posts = await _context.Posts
             .Include(p => p.User)
-            .Where(p=>p.IsDeleted==false)
+			.Include(p => p.Likes)
+			.Include(p => p.Comments)
+			.Where(p=>p.IsDeleted==false)
             .ToListAsync(cancellationToken);
 
 
 
-		var response = new List<PostResponse>();
-
-		foreach (var post in posts)
-		{
-			var postResponse = new PostResponse
-			(
-				Id: post.PostID,
-				Content: post.Content,
-				userId: post.UserID,
-				Date: post.Date,
-				Photo: post.Photo,
-				LikesCount:post.LikesCount,
-				CommentsCount:post.CommentsCount
-			);
-
-			response.Add(postResponse);
-		}
-
+		var response = posts.Select(post => new PostResponse
+		(
+			Id: post.PostID,
+			Content: post.Content,
+			userId: post.UserID,
+			Date: post.Date,
+			Photo: post.Photo,
+			LikesCount: post.Likes.Count,
+			CommentsCount: post.Comments.Count
+		)).ToList();
 		return Result.Success(response); 
 
 	}
@@ -97,7 +92,7 @@ public class PostService(
 			.ToListAsync(cancellationToken);
 
 	
-		// Map the posts to PostResponse objects
+		
 		var response = posts.Select(post => new PostResponse
 		(
 			Id: post.PostID,

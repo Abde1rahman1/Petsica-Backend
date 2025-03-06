@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Petsica.Shared.Contracts.Community
+namespace Petsica.Shared.Contracts.Community.Response
 {
     public record LikeResponse
     (
-	    int PostID,
-        string UserID 
+        int PostID,
+        string UserID
     );
 }

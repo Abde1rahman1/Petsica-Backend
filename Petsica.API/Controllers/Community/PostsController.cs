@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Petsica.Service.Abstractions.Community;
 using Petsica.Shared.Contracts.Community;
+using Petsica.Shared.Contracts.Community.Request;
 using Petsica.Shared.Extensions;
 using Petsica.Shared.Result;
 using System.Security.Claims;
@@ -45,7 +46,7 @@ public class PostsController(IPostService postService) : ControllerBase
 		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
 	}
 
-	[HttpPost("{PostId}")]
+	[HttpPost("delete/{PostId}")]
 
     public async Task<IActionResult> DeleteById(int PostId, CancellationToken cancellationToken)
     {

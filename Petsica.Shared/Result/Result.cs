@@ -1,4 +1,4 @@
-﻿using Petsica.Shared.Contracts.Community;
+﻿using Petsica.Shared.Contracts.Community.Response;
 using Petsica.Shared.Error;
 
 namespace Petsica.Shared.Result

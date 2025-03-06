@@ -22,6 +22,8 @@ namespace Petsica.Service
 
             services.AddScoped<ILikeService, LikeService>();
 
+            services.AddScoped<ICommentService, CommentService>();
+
 
 
             return services;

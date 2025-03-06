@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Petsica.Shared.Contracts.Community;
+using Petsica.Shared.Contracts.Community.Request;
+using Petsica.Shared.Contracts.Community.Response;
 using Petsica.Shared.Result;
 using System;
 using System.Collections.Generic;

@@ -5,7 +5,9 @@ public class UserCommentPost
 {
     public int CommentID { get; set; }
     public string Content { get; set; }
-    public DateTime Date { get; set; }
+    public DateTime Date { get; set; } = DateTime.Now;
+
+    public bool IsDeleted { get; set; } = false;
 
     #region Foreign Keys
     public int PostID { get; set; }

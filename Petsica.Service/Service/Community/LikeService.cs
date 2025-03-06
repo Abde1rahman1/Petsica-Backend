@@ -1,7 +1,7 @@
 ﻿using Petsica.Core.Entities.Community;
 using Petsica.Core.Entities.Users;
 using Petsica.Service.Abstractions.Community;
-using Petsica.Shared.Contracts.Community;
+using Petsica.Shared.Contracts.Community.Response;
 using Petsica.Shared.Contracts.Users.Response;
 using System;
 using System.Collections.Generic;

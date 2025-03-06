@@ -1,4 +1,4 @@
-﻿using Petsica.Shared.Contracts.Community;
+﻿using Petsica.Shared.Contracts.Community.Response;
 using Petsica.Shared.Contracts.Users.Response;
 using System;
 using System.Collections.Generic;
