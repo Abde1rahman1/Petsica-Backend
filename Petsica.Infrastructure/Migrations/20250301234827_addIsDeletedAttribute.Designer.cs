@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petsica.Infrastructure;
 
@@ -11,9 +12,11 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250301234827_addIsDeletedAttribute")]
+    partial class addIsDeletedAttribute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -163,9 +166,6 @@ namespace Petsica.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PostID"));
 
-                    b.Property<int>("CommentsCount")
-                        .HasColumnType("int");
-
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(300)
@@ -176,9 +176,6 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<int>("LikesCount")
-                        .HasColumnType("int");
 
                     b.Property<string>("Photo")
                         .HasColumnType("nvarchar(max)");
@@ -209,9 +206,6 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<int>("PostID")
                         .HasColumnType("int");
@@ -494,11 +488,11 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRemindPet", b =>
                 {
-                    b.Property<int>("UserRemindPetID")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("PetID")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserRemindPetID"));
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -507,20 +501,7 @@ namespace Petsica.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PetID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserRemindPetID");
-
-                    b.HasIndex("PetID");
+                    b.HasKey("PetID", "UserID");
 
                     b.HasIndex("UserID");
 
@@ -535,14 +516,9 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<string>("UserID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("Adoption")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Mating")
-                        .HasColumnType("bit");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PetID", "UserID");
 
@@ -551,7 +527,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.ToTable("UserRequestPets");
                 });
 
-            modelBuilder.Entity("Petsica.Core.Entities.Services.SitterService", b =>
+            modelBuilder.Entity("Petsica.Core.Entities.Services.Service", b =>
                 {
                     b.Property<int>("ServiceID")
                         .ValueGeneratedOnAdd()
@@ -1121,7 +1097,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Petsica.Core.Entities.Services.SitterService", b =>
+            modelBuilder.Entity("Petsica.Core.Entities.Services.Service", b =>
                 {
                     b.HasOne("Petsica.Core.Entities.Users.User", "Sitter")
                         .WithMany()
@@ -1134,7 +1110,7 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Services.UserRequestService", b =>
                 {
-                    b.HasOne("Petsica.Core.Entities.Services.SitterService", "Service")
+                    b.HasOne("Petsica.Core.Entities.Services.Service", "Service")
                         .WithMany("Requests")
                         .HasForeignKey("ServiceID")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1252,7 +1228,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.Navigation("Likes");
                 });
 
-            modelBuilder.Entity("Petsica.Core.Entities.Services.SitterService", b =>
+            modelBuilder.Entity("Petsica.Core.Entities.Services.Service", b =>
                 {
                     b.Navigation("Requests");
                 });

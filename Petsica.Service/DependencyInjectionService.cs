@@ -1,6 +1,7 @@
 using Petsica.Service.Abstractions.Community;
 using Petsica.Service.Abstractions.Pets;
 using Petsica.Service.Abstractions.Users;
+using Petsica.Service.Service.Community;
 using Petsica.Service.Services.Community;
 using Petsica.Service.Services.Pets;
 using Petsica.Service.Services.Users;
@@ -21,6 +22,13 @@ namespace Petsica.Service
             services.AddScoped<IPostService, PostService>();
 
             services.AddScoped<IPetsService, PetsService>();
+
+            services.AddScoped<ILikeService, LikeService>();
+
+            services.AddScoped<ICommentService, CommentService>();
+
+
+
 
             return services;
         }

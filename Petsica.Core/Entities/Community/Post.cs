@@ -9,7 +9,10 @@ public class Post
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public string? Photo { get; set; }
 
-	
+    public int LikesCount { get; set; } = 0; 
+    public int CommentsCount { get; set; } = 0; 
+
+    public bool IsDeleted { get; set; } = false; 
 
 	#region Foreign Key
 	public string UserID { get; set; }

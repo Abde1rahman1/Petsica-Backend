@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Petsica.Shared.Contracts.Community;
-public record PostResponse
+namespace Petsica.Shared.Contracts.Community.Response;
+public record CommentResponse
 (
-	int Id,
+	int CommentId,
 	string Content,
-	string userId,
-	DateTime Date
-
+	string UserID
 );
