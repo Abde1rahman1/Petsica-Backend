@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Petsica.Infrastructure;
 using Petsica.Infrastructure.DBModel;
-using Petsica.Service.Service.Authrization;
+using Petsica.Service.Services.Authrization;
 using Petsica.Shared.Contracts.Authrization;
 using System.Text;
 

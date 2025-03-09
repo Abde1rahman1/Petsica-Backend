@@ -3,7 +3,7 @@ using Petsica.Service.Abstractions.Community;
 using Petsica.Shared.Contracts.Community;
 
 
-namespace Petsica.Service.Service.Community;
+namespace Petsica.Service.Services.Community;
 public class PostService(
     ApplicationDbContext context) : IPostService
 {

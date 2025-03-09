@@ -1,5 +1,4 @@
 ﻿global using Mapster;
-global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.WebUtilities;
@@ -12,14 +11,13 @@ global using Petsica.Core.Entities.Authrization;
 global using Petsica.Core.Entities.Users;
 global using Petsica.Infrastructure;
 global using Petsica.Infrastructure.DBModel;
-global using Petsica.Service.Service.Authrization;
+global using Petsica.Service.Services.Authrization;
 global using Petsica.Shared.Contracts.Authrization;
 global using Petsica.Shared.Contracts.Authrization.Request;
 global using Petsica.Shared.Contracts.Authrization.Response;
 global using Petsica.Shared.Error;
 global using Petsica.Shared.Result;
 global using System.Security.Cryptography;
-global using System.Text;
 global using System.Text;
 
 

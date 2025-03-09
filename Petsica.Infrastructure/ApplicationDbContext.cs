@@ -27,7 +27,7 @@ namespace Petsica.Infrastructure
         public DbSet<UserCommentPost> UserCommentPosts { get; set; }
         public DbSet<UserLikePost> UserLikePosts { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Service> Services { get; set; }
+        public DbSet<SitterService> Services { get; set; }
         public DbSet<UserRequestService> UserRequestServices { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<SellerManageProduct> SellerManageProducts { get; set; }

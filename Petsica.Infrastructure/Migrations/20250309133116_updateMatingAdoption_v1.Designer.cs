@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petsica.Infrastructure;
 
@@ -11,9 +12,11 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250309133116_updateMatingAdoption_v1")]
+    partial class updateMatingAdoption_v1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -482,11 +485,11 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRemindPet", b =>
                 {
-                    b.Property<int>("UserRemindPetID")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("PetID")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserRemindPetID"));
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -495,20 +498,7 @@ namespace Petsica.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PetID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("UserRemindPetID");
-
-                    b.HasIndex("PetID");
+                    b.HasKey("PetID", "UserID");
 
                     b.HasIndex("UserID");
 

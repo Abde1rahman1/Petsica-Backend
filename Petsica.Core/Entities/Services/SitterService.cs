@@ -1,7 +1,7 @@
 ﻿
 
 namespace Petsica.Core.Entities.Services;
-public class Service
+public class SitterService
 {
     public int ServiceID { get; set; }
     public string SitterID { get; set; }
@@ -11,7 +11,7 @@ public class Service
     public string Location { get; set; }
 
     #region Navigation Property
-    public User Sitter { get; set; }
-    public required List<UserRequestService> Requests { get; set; }
+    public User? Sitter { get; set; }
+    public List<UserRequestService>? Requests { get; set; }
     #endregion
 }

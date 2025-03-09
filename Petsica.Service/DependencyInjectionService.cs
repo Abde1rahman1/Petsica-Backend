@@ -1,9 +1,9 @@
-
 using Petsica.Service.Abstractions.Community;
+using Petsica.Service.Abstractions.Pets;
 using Petsica.Service.Abstractions.Users;
-using Petsica.Service.Service.Community;
-using Petsica.Service.Service.Users;
-
+using Petsica.Service.Services.Community;
+using Petsica.Service.Services.Pets;
+using Petsica.Service.Services.Users;
 
 namespace Petsica.Service
 {
@@ -20,7 +20,7 @@ namespace Petsica.Service
 
             services.AddScoped<IPostService, PostService>();
 
-
+            services.AddScoped<IPetsService, PetsService>();
 
             return services;
         }

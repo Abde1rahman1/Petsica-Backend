@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Petsica.Service.Service.Authrization;
+using Petsica.Service.Services.Authrization;
 using Petsica.Shared.Contracts.Authrization.Request;
 using Petsica.Shared.Result;
 

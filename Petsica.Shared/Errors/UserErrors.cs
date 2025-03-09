@@ -24,5 +24,11 @@ namespace Petsica.Shared.Error
 
         public static readonly Errors DuplicatedConfirmation =
             new("User.DuplicatedConfirmation", "Email already confirmed", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors InvalidCreateService =
+           new("User.InvalidCreateService", "Can not create service Mating/Adoption", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors InvalidChooesService =
+          new("User.InvalidChooesService", "Can not Chooes Service Mating/Adoption", StatusCodes.Status400BadRequest);
     }
 }

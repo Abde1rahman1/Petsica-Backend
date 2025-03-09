@@ -15,7 +15,6 @@ public class PostsController(/*ApplicationDbContext context,*/ IPostService post
     [HttpPost("")]
     public async Task<IActionResult> Add(PostRequest postRequest, CancellationToken cancellationToken)
     {
-
         var result = await _postService.AddAsync(User.GetUserId()!, postRequest, cancellationToken);
         return result.IsSuccess ? Created() : result.ToProblem();
     }

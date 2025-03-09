@@ -1,4 +1,4 @@
-﻿namespace Petsica.Service.Service.Authrization
+﻿namespace Petsica.Service.Services.Authrization
 {
     public interface IAuthService
     {

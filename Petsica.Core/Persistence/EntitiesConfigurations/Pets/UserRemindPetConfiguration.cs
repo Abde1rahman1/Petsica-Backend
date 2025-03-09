@@ -5,7 +5,7 @@ public class UserRemindPetConfiguration : IEntityTypeConfiguration<UserRemindPet
 {
     public void Configure(EntityTypeBuilder<UserRemindPet> builder)
     {
-        builder.HasKey(r => new { r.PetID, r.UserID });
+        builder.HasKey(b => b.UserRemindPetID);
 
         #region Relationships
         builder.HasOne(r => r.User)

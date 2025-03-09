@@ -1,9 +1,9 @@
 ﻿
 
 namespace Petsica.Core.Persistence.EntitiesConfigurations.Services;
-public class ServiceConfiguration : IEntityTypeConfiguration<Service>
+public class ServiceConfiguration : IEntityTypeConfiguration<SitterService>
 {
-    public void Configure(EntityTypeBuilder<Service> builder)
+    public void Configure(EntityTypeBuilder<SitterService> builder)
     {
         builder.HasKey(s => s.ServiceID);
 
