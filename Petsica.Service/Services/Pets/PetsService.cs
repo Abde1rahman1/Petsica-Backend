@@ -105,9 +105,9 @@ namespace Petsica.Service.Services.Pets
         }
 
 
-        public async Task<Result> PetAdoptionOn(string userId, AddPetServiceRequest request, CancellationToken cancellationToken)
+        public async Task<Result> PetAdoptionOn(string userId, int petId, CancellationToken cancellationToken)
         {
-            var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == request.PetID, cancellationToken: cancellationToken);
+            var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == petId, cancellationToken: cancellationToken);
 
             if (!petIsExists)
                 return Result.Failure(PetErrors.PetNotFound);
@@ -115,7 +115,7 @@ namespace Petsica.Service.Services.Pets
             var newService = new UserRequestPet
             {
                 UserID = userId,
-                PetID = request.PetID,
+                PetID = petId,
                 IsActive = true,
                 Adoption = true,
                 Mating = false,
@@ -126,9 +126,9 @@ namespace Petsica.Service.Services.Pets
             return successService ? Result.Success() : Result.Failure(PetErrors.PetNotFound);
         }
 
-        public async Task<Result> PetMatingOn(string userId, AddPetServiceRequest request, CancellationToken cancellationToken)
+        public async Task<Result> PetMatingOn(string userId, int petId, CancellationToken cancellationToken)
         {
-            var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == request.PetID, cancellationToken: cancellationToken);
+            var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == petId, cancellationToken: cancellationToken);
 
             if (!petIsExists)
                 return Result.Failure(PetErrors.PetNotFound);
@@ -137,7 +137,7 @@ namespace Petsica.Service.Services.Pets
             var newService = new UserRequestPet
             {
                 UserID = userId,
-                PetID = request.PetID,
+                PetID = petId,
                 IsActive = true,
                 Mating = true,
                 Adoption = false,
@@ -151,9 +151,9 @@ namespace Petsica.Service.Services.Pets
         }
 
 
-        public async Task<Result> PetAdoptionOff(string userId, AddPetServiceRequest request, CancellationToken cancellationToken)
+        public async Task<Result> PetAdoptionOff(string userId, int petId, CancellationToken cancellationToken)
         {
-            var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == request.PetID, cancellationToken: cancellationToken);
+            var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == petId, cancellationToken: cancellationToken);
 
             if (!petIsExists)
                 return Result.Failure(PetErrors.PetNotFound);
@@ -161,7 +161,7 @@ namespace Petsica.Service.Services.Pets
             var newService = new UserRequestPet
             {
                 UserID = userId,
-                PetID = request.PetID,
+                PetID = petId,
                 IsActive = false,
                 Adoption = false,
                 Mating = false,
@@ -172,9 +172,9 @@ namespace Petsica.Service.Services.Pets
             return successService ? Result.Success() : Result.Failure(PetErrors.PetNotFound);
         }
 
-        public async Task<Result> PetMatingOff(string userId, AddPetServiceRequest request, CancellationToken cancellationToken)
+        public async Task<Result> PetMatingOff(string userId, int petId, CancellationToken cancellationToken)
         {
-            var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == request.PetID, cancellationToken: cancellationToken);
+            var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == petId, cancellationToken: cancellationToken);
 
             if (!petIsExists)
                 return Result.Failure(PetErrors.PetNotFound);
@@ -183,7 +183,7 @@ namespace Petsica.Service.Services.Pets
             var newService = new UserRequestPet
             {
                 UserID = userId,
-                PetID = request.PetID,
+                PetID = petId,
                 IsActive = false,
                 Mating = false,
                 Adoption = false,

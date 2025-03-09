@@ -11,10 +11,10 @@ namespace Petsica.Service.Abstractions.Pets
         Task<Result<IEnumerable<RemindPetResponse>>> GetAllRemindAsync(string userId, int PetID, CancellationToken cancellationToken);
         Task<Result<IEnumerable<PetsResponse>>> GetAllPetsAsync(string userId, CancellationToken cancellationToken);
 
-        Task<Result> PetAdoptionOn(string userId, AddPetServiceRequest request, CancellationToken cancellationToken);
-        Task<Result> PetMatingOn(string userId, AddPetServiceRequest request, CancellationToken cancellationToken);
-        Task<Result> PetAdoptionOff(string userId, AddPetServiceRequest request, CancellationToken cancellationToken);
-        Task<Result> PetMatingOff(string userId, AddPetServiceRequest request, CancellationToken cancellationToken);
+        Task<Result> PetAdoptionOn(string userId, int petId, CancellationToken cancellationToken);
+        Task<Result> PetMatingOn(string userId, int petId, CancellationToken cancellationToken);
+        Task<Result> PetAdoptionOff(string userId, int petId, CancellationToken cancellationToken);
+        Task<Result> PetMatingOff(string userId, int petId, CancellationToken cancellationToken);
 
 
 

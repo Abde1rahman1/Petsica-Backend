@@ -30,8 +30,8 @@ namespace Petsica.API.Controllers
             return result.IsSuccess ? Created() : result.ToProblem();
         }
 
-        [HttpPut("UpdateRemindPet")]
-        public async Task<IActionResult> UpdateRemindPet(int RemindID, [FromBody] UpdateRemindPetRequest request, CancellationToken cancellationToken)
+        [HttpPut("UpdateRemindPet/{RemindID}")]
+        public async Task<IActionResult> UpdateRemindPet([FromRoute] int RemindID, [FromBody] UpdateRemindPetRequest request, CancellationToken cancellationToken)
         {
             var result = await _service.UpdateRemindPetAsync(RemindID, request, cancellationToken);
 
@@ -56,45 +56,45 @@ namespace Petsica.API.Controllers
             return result.IsSuccess ? Ok(result) : result.ToProblem();
         }
 
-        [HttpPost("PetAdoptionOn")]
-        public async Task<IActionResult> PetAdoptionOn(AddPetServiceRequest request, CancellationToken cancellationToken)
+        [HttpPost("PetAdoptionOn/{petId}")]
+        public async Task<IActionResult> PetAdoptionOn([FromRoute] int petId, CancellationToken cancellationToken)
         {
-            var result = await _service.PetAdoptionOn(User.GetUserId()!, request, cancellationToken);
+            var result = await _service.PetAdoptionOn(User.GetUserId()!, petId, cancellationToken);
 
             return result.IsSuccess ? Created() : result.ToProblem();
 
         }
-        [HttpPost("PetAdoptionOff")]
-        public async Task<IActionResult> PetAdoptionOff(AddPetServiceRequest request, CancellationToken cancellationToken)
+        [HttpPost("PetAdoptionOff/{petId}")]
+        public async Task<IActionResult> PetAdoptionOff([FromRoute] int petId, CancellationToken cancellationToken)
         {
-            var result = await _service.PetAdoptionOff(User.GetUserId()!, request, cancellationToken);
+            var result = await _service.PetAdoptionOff(User.GetUserId()!, petId, cancellationToken);
 
             return result.IsSuccess ? Ok() : result.ToProblem();
 
         }
 
-        [HttpPost("PetMatingOn")]
-        public async Task<IActionResult> PetMatingOn(AddPetServiceRequest request, CancellationToken cancellationToken)
+        [HttpPost("PetMatingOn/{petId}")]
+        public async Task<IActionResult> PetMatingOn([FromRoute] int petId, CancellationToken cancellationToken)
         {
-            var result = await _service.PetMatingOn(User.GetUserId()!, request, cancellationToken);
+            var result = await _service.PetMatingOn(User.GetUserId()!, petId, cancellationToken);
 
             return result.IsSuccess ? Ok() : result.ToProblem();
 
         }
 
-        [HttpPost("PetMatingOff")]
+        [HttpPost("PetMatingOff/{petId}")]
 
-        public async Task<IActionResult> PetMatingOff(AddPetServiceRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> PetMatingOff([FromRoute] int petId, CancellationToken cancellationToken)
         {
-            var result = await _service.PetMatingOff(User.GetUserId()!, request, cancellationToken);
+            var result = await _service.PetMatingOff(User.GetUserId()!, petId, cancellationToken);
 
             return result.IsSuccess ? Ok() : result.ToProblem();
 
         }
 
-        [HttpGet("GetPetService")]
+        [HttpGet("GetPetService/{petId}")]
 
-        public async Task<IActionResult> GetPetService(int petId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetPetService([FromRoute] int petId, CancellationToken cancellationToken)
         {
             var result = await _service.GetPetServices(User.GetUserId()!, petId, cancellationToken);
 
