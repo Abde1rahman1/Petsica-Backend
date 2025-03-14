@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petsica.Infrastructure;
 
@@ -11,9 +12,11 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250312234406_AddUserFollowTable")]
+    partial class AddUserFollowTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,7 +244,7 @@ namespace Petsica.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("FollowerUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -249,7 +252,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("FollowedUserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("FollowerUserId");
 
                     b.ToTable("UserFollows");
                 });
@@ -970,15 +973,15 @@ namespace Petsica.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Petsica.Core.Entities.Users.User", "User")
+                    b.HasOne("Petsica.Core.Entities.Users.User", "FollowerUser")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("FollowerUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("FollowedUser");
 
-                    b.Navigation("User");
+                    b.Navigation("FollowerUser");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserLikePost", b =>

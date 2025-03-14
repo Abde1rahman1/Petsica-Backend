@@ -27,6 +27,8 @@ namespace Petsica.Service
 
             services.AddScoped<ICommentService, CommentService>();
 
+            services.AddScoped<IUserFollow, UserFollowService>();
+
 
 
 

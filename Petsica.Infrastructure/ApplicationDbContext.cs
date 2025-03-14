@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Petsica.Core.Entities.Community;
 using Petsica.Core.Persistence.EntitiesConfigurations;
 using Petsica.Core.Persistence.EntitiesConfigurations.Community;
 using Petsica.Core.Persistence.EntitiesConfigurations.Marketplace;
@@ -42,6 +43,7 @@ namespace Petsica.Infrastructure
         public DbSet<UserMakeOrder> UserMakeOrders { get; set; }
         public DbSet<UserRequestPet> UserRequestPets { get; set; }
         public DbSet<UserRemindPet> UserRemindPets { get; set; }
+        public DbSet<UserFollow> UserFollows { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
