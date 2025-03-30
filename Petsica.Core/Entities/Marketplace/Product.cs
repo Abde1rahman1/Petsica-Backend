@@ -15,13 +15,13 @@ public class Product
     #region Foreign Key
     public string SellerID { get; set; }
 
-	public string Category { get; set; }
+    public int CategoryId { get; set; }
 
+    #endregion
 
-	#endregion
-
-    # region Navigation Property
-	public User Seller { get; set; }
-	#endregion
+    #region Navigation Property
+    public User Seller { get; set; }
+    public Category Category { get; set; }
+    #endregion
 
 }

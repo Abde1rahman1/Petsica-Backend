@@ -22,33 +22,6 @@ namespace Petsica.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -72,6 +45,183 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClaimType = "permissions",
+                            ClaimValue = "pets:read",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClaimType = "permissions",
+                            ClaimValue = "pets:add",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClaimType = "permissions",
+                            ClaimValue = "pets:update",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ClaimType = "permissions",
+                            ClaimValue = "pets:delete",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            ClaimType = "permissions",
+                            ClaimValue = "categories:read",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            ClaimType = "permissions",
+                            ClaimValue = "categories:add",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            ClaimType = "permissions",
+                            ClaimValue = "categories:update",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            ClaimType = "permissions",
+                            ClaimValue = "users:read",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            ClaimType = "permissions",
+                            ClaimValue = "users:add",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            ClaimType = "permissions",
+                            ClaimValue = "users:update",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            ClaimType = "permissions",
+                            ClaimValue = "roles:read",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            ClaimType = "permissions",
+                            ClaimValue = "roles:add",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            ClaimType = "permissions",
+                            ClaimValue = "roles:update",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            ClaimType = "permissions",
+                            ClaimValue = "userFollows:read",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            ClaimType = "permissions",
+                            ClaimValue = "userFollows:add",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            ClaimType = "permissions",
+                            ClaimValue = "userFollows:update",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            ClaimType = "permissions",
+                            ClaimValue = "likes:read",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            ClaimType = "permissions",
+                            ClaimValue = "likes:add",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            ClaimType = "permissions",
+                            ClaimValue = "likes:update",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            ClaimType = "permissions",
+                            ClaimValue = "comments:read",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            ClaimType = "permissions",
+                            ClaimValue = "comments:add",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            ClaimType = "permissions",
+                            ClaimValue = "comments:update",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            ClaimType = "permissions",
+                            ClaimValue = "posts:read",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            ClaimType = "permissions",
+                            ClaimValue = "posts:add",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            ClaimType = "permissions",
+                            ClaimValue = "posts:update",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -134,6 +284,13 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "a150d2df-c1c1-4317-954a-e39ce0db0682",
+                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -229,6 +386,31 @@ namespace Petsica.Infrastructure.Migrations
                     b.ToTable("UserCommentPosts");
                 });
 
+            modelBuilder.Entity("Petsica.Core.Entities.Community.UserFollow", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FollowedUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowedUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFollows");
+                });
+
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserLikePost", b =>
                 {
                     b.Property<int>("LikeID")
@@ -251,6 +433,24 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("UserLikePosts");
+                });
+
+            modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Order", b =>
@@ -286,9 +486,8 @@ namespace Petsica.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductID"));
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -317,6 +516,8 @@ namespace Petsica.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductID");
+
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("SellerID");
 
@@ -601,161 +802,14 @@ namespace Petsica.Infrastructure.Migrations
                     b.ToTable("UserRequestServices");
                 });
 
-            modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.Admin", b =>
-                {
-                    b.Property<string>("AdminID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.HasKey("AdminID");
-
-                    b.ToTable("Admins");
-                });
-
-            modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.ClinicApproval", b =>
-                {
-                    b.Property<string>("ApprovalID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AdminID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ApprovalDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ClinicID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.HasKey("ApprovalID");
-
-                    b.HasIndex("AdminID");
-
-                    b.HasIndex("ClinicID");
-
-                    b.ToTable("ClinicApprovals");
-                });
-
-            modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.SellerApproval", b =>
-                {
-                    b.Property<string>("ApprovalID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AdminID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ApprovalDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SellerID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.HasKey("ApprovalID");
-
-                    b.HasIndex("AdminID");
-
-                    b.HasIndex("SellerID");
-
-                    b.ToTable("SellerApprovals");
-                });
-
-            modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.SitterApproval", b =>
-                {
-                    b.Property<string>("ApprovalID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AdminID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("ApprovalDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SitterID")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
-
-                    b.HasKey("ApprovalID");
-
-                    b.HasIndex("AdminID");
-
-                    b.HasIndex("SitterID");
-
-                    b.ToTable("SitterApprovals");
-                });
-
             modelBuilder.Entity("Petsica.Core.Entities.Users.Clinic", b =>
                 {
                     b.Property<string>("ClinicID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ContactInfo")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Photo")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<int>("VerificationID")
-                        .HasColumnType("int");
 
                     b.Property<string>("WorkingHours")
                         .IsRequired()
@@ -776,6 +830,86 @@ namespace Petsica.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationRole", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a",
+                            ConcurrencyStamp = "13ac201a-1f5b-4871-bb36-6912b4ed12bf",
+                            IsDefault = false,
+                            IsDelete = false,
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "f3056a00-6914-4873-9f31-e3eb3ba6633a",
+                            ConcurrencyStamp = "4e2c6469-ce64-4d4a-acb1-72ddabb6f0db",
+                            IsDefault = true,
+                            IsDelete = false,
+                            Name = "Member",
+                            NormalizedName = "MEMBER"
+                        },
+                        new
+                        {
+                            Id = "220229cd-8d7f-4b6e-9411-4c8bf3df079c",
+                            ConcurrencyStamp = "3cd7fbee-f947-4af1-be3f-1765dc49ced9",
+                            IsDefault = false,
+                            IsDelete = false,
+                            Name = "Seller",
+                            NormalizedName = "SELLER"
+                        },
+                        new
+                        {
+                            Id = "9cc3c82c-9f0a-44c6-ae43-f28b6c056ee5",
+                            ConcurrencyStamp = "f9683f9e-57f3-4997-ac39-8ffa3b63b214",
+                            IsDefault = false,
+                            IsDelete = false,
+                            Name = "Sitter",
+                            NormalizedName = "SITTER"
+                        },
+                        new
+                        {
+                            Id = "8be5290b-5b0c-4e48-b6d4-5594d1495622",
+                            ConcurrencyStamp = "8341db82-f2ae-480c-a55e-4604dba79030",
+                            IsDefault = false,
+                            IsDelete = false,
+                            Name = "Clinic",
+                            NormalizedName = "CLINIC"
+                        });
+                });
+
             modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -785,7 +919,9 @@ namespace Petsica.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ApprovalPhoto")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -799,9 +935,11 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsApproval")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDisabled")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -830,7 +968,6 @@ namespace Petsica.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Photo")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -838,6 +975,9 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
@@ -854,11 +994,31 @@ namespace Petsica.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "a150d2df-c1c1-4317-954a-e39ce0db0682",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "7fa50e48-4080-4d01-8903-7c18c2e65392",
+                            Email = "Admin@Petsica.com",
+                            EmailConfirmed = true,
+                            IsApproval = false,
+                            IsDisabled = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@PETSICA.COM",
+                            NormalizedUserName = "ADMIN@PETSICA.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKRku5u6K325Irl1Utujiuil/WUhjTvShS9mJLXxO+2v/GKrMT1Ofhdp/0taFUO2bA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "6B5AD15259FF426FBDC89A431C9541A2",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin@Petsica.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Petsica.Infrastructure.DBModel.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -885,7 +1045,7 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Petsica.Infrastructure.DBModel.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -937,6 +1097,25 @@ namespace Petsica.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Petsica.Core.Entities.Community.UserFollow", b =>
+                {
+                    b.HasOne("Petsica.Core.Entities.Users.User", "FollowedUser")
+                        .WithMany()
+                        .HasForeignKey("FollowedUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Petsica.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FollowedUser");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserLikePost", b =>
                 {
                     b.HasOne("Petsica.Core.Entities.Community.Post", "Post")
@@ -969,11 +1148,19 @@ namespace Petsica.Infrastructure.Migrations
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Product", b =>
                 {
+                    b.HasOne("Petsica.Core.Entities.Marketplace.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("Petsica.Core.Entities.Users.User", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerID")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("Seller");
                 });
@@ -1151,68 +1338,11 @@ namespace Petsica.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.ClinicApproval", b =>
-                {
-                    b.HasOne("Petsica.Core.Entities.Users.AdminEntity.Admin", "Admin")
-                        .WithMany("ClinicApprovals")
-                        .HasForeignKey("AdminID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Petsica.Core.Entities.Users.Clinic", "Clinic")
-                        .WithMany("Approvals")
-                        .HasForeignKey("ClinicID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-
-                    b.Navigation("Clinic");
-                });
-
-            modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.SellerApproval", b =>
-                {
-                    b.HasOne("Petsica.Core.Entities.Users.AdminEntity.Admin", "Admin")
-                        .WithMany("SellerApprovals")
-                        .HasForeignKey("AdminID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Petsica.Core.Entities.Users.User", "Seller")
-                        .WithMany()
-                        .HasForeignKey("SellerID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-
-                    b.Navigation("Seller");
-                });
-
-            modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.SitterApproval", b =>
-                {
-                    b.HasOne("Petsica.Core.Entities.Users.AdminEntity.Admin", "Admin")
-                        .WithMany("SitterApprovals")
-                        .HasForeignKey("AdminID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Petsica.Core.Entities.Users.User", "Sitter")
-                        .WithMany()
-                        .HasForeignKey("SitterID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Admin");
-
-                    b.Navigation("Sitter");
-                });
-
             modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationUser", b =>
                 {
                     b.OwnsMany("Petsica.Core.Entities.Authrization.RefreshToken", "RefreshTokens", b1 =>
                         {
-                            b1.Property<string>("ApplicationUserId")
+                            b1.Property<string>("UserId")
                                 .HasColumnType("nvarchar(450)");
 
                             b1.Property<int>("Id")
@@ -1234,12 +1364,12 @@ namespace Petsica.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
-                            b1.HasKey("ApplicationUserId", "Id");
+                            b1.HasKey("UserId", "Id");
 
-                            b1.ToTable("RefreshToken");
+                            b1.ToTable("RefreshTokens", (string)null);
 
                             b1.WithOwner()
-                                .HasForeignKey("ApplicationUserId");
+                                .HasForeignKey("UserId");
                         });
 
                     b.Navigation("RefreshTokens");
@@ -1252,24 +1382,18 @@ namespace Petsica.Infrastructure.Migrations
                     b.Navigation("Likes");
                 });
 
+            modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Category", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("Petsica.Core.Entities.Services.SitterService", b =>
                 {
                     b.Navigation("Requests");
                 });
 
-            modelBuilder.Entity("Petsica.Core.Entities.Users.AdminEntity.Admin", b =>
-                {
-                    b.Navigation("ClinicApprovals");
-
-                    b.Navigation("SellerApprovals");
-
-                    b.Navigation("SitterApprovals");
-                });
-
             modelBuilder.Entity("Petsica.Core.Entities.Users.Clinic", b =>
                 {
-                    b.Navigation("Approvals");
-
                     b.Navigation("ClinicMessages");
 
                     b.Navigation("UserMessages");

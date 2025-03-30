@@ -4,7 +4,6 @@
     string Email,
     string UserName,
     string Photo,
-    string Address,
-    string Location
+    string Address
 );
 }

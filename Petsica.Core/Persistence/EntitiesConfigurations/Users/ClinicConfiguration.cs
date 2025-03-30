@@ -5,13 +5,6 @@ public class ClinicConfiguration : IEntityTypeConfiguration<Clinic>
     {
         builder.HasKey(c => c.ClinicID);
 
-        builder.Property(c => c.Username)
-               .IsRequired()
-               .HasMaxLength(15);
-
-        builder.Property(c => c.Password)
-               .IsRequired()
-               .HasMaxLength(50);
 
         #region Relationships
         builder.HasMany(c => c.ClinicMessages)

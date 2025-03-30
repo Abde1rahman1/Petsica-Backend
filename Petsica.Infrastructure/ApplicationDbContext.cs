@@ -7,9 +7,9 @@ using Petsica.Core.Persistence.EntitiesConfigurations.Pets;
 using Petsica.Core.Persistence.EntitiesConfigurations.Services;
 using Petsica.Core.Persistence.EntitiesConfigurations.ServicesS;
 using Petsica.Core.Persistence.EntitiesConfigurations.Users;
-using Petsica.Core.Persistence.EntitiesConfigurations.Users.Admins;
-
+using Petsica.Infrastructure.DataBase.Configurations;
 using Petsica.Infrastructure.DBModel;
+
 
 
 
@@ -18,7 +18,7 @@ namespace Petsica.Infrastructure
 {
 
     public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
-        IdentityDbContext<ApplicationUser>(options)
+        IdentityDbContext<ApplicationUser, ApplicationRole, string>(options)
     {
         #region Tables
         public DbSet<User> Users { get; set; }
@@ -31,10 +31,10 @@ namespace Petsica.Infrastructure
         public DbSet<UserRequestService> UserRequestServices { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<SellerManageProduct> SellerManageProducts { get; set; }
-        public DbSet<Admin> Admins { get; set; }
-        public DbSet<SitterApproval> SitterApprovals { get; set; }
-        public DbSet<SellerApproval> SellerApprovals { get; set; }
-        public DbSet<ClinicApproval> ClinicApprovals { get; set; }
+        //public DbSet<Admin> Admins { get; set; }
+        //public DbSet<SitterApproval> SitterApprovals { get; set; }
+        //public DbSet<SellerApproval> SellerApprovals { get; set; }
+        //public DbSet<ClinicApproval> ClinicApprovals { get; set; }
         public DbSet<Clinic> Clinics { get; set; }
         public DbSet<ClinicMessageClinic> ClinicMessageClinics { get; set; }
         public DbSet<UserMessageClinic> UserMessageClinics { get; set; }
@@ -42,11 +42,13 @@ namespace Petsica.Infrastructure
         public DbSet<UserMakeOrder> UserMakeOrders { get; set; }
         public DbSet<UserRequestPet> UserRequestPets { get; set; }
         public DbSet<UserRemindPet> UserRemindPets { get; set; }
+        public DbSet<UserFollow> UserFollows { get; set; }
+        public DbSet<Category> Categories { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            ///  modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new PetConfiguration());
@@ -58,10 +60,10 @@ namespace Petsica.Infrastructure
             modelBuilder.ApplyConfiguration(new UserRequestServiceConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new SellerManageProductConfiguration());
-            modelBuilder.ApplyConfiguration(new AdminConfiguration());
-            modelBuilder.ApplyConfiguration(new SitterApprovalConfiguration());
-            modelBuilder.ApplyConfiguration(new SellerApprovalConfiguration());
-            modelBuilder.ApplyConfiguration(new ClinicApprovalConfiguration());
+            //modelBuilder.ApplyConfiguration(new AdminConfiguration());
+            //modelBuilder.ApplyConfiguration(new SitterApprovalConfiguration());
+            //modelBuilder.ApplyConfiguration(new SellerApprovalConfiguration());
+            //modelBuilder.ApplyConfiguration(new ClinicApprovalConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicMessageClinicConfiguration());
             modelBuilder.ApplyConfiguration(new UserMessageClinicConfiguration());
@@ -69,6 +71,12 @@ namespace Petsica.Infrastructure
             modelBuilder.ApplyConfiguration(new UserMakeOrderConfiguration());
             modelBuilder.ApplyConfiguration(new UserRequestPetConfiguration());
             modelBuilder.ApplyConfiguration(new UserRemindPetConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleClaimConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

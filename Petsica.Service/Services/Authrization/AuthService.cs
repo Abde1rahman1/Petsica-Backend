@@ -1,13 +1,18 @@
-﻿namespace Petsica.Service.Services.Authrization
+﻿using Petsica.Core.Const;
+
+namespace Petsica.Service.Services.Authrization
 {
     public class AuthService(
      UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager,
+
      IJwtProvider jwtProvider,
      ILogger<AuthService> logger,
      ApplicationDbContext context
     ) : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
         private readonly IJwtProvider _jwtProvider = jwtProvider;
         private readonly ILogger<AuthService> _logger = logger;
         private readonly ApplicationDbContext _context = context;
@@ -15,34 +20,42 @@
 
         public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
         {
-
-            var user = await _userManager.FindByEmailAsync(email);
-
-            if (user is null)
+            if (await _userManager.FindByEmailAsync(email) is not { } user)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
-            var isValidPassword = await _userManager.CheckPasswordAsync(user, password);
+            if (user.IsDisabled)
+                return Result.Failure<AuthResponse>(UserErrors.DisabledUser);
 
-            if (!isValidPassword)
-                return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials); ;
+            var result = await _signInManager.PasswordSignInAsync(user, password, false, true);
 
-            var (token, expiresIn) = _jwtProvider.GenerateToken(user);
-            var refreshToken = GenerateRefreshToken();
-            var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpiryDays);
-
-            user.RefreshTokens.Add(new RefreshToken
+            if (result.Succeeded)
             {
-                Token = refreshToken,
-                ExpiresOn = refreshTokenExpiration
-            });
+                var (userRoles, userPermissions) = await GetUserRolesAndPermissions(user, cancellationToken);
 
-            await _userManager.UpdateAsync(user);
+                var (token, expiresIn) = _jwtProvider.GenerateToken(user, userRoles, userPermissions);
+                var refreshToken = GenerateRefreshToken();
+                var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpiryDays);
 
-            var response = new AuthResponse(user.Id, user.Email, token, expiresIn, refreshToken, refreshTokenExpiration);
+                user.RefreshTokens.Add(new RefreshToken
+                {
+                    Token = refreshToken,
+                    ExpiresOn = refreshTokenExpiration
+                });
 
-            return Result.Success(response);
+                await _userManager.UpdateAsync(user);
 
+                var response = new AuthResponse(user.Id, user.Email, token, expiresIn, refreshToken, refreshTokenExpiration);
 
+                return Result.Success(response);
+            }
+
+            var error = result.IsNotAllowed
+                ? UserErrors.EmailNotConfirmed
+                : result.IsLockedOut
+                ? UserErrors.LockedUser
+                : UserErrors.InvalidCredentials;
+
+            return Result.Failure<AuthResponse>(error);
         }
 
 
@@ -65,7 +78,9 @@
 
             userRefreshToken.RevokedOn = DateTime.UtcNow;
 
-            var (newToken, expiresIn) = _jwtProvider.GenerateToken(user);
+            var (userRoles, userPermissions) = await GetUserRolesAndPermissions(user, cancellationToken);
+
+            var (newToken, expiresIn) = _jwtProvider.GenerateToken(user, userRoles, userPermissions);
             var newRefreshToken = GenerateRefreshToken();
             var refreshTokenExpiration = DateTime.UtcNow.AddDays(_refreshTokenExpiryDays);
 
@@ -142,6 +157,46 @@
             return Result.Failure(new Errors(error.Code, error.Description, StatusCodes.Status400BadRequest));
         }
 
+        public async Task<Result> ClinicRegisterAsync(ClinicRegisterRequest request, CancellationToken cancellationToken = default)
+        {
+            var emailIsExists = await _userManager.Users.AnyAsync(x => x.Email == request.Email, cancellationToken);
+
+            if (emailIsExists)
+                return Result.Failure(UserErrors.DuplicatedEmail);
+
+            var user = request.Adapt<ApplicationUser>();
+
+            user.Type = RoleName.Clinic;
+
+            var result = await _userManager.CreateAsync(user, request.Password);
+
+
+            var clinic = new Clinic
+            {
+                ClinicID = user.Id,
+                WorkingHours = request.WorkingHours,
+                ContactInfo = request.ContactInfo,
+            };
+
+            await _context.Clinics.AddAsync(clinic, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
+            if (result.Succeeded)
+            {
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+                _logger.LogInformation("Confirmation code: {code}", code);
+
+
+                return Result.Success();
+            }
+
+            var error = result.Errors.First();
+
+            return Result.Failure(new Errors(error.Code, error.Description, StatusCodes.Status400BadRequest));
+        }
+
         public async Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request)
         {
             if (await _userManager.FindByIdAsync(request.UserId) is not { } user)
@@ -164,7 +219,20 @@
             var result = await _userManager.ConfirmEmailAsync(user, code);
 
             if (result.Succeeded)
+            {
+                if (user.Type == RoleName.Member)
+                    await _userManager.AddToRoleAsync(user, DefaultRoles.Member.Name);
+                else if (user.Type == RoleName.Seller)
+                    await _userManager.AddToRoleAsync(user, DefaultRoles.Seller.Name);
+                else if (user.Type == RoleName.Sitter)
+                    await _userManager.AddToRoleAsync(user, DefaultRoles.Sitter.Name);
+                else if (user.Type == RoleName.Clinic)
+                    await _userManager.AddToRoleAsync(user, DefaultRoles.Clinic.Name);
+
+
                 return Result.Success();
+            }
+
 
             var error = result.Errors.First();
 
@@ -233,6 +301,33 @@
         private static string GenerateRefreshToken()
         {
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+        }
+
+
+        private async Task<(IEnumerable<string> roles, IEnumerable<string> permissions)> GetUserRolesAndPermissions(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            //var userPermissions = await _context.Roles
+            //    .Join(_context.RoleClaims,
+            //        role => role.Id,
+            //        claim => claim.RoleId,
+            //        (role, claim) => new { role, claim }
+            //    )
+            //    .Where(x => userRoles.Contains(x.role.Name!))
+            //    .Select(x => x.claim.ClaimValue!)
+            //    .Distinct()
+            //    .ToListAsync(cancellationToken);
+
+            var userPermissions = await (from r in _context.Roles
+                                         join p in _context.RoleClaims
+                                         on r.Id equals p.RoleId
+                                         where userRoles.Contains(r.Name!)
+                                         select p.ClaimValue!)
+                                         .Distinct()
+                                         .ToListAsync(cancellationToken);
+
+            return (userRoles, userPermissions);
         }
 
     }

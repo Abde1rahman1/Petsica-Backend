@@ -30,73 +30,73 @@ namespace Petsica.Service.Services.Pets
 
         }
 
-        public async Task<Result> AddRemindPetAsync(string userId, AddRemindPetRequest request, CancellationToken cancellationToken)
-        {
-            var result = request.Adapt<UserRemindPet>();
+        //public async Task<Result> AddRemindPetAsync(string userId, AddRemindPetRequest request, CancellationToken cancellationToken)
+        //{
+        //    var result = request.Adapt<UserRemindPet>();
 
-            result.UserID = userId;
+        //    result.UserID = userId;
 
-            try
-            {
-                await _context.UserRemindPets.AddAsync(result, cancellationToken);
-                await _context.SaveChangesAsync(cancellationToken);
-            }
-            catch
-            {
+        //    try
+        //    {
+        //        await _context.UserRemindPets.AddAsync(result, cancellationToken);
+        //        await _context.SaveChangesAsync(cancellationToken);
+        //    }
+        //    catch
+        //    {
 
-                return Result.Failure(PetErrors.InvalidCreatePet);
-            }
+        //        return Result.Failure(PetErrors.InvalidCreatePet);
+        //    }
 
-            return Result.Success();
+        //    return Result.Success();
 
-        }
-
-
-        public async Task<Result> UpdateRemindPetAsync(int RemindID, UpdateRemindPetRequest request, CancellationToken cancellationToken)
-        {
+        //}
 
 
-            var isExisting = await _context.UserRemindPets.AnyAsync(x => x.UserRemindPetID == RemindID, cancellationToken: cancellationToken);
-
-            if (!isExisting)
-                return Result.Failure(PetErrors.InvalidUpdateRemindPets);
-
-            var currentRemind = await _context.UserRemindPets.FindAsync(RemindID, cancellationToken);
-
-            if (currentRemind is null)
-                return Result.Failure(PetErrors.RemindNotFound);
-
-            currentRemind!.Description = request.Description;
-            currentRemind.Date = request.Date;
+        //public async Task<Result> UpdateRemindPetAsync(int RemindID, UpdateRemindPetRequest request, CancellationToken cancellationToken)
+        //{
 
 
+        //    var isExisting = await _context.UserRemindPets.AnyAsync(x => x.UserRemindPetID == RemindID, cancellationToken: cancellationToken);
 
-            await _context.SaveChangesAsync(cancellationToken);
+        //    if (!isExisting)
+        //        return Result.Failure(PetErrors.InvalidUpdateRemindPets);
 
-            return Result.Success();
+        //    var currentRemind = await _context.UserRemindPets.FindAsync(RemindID, cancellationToken);
 
-        }
+        //    if (currentRemind is null)
+        //        return Result.Failure(PetErrors.RemindNotFound);
 
-        public async Task<Result<IEnumerable<RemindPetResponse>>> GetAllRemindAsync(string userId, int PetID, CancellationToken cancellationToken)
-        {
-            var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == PetID, cancellationToken: cancellationToken);
+        //    currentRemind!.Description = request.Description;
+        //    currentRemind.Date = request.Date;
 
-            if (!petIsExists)
-                return Result.Failure<IEnumerable<RemindPetResponse>>(PetErrors.PetNotFound);
 
-            var response = await _context.UserRemindPets.
-                Where(x => x.UserID == userId && x.PetID == PetID)
-                .ProjectToType<RemindPetResponse>()
-                .ToListAsync(cancellationToken);
 
-            return Result.Success<IEnumerable<RemindPetResponse>>(response);
+        //    await _context.SaveChangesAsync(cancellationToken);
 
-        }
+        //    return Result.Success();
+
+        //}
+
+        //public async Task<Result<IEnumerable<RemindPetResponse>>> GetAllRemindAsync(string userId, int PetID, CancellationToken cancellationToken)
+        //{
+        //    var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == PetID, cancellationToken: cancellationToken);
+
+        //    if (!petIsExists)
+        //        return Result.Failure<IEnumerable<RemindPetResponse>>(PetErrors.PetNotFound);
+
+        //    var response = await _context.UserRemindPets.
+        //        Where(x => x.UserID == userId && x.PetID == PetID)
+        //        .ProjectToType<RemindPetResponse>()
+        //        .ToListAsync(cancellationToken);
+
+        //    return Result.Success<IEnumerable<RemindPetResponse>>(response);
+
+        //}
+
         public async Task<Result<IEnumerable<PetsResponse>>> GetAllPetsAsync(string userId, CancellationToken cancellationToken)
         {
             var response = await _context.Pets.
                 Where(x => x.UserID == userId)
-
                 .ProjectToType<PetsResponse>()
                 .ToListAsync(cancellationToken);
 
@@ -196,7 +196,7 @@ namespace Petsica.Service.Services.Pets
 
         }
 
-        public async Task<Result<PetsServiceResponse>> GetPetServices(string userId, int PetID, CancellationToken cancellationToken)
+        public async Task<Result<PetsServiceResponse>> GetPetProfil(string userId, int PetID, CancellationToken cancellationToken)
         {
             var petIsExists = await _context.Pets.AnyAsync(x => x.PetID == PetID, cancellationToken: cancellationToken);
 
@@ -216,6 +216,36 @@ namespace Petsica.Service.Services.Pets
             return Result.Success(response);
         }
 
+        public async Task<Result<IEnumerable<PetsMatingResponse>>> GetPetMatingList(CancellationToken CancellationToken)
+        {
+            var matingList = await _context.UserRequestPets
+                .Where(x => x.Mating == true)
+                .Include(p => p.Pet)
+                .ProjectToType<PetsMatingResponse>()
+                .ToListAsync(cancellationToken: CancellationToken);
+
+            if (matingList is null)
+                return Result.Failure<IEnumerable<PetsMatingResponse>>(PetErrors.PetNotFound);
+
+            return Result.Success<IEnumerable<PetsMatingResponse>>(matingList);
+
+
+        }
+        public async Task<Result<IEnumerable<PetsAdoptionResponse>>> GetPetAdoptionList(CancellationToken CancellationToken)
+        {
+            var AdoptionList = await _context.UserRequestPets
+                .Where(x => x.Adoption == true)
+                .Include(p => p.Pet)
+                .ProjectToType<PetsAdoptionResponse>()
+                .ToListAsync(cancellationToken: CancellationToken);
+
+            if (AdoptionList is null)
+                return Result.Failure<IEnumerable<PetsAdoptionResponse>>(PetErrors.PetNotFound);
+
+            return Result.Success<IEnumerable<PetsAdoptionResponse>>(AdoptionList);
+
+
+        }
 
         public bool Createservices(UserRequestPet request)
         {
@@ -249,5 +279,7 @@ namespace Petsica.Service.Services.Pets
             return true;
 
         }
+
+
     }
 }

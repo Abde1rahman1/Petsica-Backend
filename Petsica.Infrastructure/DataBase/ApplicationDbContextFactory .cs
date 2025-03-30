@@ -10,14 +10,10 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
     {
         var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
 
-
-
-
-
-
-
         //Hamed
-        //  optionsBuilder.UseSqlServer("Server=.;Database=Petsica;Trusted_Connection=True;Encrypt=False");
+        optionsBuilder.UseSqlServer("Server=.;Database=Petsica;Trusted_Connection=True;Encrypt=False");
+        // optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectModels;Database=Petsicaa;Trusted_Connection=True;Encrypt=False");
+
 
         return new ApplicationDbContext(optionsBuilder.Options);
     }

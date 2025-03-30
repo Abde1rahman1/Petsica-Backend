@@ -8,6 +8,4 @@
     string Name,
     string Breed
         );
-
-
 }

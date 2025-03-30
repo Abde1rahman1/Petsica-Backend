@@ -1,5 +1,4 @@
 ﻿using Petsica.Shared.Contracts.Users.Request;
-using Petsica.Shared.Contracts.Users.Response;
 
 namespace Petsica.Shared.Contracts.Users.Validation
 {

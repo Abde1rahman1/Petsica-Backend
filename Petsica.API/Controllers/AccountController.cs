@@ -57,7 +57,7 @@ namespace Petsica.API.Controllers
             var result = await _userService.GetServicesAsync(cancellationToken);
 
 
-            return result.IsSuccess ? Ok(result) : result.ToProblem();
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
 
         }
 
@@ -68,6 +68,67 @@ namespace Petsica.API.Controllers
 
 
             return result.IsSuccess ? Created() : result.ToProblem();
+
+        }
+
+        [HttpGet("GetASitterService")]
+        public async Task<IActionResult> GetASitterService(CancellationToken cancellationToken)
+        {
+            var result = await _userService.GetAllSitterService(User.GetUserId()!, cancellationToken);
+
+
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+
+        }
+
+        [HttpPut("UpdateSitterService")]
+        public async Task<IActionResult> UpdateSitterService([FromBody] UpdateSitterServiceRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _userService.UpdateSitterService(User.GetUserId()!, request, cancellationToken);
+
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
+
+        }
+
+        [HttpGet("GetSellerApproval")]
+        public async Task<IActionResult> GetSellerApproval([FromBody] UpdateSitterServiceRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _userService.GetSellerApproval(User.GetUserId()!, cancellationToken);
+
+
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+        }
+
+        [HttpGet("GetSitterApproval")]
+        public async Task<IActionResult> GetSitterApproval([FromBody] UpdateSitterServiceRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _userService.GetSitterApproval(User.GetUserId()!, cancellationToken);
+
+
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+        }
+
+        [HttpGet("GetClinicApproval")]
+        public async Task<IActionResult> GetClinicApproval([FromBody] UpdateSitterServiceRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _userService.GetClinicApproval(User.GetUserId()!, cancellationToken);
+
+
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+        }
+
+        [HttpPost("ApprovalUser")]
+        public async Task<IActionResult> ApprovalUser([FromBody] string userId, CancellationToken cancellationToken)
+        {
+            var result = await _userService.ApprovalUser(userId, cancellationToken);
+
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
 
         }
     }

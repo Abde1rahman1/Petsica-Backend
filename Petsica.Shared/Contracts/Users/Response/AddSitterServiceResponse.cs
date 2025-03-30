@@ -1,6 +1,6 @@
 ﻿namespace Petsica.Shared.Contracts.Users.Response
 {
-    public record ServiceResponse(
+    public record AddSitterServiceResponse(
     int ServiceID,
     string SitterID,
     decimal Price,

@@ -7,6 +7,12 @@ namespace Petsica.Shared.Error
         public static readonly Errors InvalidCredentials =
             new("User.InvalidCredentials", "Invalid email/password", StatusCodes.Status401Unauthorized);
 
+        public static readonly Errors DisabledUser =
+            new("User.DisabledUser", "Disabled user, please contact your administrator", StatusCodes.Status401Unauthorized);
+
+        public static readonly Errors LockedUser =
+            new("User.LockedUser", "Locked user, please contact your administrator", StatusCodes.Status401Unauthorized);
+
         public static readonly Errors InvalidJwtToken =
             new("User.InvalidJwtToken", "Invalid Jwt token", StatusCodes.Status401Unauthorized);
 
@@ -26,9 +32,19 @@ namespace Petsica.Shared.Error
             new("User.DuplicatedConfirmation", "Email already confirmed", StatusCodes.Status400BadRequest);
 
         public static readonly Errors InvalidCreateService =
-           new("User.InvalidCreateService", "Can not create service Mating/Adoption", StatusCodes.Status400BadRequest);
+           new("User.InvalidCreateService", "Can not create service ", StatusCodes.Status400BadRequest);
 
         public static readonly Errors InvalidChooesService =
-          new("User.InvalidChooesService", "Can not Chooes Service Mating/Adoption", StatusCodes.Status400BadRequest);
+          new("User.InvalidChooesService", "Can not Chooes Service ", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors NoServicesYet =
+         new("User.NoServicesYet", "There are no services available yet", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors ServiceNotFound =
+       new("User.ServiceNotFound", "There are no services available yet", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors NotApproval =
+       new("User.NotApproval", "user not Approval yet ", StatusCodes.Status400BadRequest);
+
     }
 }

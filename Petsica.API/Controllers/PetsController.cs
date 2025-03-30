@@ -22,30 +22,30 @@ namespace Petsica.API.Controllers
             return result.IsSuccess ? Created() : result.ToProblem();
         }
 
-        [HttpPost("AddRemindPet")]
-        public async Task<IActionResult> AddRemindPet([FromBody] AddRemindPetRequest request, CancellationToken cancellationToken)
-        {
-            var result = await _service.AddRemindPetAsync(User.GetUserId()!, request, cancellationToken);
+        //[HttpPost("AddRemindPet")]
+        //public async Task<IActionResult> AddRemindPet([FromBody] AddRemindPetRequest request, CancellationToken cancellationToken)
+        //{
+        //    var result = await _service.AddRemindPetAsync(User.GetUserId()!, request, cancellationToken);
 
-            return result.IsSuccess ? Created() : result.ToProblem();
-        }
+        //    return result.IsSuccess ? Created() : result.ToProblem();
+        //}
 
-        [HttpPut("UpdateRemindPet/{RemindID}")]
-        public async Task<IActionResult> UpdateRemindPet([FromRoute] int RemindID, [FromBody] UpdateRemindPetRequest request, CancellationToken cancellationToken)
-        {
-            var result = await _service.UpdateRemindPetAsync(RemindID, request, cancellationToken);
+        //[HttpPut("UpdateRemindPet/{RemindID}")]
+        //public async Task<IActionResult> UpdateRemindPet([FromRoute] int RemindID, [FromBody] UpdateRemindPetRequest request, CancellationToken cancellationToken)
+        //{
+        //    var result = await _service.UpdateRemindPetAsync(RemindID, request, cancellationToken);
 
-            return result.IsSuccess ? Created() : result.ToProblem();
-        }
+        //    return result.IsSuccess ? Created() : result.ToProblem();
+        //}
 
-        [HttpGet("GetAllRemind")]
+        //[HttpGet("GetAllRemind")]
 
-        public async Task<IActionResult> GetAllRemind([FromQuery] int petId, CancellationToken cancellationToken)
-        {
-            var result = await _service.GetAllRemindAsync(User.GetUserId()!, petId, cancellationToken);
+        //public async Task<IActionResult> GetAllRemind([FromQuery] int petId, CancellationToken cancellationToken)
+        //{
+        //    var result = await _service.GetAllRemindAsync(User.GetUserId()!, petId, cancellationToken);
 
-            return result.IsSuccess ? Ok(result) : result.ToProblem();
-        }
+        //    return result.IsSuccess ? Ok(result) : result.ToProblem();
+        //}
 
         [HttpGet("GetAllPets")]
 
@@ -96,7 +96,27 @@ namespace Petsica.API.Controllers
 
         public async Task<IActionResult> GetPetService([FromRoute] int petId, CancellationToken cancellationToken)
         {
-            var result = await _service.GetPetServices(User.GetUserId()!, petId, cancellationToken);
+            var result = await _service.GetPetProfil(User.GetUserId()!, petId, cancellationToken);
+
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+        }
+
+        [HttpGet("GetPetMatingList")]
+
+        public async Task<IActionResult> GetPetMatingList(CancellationToken cancellationToken)
+        {
+            var result = await _service.GetPetMatingList(cancellationToken);
+
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+        }
+
+        [HttpGet("GetPetAdoptionList")]
+
+        public async Task<IActionResult> GetPetAdoptionList(CancellationToken cancellationToken)
+        {
+            var result = await _service.GetPetAdoptionList(cancellationToken);
 
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
 

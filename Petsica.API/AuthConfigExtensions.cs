@@ -16,7 +16,7 @@ namespace Petsica.API
         public static IServiceCollection AddAuthConfigDI(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
               .AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
 

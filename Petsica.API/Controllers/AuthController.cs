@@ -39,10 +39,18 @@ namespace Petsica.API.Controllers
             return result.IsSuccess ? Ok() : result.ToProblem();
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request, CancellationToken cancellationToken)
+        [HttpPost("registerUser")]
+        public async Task<IActionResult> UserRegister([FromBody] RegisterRequest request, CancellationToken cancellationToken)
         {
             var result = await _authService.RegisterAsync(request, cancellationToken);
+
+            return result.IsSuccess ? Created() : result.ToProblem();
+        }
+
+        [HttpPost("registerClinic")]
+        public async Task<IActionResult> ClinicRegister([FromBody] ClinicRegisterRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _authService.ClinicRegisterAsync(request, cancellationToken);
 
             return result.IsSuccess ? Created() : result.ToProblem();
         }

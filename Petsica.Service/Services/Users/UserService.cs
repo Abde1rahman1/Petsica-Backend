@@ -1,4 +1,5 @@
-﻿using Petsica.Core.Entities.Services;
+﻿using Petsica.Core.Const;
+using Petsica.Core.Entities.Services;
 using Petsica.Service.Abstractions.Users;
 using Petsica.Shared.Contracts.Users.Request;
 using Petsica.Shared.Contracts.Users.Response;
@@ -29,7 +30,6 @@ namespace Petsica.Service.Services.Users
                     setters
                         .SetProperty(x => x.UserName, request.UserName)
                         .SetProperty(x => x.Address, request.Address)
-                        .SetProperty(x => x.Location, request.Location)
                         .SetProperty(x => x.Photo, request.Photo)
                 );
 
@@ -75,13 +75,13 @@ namespace Petsica.Service.Services.Users
             return Result.Success();
         }
 
-        public async Task<Result<List<ServiceResponse>>> GetServicesAsync(CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<AddSitterServiceResponse>>> GetServicesAsync(CancellationToken cancellationToken)
         {
             var result = await _context.Services.ToListAsync(cancellationToken);
 
             //var serviceResponses = result.Adapt<List<ServiceResponse>>();
 
-            var serviceResponses = result.Select(service => new ServiceResponse(
+            var serviceResponses = result.Select(service => new AddSitterServiceResponse(
                     service.ServiceID,
                     service.SitterID,
                     service.Price,
@@ -90,7 +90,7 @@ namespace Petsica.Service.Services.Users
                     service.Location
                   )).ToList();
 
-            return Result.Success(serviceResponses);
+            return Result.Success<IEnumerable<AddSitterServiceResponse>>(serviceResponses);
 
 
         }
@@ -116,6 +116,126 @@ namespace Petsica.Service.Services.Users
             return Result.Success();
 
         }
+
+        public async Task<Result<IEnumerable<AddSitterServiceResponse>>> GetAllSitterService(string userID, CancellationToken cancellationToken)
+        {
+
+            var serviceResponses = await _context.Services
+                .Where(x => x.SitterID == userID)
+                .ProjectToType<AddSitterServiceResponse>()
+                .ToListAsync(cancellationToken);
+
+            if (serviceResponses is null)
+                return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.NoServicesYet);
+
+            return Result.Success<IEnumerable<AddSitterServiceResponse>>(serviceResponses);
+        }
+
+        public async Task<Result> UpdateSitterService(string userID, UpdateSitterServiceRequest request, CancellationToken cancellationToken)
+        {
+            var service = await _context.Services
+                .Where(x => x.ServiceID == request.ServiceID && x.SitterID == userID)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (service is null)
+                return Result.Failure(UserErrors.ServiceNotFound);
+
+
+            service.Title = request.Title;
+            service.Description = request.Description;
+            service.Location = request.Location;
+            service.Price = request.Price;
+
+            try
+            {
+                await _context.Services.Where(x => x.ServiceID == request.ServiceID).
+                     ExecuteUpdateAsync(service =>
+                        service.
+                        SetProperty(x => x.Title, request.Title)
+                        .SetProperty(x => x.Description, request.Description)
+                        .SetProperty(x => x.Location, request.Location)
+                        .SetProperty(x => x.Price, request.Price), cancellationToken
+
+                     );
+                return Result.Success();
+
+            }
+            catch
+            {
+                return Result.Failure(UserErrors.ServiceNotFound);
+            }
+
+        }
+
+
+
+        public async Task<Result<IEnumerable<UserApprovalResponse>>> GetSellerApproval(string userId, CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null || !(user.Type == RoleName.Admin))
+                return Result.Failure<IEnumerable<UserApprovalResponse>>(UserErrors.ServiceNotFound);
+
+            var setters = _userManager.Users
+                .Where(x => x.Type == RoleName.Seller && x.IsApproval == false)
+                .ProjectToType<UserApprovalResponse>()
+                .ToList();
+
+
+            return Result.Success<IEnumerable<UserApprovalResponse>>(setters);
+
+        }
+        public async Task<Result<IEnumerable<UserApprovalResponse>>> GetSitterApproval(string userId, CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null || !(user.Type == RoleName.Admin))
+                return Result.Failure<IEnumerable<UserApprovalResponse>>(UserErrors.ServiceNotFound);
+
+            var sitters = _userManager.Users
+                .Where(x => x.Type == RoleName.Sitter && x.IsApproval == false)
+                .ProjectToType<UserApprovalResponse>()
+                .ToList();
+
+
+            return Result.Success<IEnumerable<UserApprovalResponse>>(sitters);
+
+        }
+
+        public async Task<Result<IEnumerable<UserApprovalResponse>>> GetClinicApproval(string userId, CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user is null || !(user.Type == RoleName.Admin))
+                return Result.Failure<IEnumerable<UserApprovalResponse>>(UserErrors.ServiceNotFound);
+
+            var clinics = _userManager.Users
+                .Where(x => x.Type == RoleName.Clinic && x.IsApproval == false)
+                .ProjectToType<UserApprovalResponse>()
+                .ToList();
+
+
+            return Result.Success<IEnumerable<UserApprovalResponse>>(clinics);
+
+        }
+
+
+        public async Task<Result> ApprovalUser(string userId, CancellationToken cancellationToken = default)
+        {
+
+            await _userManager.Users
+                .Where(x => x.Id == userId)
+                .ExecuteUpdateAsync(setters =>
+                setters
+                        .SetProperty(x => x.IsApproval, true)
+                        , cancellationToken
+
+                );
+
+            return Result.Success();
+
+        }
+
     }
 
 
