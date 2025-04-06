@@ -1,6 +1,7 @@
 ﻿global using Mapster;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.UI.Services;
 global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
@@ -19,5 +20,4 @@ global using Petsica.Shared.Error;
 global using Petsica.Shared.Result;
 global using System.Security.Cryptography;
 global using System.Text;
-
 
