@@ -33,4 +33,9 @@
     <ProjectReference Include="..\Petsica.Shared\Petsica.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Abstractions\Marketplace\" />
+    <Folder Include="Services\Marketplace\" />
+  </ItemGroup>
+
 </Project>

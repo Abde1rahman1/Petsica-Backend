@@ -43,7 +43,6 @@ namespace Petsica.Infrastructure
         public DbSet<UserRequestPet> UserRequestPets { get; set; }
         public DbSet<UserRemindPet> UserRemindPets { get; set; }
         public DbSet<UserFollow> UserFollows { get; set; }
-        public DbSet<Category> Categories { get; set; }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -71,7 +70,6 @@ namespace Petsica.Infrastructure
             modelBuilder.ApplyConfiguration(new UserMakeOrderConfiguration());
             modelBuilder.ApplyConfiguration(new UserRequestPetConfiguration());
             modelBuilder.ApplyConfiguration(new UserRemindPetConfiguration());
-            modelBuilder.ApplyConfiguration(new CategoryConfiguration());
 
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleClaimConfiguration());

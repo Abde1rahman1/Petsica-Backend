@@ -18,4 +18,10 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Contracts\Marketplace\Request\" />
+    <Folder Include="Contracts\Marketplace\Response\" />
+    <Folder Include="Contracts\Marketplace\Validation\" />
+  </ItemGroup>
+
 </Project>
