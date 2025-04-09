@@ -18,7 +18,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
 		optionsBuilder.UseSqlServer("Server=.;Database=Petsicaa;Trusted_Connection=True;Encrypt=False");
 
 		//Public
-		//optionsBuilder.UseSqlServer("Server=db15370.public.databaseasp.net; Database=db15370; User Id=db15370; Password=X%p4b7?WD-o5; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True; ");
+		//optionsBuilder.UseSqlServer("Server=db16824.public.databaseasp.net; Database=db16824; User Id=db16824; Password=7f-Q@Aj6n3L?; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True; ");
 
 		return new ApplicationDbContext(optionsBuilder.Options);
     }
