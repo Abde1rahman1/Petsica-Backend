@@ -14,7 +14,19 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         #region Relationships
         builder.HasOne(p => p.Seller)
                .WithMany()
-               .HasForeignKey(p => p.SellerID).OnDelete(DeleteBehavior.NoAction);
+               .HasForeignKey(p => p.SellerID)
+               .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany(p => p.OrderItems)
+               .WithOne(oi => oi.Product)
+               .HasForeignKey(oi => oi.ProductId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasMany(p => p.CartItems)
+               .WithOne(ci => ci.Product)
+               .HasForeignKey(ci => ci.ProductId)
+               .OnDelete(DeleteBehavior.NoAction);
+
         #endregion
     }
 }

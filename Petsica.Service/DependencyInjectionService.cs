@@ -1,10 +1,9 @@
 using Petsica.Service.Abstractions.Community;
-using Petsica.Service.Abstractions.Marketplace;
 using Petsica.Service.Abstractions.Pets;
 using Petsica.Service.Abstractions.Users;
 using Petsica.Service.Service.Community;
 using Petsica.Service.Services.Community;
-using Petsica.Service.Services.Marketplace;
+using Petsica.Service.Services.Email;
 using Petsica.Service.Services.Pets;
 using Petsica.Service.Services.Users;
 
@@ -12,8 +11,7 @@ namespace Petsica.Service
 {
     public static class DependencyInjectionService
     {
-        public static IServiceCollection AddServiceDI(this IServiceCollection services,
-            IConfiguration configuration)
+        public static IServiceCollection AddServiceDI(this IServiceCollection services)
         {
 
 
@@ -31,13 +29,25 @@ namespace Petsica.Service
 
             services.AddScoped<IUserFollow, UserFollowService>();
 
-            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IEmailSender, EmailService>();
 
+            services.AddHttpContextAccessor();
 
             return services;
         }
 
 
+        //public static IServiceCollection MailSettings(this IServiceCollection services, IConfiguration configuration)
+        //{
+        //    services.AddOptions<MailSettings>()
+        //          .BindConfiguration(nameof(MailSettings))
+        //          .ValidateDataAnnotations()
+        //          .ValidateOnStart();
 
+
+
+
+        //    return services;
+        //}
     }
 }

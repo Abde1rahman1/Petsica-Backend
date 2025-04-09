@@ -37,7 +37,8 @@ namespace Petsica.API
 
             services.AddAuthConfigDI(configuration);
             services.AddDBConfig(configuration);
-            services.AddServiceDI(configuration);
+            services.AddServiceDI();
+            //  services.MailSettings(configuration);
             //  services.AddScoped<IAuthService, AuthService>();
 
             //  services.AddExceptionHandler<GlobalExceptionHandler>();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petsica.Infrastructure;
 
@@ -11,9 +12,11 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250407004805_Market_Updates")]
+    partial class Market_Updates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -348,7 +351,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserCommentPost", b =>
@@ -383,7 +386,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserCommentPosts", (string)null);
+                    b.ToTable("UserCommentPosts");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserFollow", b =>
@@ -408,7 +411,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserFollows", (string)null);
+                    b.ToTable("UserFollows");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserLikePost", b =>
@@ -432,7 +435,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserLikePosts", (string)null);
+                    b.ToTable("UserLikePosts");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Cart", b =>
@@ -454,7 +457,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.CartItem", b =>
@@ -480,7 +483,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems", (string)null);
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Order", b =>
@@ -508,7 +511,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.OrderItem", b =>
@@ -540,7 +543,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Product", b =>
@@ -587,7 +590,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("SellerID");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.ClinicMessageClinic", b =>
@@ -619,7 +622,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ClinicSenderID");
 
-                    b.ToTable("ClinicMessageClinics", (string)null);
+                    b.ToTable("ClinicMessageClinics");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.UserMessageClinic", b =>
@@ -652,7 +655,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserMessageClinics", (string)null);
+                    b.ToTable("UserMessageClinics");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.UserMessageUser", b =>
@@ -685,7 +688,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserSenderID");
 
-                    b.ToTable("UserMessageUsers", (string)null);
+                    b.ToTable("UserMessageUsers");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.Pet", b =>
@@ -726,7 +729,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Pets", (string)null);
+                    b.ToTable("Pets");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRemindPet", b =>
@@ -761,7 +764,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserRemindPets", (string)null);
+                    b.ToTable("UserRemindPets");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRequestPet", b =>
@@ -785,7 +788,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserRequestPets", (string)null);
+                    b.ToTable("UserRequestPets");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Services.SitterService", b =>
@@ -820,7 +823,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("SitterID");
 
-                    b.ToTable("Services", (string)null);
+                    b.ToTable("Services");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Services.UserRequestService", b =>
@@ -835,7 +838,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserRequestServices", (string)null);
+                    b.ToTable("UserRequestServices");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.Clinic", b =>
@@ -853,7 +856,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasKey("ClinicID");
 
-                    b.ToTable("Clinics", (string)null);
+                    b.ToTable("Clinics");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.User", b =>
@@ -863,7 +866,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationRole", b =>

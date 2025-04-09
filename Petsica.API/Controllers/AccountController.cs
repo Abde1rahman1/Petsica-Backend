@@ -93,7 +93,7 @@ namespace Petsica.API.Controllers
         }
 
         [HttpGet("GetSellerApproval")]
-        public async Task<IActionResult> GetSellerApproval([FromBody] UpdateSitterServiceRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetSellerApproval(CancellationToken cancellationToken)
         {
             var result = await _userService.GetSellerApproval(User.GetUserId()!, cancellationToken);
 
@@ -103,7 +103,7 @@ namespace Petsica.API.Controllers
         }
 
         [HttpGet("GetSitterApproval")]
-        public async Task<IActionResult> GetSitterApproval([FromBody] UpdateSitterServiceRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetSitterApproval(CancellationToken cancellationToken)
         {
             var result = await _userService.GetSitterApproval(User.GetUserId()!, cancellationToken);
 
@@ -113,7 +113,7 @@ namespace Petsica.API.Controllers
         }
 
         [HttpGet("GetClinicApproval")]
-        public async Task<IActionResult> GetClinicApproval([FromBody] UpdateSitterServiceRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetClinicApproval(CancellationToken cancellationToken)
         {
             var result = await _userService.GetClinicApproval(User.GetUserId()!, cancellationToken);
 

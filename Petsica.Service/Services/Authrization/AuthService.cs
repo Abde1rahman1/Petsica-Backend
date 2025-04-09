@@ -1,14 +1,16 @@
 ﻿using Petsica.Core.Const;
+using Petsica.Shared.Email.Helpers;
 
 namespace Petsica.Service.Services.Authrization
 {
     public class AuthService(
      UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager,
-
      IJwtProvider jwtProvider,
      ILogger<AuthService> logger,
-     ApplicationDbContext context
+     ApplicationDbContext context,
+     IEmailSender emailSender,
+     IHttpContextAccessor httpContextAccessor
     ) : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
@@ -16,6 +18,8 @@ namespace Petsica.Service.Services.Authrization
         private readonly IJwtProvider _jwtProvider = jwtProvider;
         private readonly ILogger<AuthService> _logger = logger;
         private readonly ApplicationDbContext _context = context;
+        private readonly IEmailSender _emailSender = emailSender;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly int _refreshTokenExpiryDays = 14;
 
         public async Task<Result<AuthResponse>> GetTokenAsync(string email, string password, CancellationToken cancellationToken = default)
@@ -148,6 +152,7 @@ namespace Petsica.Service.Services.Authrization
 
                 _logger.LogInformation("Confirmation code: {code}", code);
 
+                await SendConfirmationEmail(user, code);
 
                 return Result.Success();
             }
@@ -188,7 +193,7 @@ namespace Petsica.Service.Services.Authrization
 
                 _logger.LogInformation("Confirmation code: {code}", code);
 
-
+                await SendConfirmationEmail(user, code);
                 return Result.Success();
             }
 
@@ -252,7 +257,7 @@ namespace Petsica.Service.Services.Authrization
 
             _logger.LogInformation("Confirmation code: {code}", code);
 
-
+            await SendConfirmationEmail(user, code);
 
             return Result.Success();
         }
@@ -296,6 +301,8 @@ namespace Petsica.Service.Services.Authrization
 
             _logger.LogInformation("Reset code: {code}", code);
 
+            await SendResetPasswordEmail(user, code);
+
             return Result.Success();
         }
         private static string GenerateRefreshToken()
@@ -330,5 +337,39 @@ namespace Petsica.Service.Services.Authrization
             return (userRoles, userPermissions);
         }
 
+
+        private async Task SendResetPasswordEmail(ApplicationUser user, string code)
+        {
+            var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
+
+            var emailBody = EmailBodyBuilder.GenerateEmailBody("ForgetPassword",
+                templateModel: new Dictionary<string, string>
+                {
+                { "{{name}}", user.UserName! },
+                { "{{action_url}}", $"{origin}/auth/forgetPassword?email={user.Email}&code={code}" }
+                }
+            );
+
+            await _emailSender.SendEmailAsync(user.Email!, "✅ Petsica: Change Password", emailBody);
+
+            await Task.CompletedTask;
+        }
+
+        private async Task SendConfirmationEmail(ApplicationUser user, string code)
+        {
+            var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
+
+            var emailBody = EmailBodyBuilder.GenerateEmailBody("EmailConfirmation",
+                templateModel: new Dictionary<string, string>
+                {
+                { "{{name}}", user.UserName! },
+                    { "{{action_url}}", $"{origin}/auth/emailConfirmation?userId={user.Id}&code={code}" }
+                }
+            );
+
+            await _emailSender.SendEmailAsync(user.Email!, "✅ Petsica: Email Confirmation", emailBody);
+
+            await Task.CompletedTask;
+        }
     }
 }

@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Petsica.Shared.Contracts.Marketplace.Response
 {
-    public record CategoryResponse
+    public record ProductResponse
     (
-         int Id,
-         string Name
+
     );
 }

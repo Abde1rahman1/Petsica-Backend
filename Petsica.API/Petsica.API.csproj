@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Petsica.Shared\Petsica.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Marketplace\" />
+  </ItemGroup>
+
 </Project>
