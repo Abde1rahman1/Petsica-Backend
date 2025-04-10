@@ -9,6 +9,23 @@ namespace Petsica.Shared.Error
 {
     public static class MarketErrors
     {
+		public static readonly Errors InvalidCreateProduct =
+			new("Product.InvalidCreateProduct", "Failed to create the Product", StatusCodes.Status400BadRequest);
 
-    }
+		public static readonly Errors InvalidCategory =
+			new("Product.InvalidCategory", "Invalid Category, Choose Correct Category", StatusCodes.Status400BadRequest);
+
+		public static readonly Errors GetAllProductsFailed =
+			new("Product.GetAllProductsFailed", "Faild While Get Products", StatusCodes.Status400BadRequest);
+
+		public static readonly Errors NoProductBySeller =
+		new("Product.NoProductBySeller", "No Product belongs to you !", StatusCodes.Status404NotFound);
+
+		public static readonly Errors NoProduct =
+		new("Product.NoProduct", "No Product ", StatusCodes.Status404NotFound);
+
+		public static readonly Errors Unathorized =
+		new("Product.Unathorized", "Unauthorized to update ! ", StatusCodes.Status401Unauthorized);
+
+	}
 }

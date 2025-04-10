@@ -11,8 +11,12 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
                .IsRequired()
                .HasMaxLength(25);
 
-        #region Relationships
-        builder.HasOne(p => p.Seller)
+		builder.Property(p => p.Category)
+			   .HasConversion<string>()  
+			   .HasMaxLength(20);
+
+		#region Relationships
+		builder.HasOne(p => p.Seller)
                .WithMany()
                .HasForeignKey(p => p.SellerID)
                .OnDelete(DeleteBehavior.NoAction);

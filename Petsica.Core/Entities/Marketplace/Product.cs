@@ -1,5 +1,7 @@
 ﻿
 
+using Petsica.Shared.Const;
+
 namespace Petsica.Core.Entities.Marketplace;
 public class Product
 {
@@ -13,6 +15,8 @@ public class Product
     public string Photo { get; set; }
     public bool IsDeleted { get; set; } = false;
 
+   
+
     #region Foreign Key
     public string SellerID { get; set; }
     #endregion
@@ -24,12 +28,6 @@ public class Product
     public List<CartItem> CartItems { get; set; } = new List<CartItem>();
     #endregion
 
-    public enum ProductCategory
-    {
-        Food,
-        Toys,
-        Accessories,
-        Healthcare
-    }
+   
 
 }

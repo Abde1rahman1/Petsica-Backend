@@ -1,13 +1,21 @@
 ﻿using Petsica.Shared.Contracts.Marketplace.Request;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Petsica.Shared.Contracts.Marketplace.Validation
 {
-    public class ProductRequestValidator : AbstractValidator<ProductRequest>
+	public class ProductRequestValidator : AbstractValidator<ProductRequest>
     {
-    }
+		public ProductRequestValidator()
+		{
+			RuleFor(p=>p.Description)
+				.NotEmpty()
+				.MaximumLength(300);
+			RuleFor(p => p.ProductName)
+				.NotEmpty();
+			RuleFor(p => p.Price)
+				.NotEmpty();
+			RuleFor(p=>p.Photo)
+				.NotEmpty();
+		}
+
+	}
 }
