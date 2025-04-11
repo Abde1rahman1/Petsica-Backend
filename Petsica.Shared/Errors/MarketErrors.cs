@@ -27,5 +27,18 @@ namespace Petsica.Shared.Error
 		public static readonly Errors Unathorized =
 		new("Product.Unathorized", "Unauthorized to update ! ", StatusCodes.Status401Unauthorized);
 
-	}
+        public static readonly Errors ExceedAvailableStock = 
+			new("Cart.ExceedAvailableStock", "Requested quantity exceeds available stock.", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors CartNotFound =
+        new("Cart.NotFound", "Cart not found.", StatusCodes.Status404NotFound);
+
+        public static readonly Errors CartItemNotFound =
+            new("Cart.ItemNotFound", "This item does not exist in the cart.", StatusCodes.Status404NotFound);
+
+
+
+
+
+    }
 }
