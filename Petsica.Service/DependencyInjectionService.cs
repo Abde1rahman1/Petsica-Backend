@@ -1,8 +1,10 @@
 using Petsica.Service.Abstractions.Community;
 using Petsica.Service.Abstractions.Marketplace;
+using Petsica.Service.Abstractions.Messages;
 using Petsica.Service.Abstractions.Pets;
 using Petsica.Service.Abstractions.Users;
 using Petsica.Service.Service.Community;
+using Petsica.Service.Services.Chat;
 using Petsica.Service.Services.Community;
 using Petsica.Service.Services.Email;
 using Petsica.Service.Services.Marketplace;
@@ -37,8 +39,11 @@ namespace Petsica.Service
 
             services.AddScoped<ICartService, CartService>();
 
+			//services.AddScoped<IClinicChatService, ClinicChatService>();
 
-            services.AddHttpContextAccessor();
+			services.AddScoped<IUserChatService, UserChatService>();
+
+			services.AddHttpContextAccessor();
 
             return services;
         }
