@@ -17,6 +17,6 @@ public class UserChatHub : Hub
 			Date = DateTime.UtcNow
 		};
 
-		await Clients.User(receiverId).SendAsync("ReceiveMessage", message);
+		await Clients.User(receiverId).SendAsync("ReceiveMessage", message, senderId,DateTime.UtcNow);
 	}
 }

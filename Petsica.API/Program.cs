@@ -1,9 +1,10 @@
 ﻿using Petsica.Shared;
+using Petsica.Shared.Hubs;
 using Serilog;
 
 namespace Petsica.API
 {
-	public class Program
+    public class Program
 	{
 		public static void Main(string[] args)
 		{

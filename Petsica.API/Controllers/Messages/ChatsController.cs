@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Petsica.Core.Entities.Messages;
 using Petsica.Service.Abstractions.Messages;
-using Petsica.Shared;
 using Petsica.Shared.Contracts.Messages;
+using Petsica.Shared.Hubs;
 
 namespace Petsica.API.Controllers.Messages;
 [Route("api/[controller]")]
