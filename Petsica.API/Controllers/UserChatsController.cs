@@ -21,19 +21,22 @@ public class UserChatsController : ControllerBase
 		_hubContext = hubContext;
 	}
 
-	[HttpPost("send")]
-	public async Task<IActionResult> SendMessage( ChatUsersReques message)
-	{
-		
-		await _chatService.SaveMessageAsync(message);
+    [HttpPost("send")]
+    public async Task<IActionResult> SendMessage(ChatUsersReques message)
+    {
+        // Save the message to the database
+        await _chatService.SaveMessageAsync(message);
 
-		await _hubContext.Clients.User(message.UserReceiverID)
-			.SendAsync("ReceiveMessage", message.UserSenderID, message.Content, DateTime.UtcNow);
+        // Send the message to both the sender and receiver (real-time)
+        await _hubContext.Clients.Users(message.UserSenderID, message.UserReceiverID)
+            .SendAsync("ReceiveMessage", message.UserSenderID, message.Content, DateTime.UtcNow);
 
-		return Ok();
-	}
+        return Ok();
+    }
 
-	[HttpGet("messages/{user1Id}/{user2Id}")]
+
+
+    [HttpGet("messages/{user1Id}/{user2Id}")]
 	public async Task<IActionResult> GetChatHistory(string user1Id, string user2Id)
 	{
 		var messages = await _chatService.GetMessagesAsync(user1Id, user2Id);
