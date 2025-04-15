@@ -24,9 +24,9 @@ public class PostsController(IPostService postService) : ControllerBase
     [HttpPut("{postId}")]
     public async Task<IActionResult> Update(int PostId, [FromBody] PostRequest request, CancellationToken cancellationToken = default)
     {
-        var result = await _postService.UpdatePostById(PostId, request, cancellationToken);
+        var result = await _postService.UpdatePostById(User.GetUserId()!, PostId, request, cancellationToken);
         return result.IsSuccess ? Created() : result.ToProblem();
-    }
+	}
 
 
     [HttpGet]
@@ -34,22 +34,22 @@ public class PostsController(IPostService postService) : ControllerBase
     {
         var result = await _postService.GetAllPostsAsync(cancellationToken);
 
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+	}
 
 	[HttpGet("{postId}")]
 	public async Task<IActionResult> GetPostById(int postId,CancellationToken cancellationToken)
 	{
 		var result = await _postService.GetPostById(postId, cancellationToken);
 
-		return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+		return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
 	}
 
 	[HttpPost("delete/{PostId}")]
 
     public async Task<IActionResult> DeleteById(int PostId, CancellationToken cancellationToken)
     {
-        var result = await _postService.DeleteById(PostId, cancellationToken);
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+        var result = await _postService.DeleteById(User.GetUserId()!, PostId, cancellationToken);
+        return result.IsSuccess ? Ok() : result.ToProblem();
+	}
 }

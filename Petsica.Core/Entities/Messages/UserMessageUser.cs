@@ -7,7 +7,7 @@ public class UserMessageUser
     public string UserReceiverID { get; set; }
     public string UserSenderID { get; set; }
     public string Content { get; set; }
-    public DateTime Date { get; set; }
+    public DateTime Date { get; set; }= DateTime.Now;
 
     #region Navigation Properties
     public User Receiver { get; set; }

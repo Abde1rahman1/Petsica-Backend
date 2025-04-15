@@ -5,6 +5,7 @@ using Petsica.Service.Abstractions.Community;
 using Petsica.Shared.Contracts.Community.Request;
 using Petsica.Shared.Contracts.Community.Response;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Petsica.Shared.Const;
 
 
 namespace Petsica.Service.Services.Community;
@@ -18,6 +19,7 @@ public class PostService(
         var newPost = new Post
         {
             Content = request.Content,
+			Photo= request.photo,
             UserID = userId,
         };
 
@@ -29,11 +31,17 @@ public class PostService(
         return Result.Success(response);
     }
 
-    public async Task<Result<PostResponse>> UpdatePostById(int PostId, [FromBody] PostRequest request, CancellationToken cancellationToken = default)
+    public async Task<Result> UpdatePostById(string userId ,int PostId, [FromBody] PostRequest request, CancellationToken cancellationToken = default)
     {
         var post = await _context.Posts.FirstOrDefaultAsync(p => p.PostID == PostId, cancellationToken);
 
-        post.Content = request.Content;
+		if (post == null)
+			return Result.Failure(CommunityErrors.InvalidPostId);
+
+		if (post.UserID != userId)
+			return Result.Failure(CommunityErrors.UnauthorizedToUpdatePost);
+
+		post.Content = request.Content;
 
         _context.Posts.Update(post);
         _context.SaveChanges();
@@ -41,11 +49,15 @@ public class PostService(
         var response = post.Adapt<PostResponse>();
         return Result.Success(response);
     }
-    public async Task<Result<PostResponse>> DeleteById(int PostId, CancellationToken cancellationToken)
+    public async Task<Result> DeleteById(string userId, int PostId, CancellationToken cancellationToken)
     {
         var post = await _context.Posts.FirstOrDefaultAsync(p => p.PostID == PostId);
+		if (post == null)
+			return Result.Failure(CommunityErrors.InvalidPostId);
 
-        post.IsDeleted = true;
+		if (post.UserID != userId)
+			return Result.Failure(CommunityErrors.UnauthorizedToUpdatePost);
+		post.IsDeleted = true;
 		_context.Posts.Update(post);
 		_context.SaveChanges();
 

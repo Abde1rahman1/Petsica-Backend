@@ -11,10 +11,11 @@ public interface IPostService
 
     Task<Result<List<PostResponse>>> GetAllPostsAsync(CancellationToken cancellationToken = default);
 
-    Task<Result<PostResponse>> UpdatePostById(int PostId, [FromBody] PostRequest request, CancellationToken cancellationToken = default);
+    Task<Result> UpdatePostById(string userId, int PostId, [FromBody] PostRequest request, CancellationToken cancellationToken = default);
 
-    Task<Result<PostResponse>> DeleteById(int PostId, CancellationToken cancellationToken);
 
-    Task<Result<List<PostResponse>>> GetPostById(int postId, CancellationToken cancellationToken = default);
+    Task<Result> DeleteById(string userId, int PostId, CancellationToken cancellationToken);
+
+	Task<Result<List<PostResponse>>> GetPostById(int postId, CancellationToken cancellationToken = default);
 
 }

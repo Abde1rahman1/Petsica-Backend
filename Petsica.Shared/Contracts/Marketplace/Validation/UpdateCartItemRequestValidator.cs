@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace Petsica.Shared.Contracts.Marketplace.Validation
 {
-    public class CategoryRequestValidator : AbstractValidator<CategoryRequest>
+    public class UpdateCartItemRequestValidator : AbstractValidator<UpdateCartItemRequest>
     {
-        public CategoryRequestValidator()
+        public UpdateCartItemRequestValidator()
         {
-            RuleFor(c => c.Name).NotEmpty().WithMessage("Category name is required.");
+            RuleFor(r => r.ProductId).NotEmpty();
+            RuleFor(r => r.Quantity).GreaterThan(0);
         }
     }
 }
