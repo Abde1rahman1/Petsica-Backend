@@ -5,13 +5,13 @@ namespace Petsica.Shared.Email.Settings
     public static class MailSettings
     {
         [Required, EmailAddress]
-        public const string Mail = "titus.dietrich42@ethereal.email";
+        public const string Mail = "emmy89@ethereal.email";
 
         [Required]
         public const string DisplayName = "Petsica";
 
         [Required]
-        public const string Password = "Arf3EC4vgzwzaEMcdr";
+        public const string Password = "rQAcr1VxJHFSPttBWe";
 
         [Required]
         public const string Host = "smtp.ethereal.email";

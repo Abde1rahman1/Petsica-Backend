@@ -147,8 +147,8 @@ namespace Petsica.Service.Services.Authrization
             await _context.SaveChangesAsync(cancellationToken);
             if (result.Succeeded)
             {
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var code = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+
 
                 _logger.LogInformation("Confirmation code: {code}", code);
 
@@ -186,10 +186,10 @@ namespace Petsica.Service.Services.Authrization
             await _context.Clinics.AddAsync(clinic, cancellationToken);
 
             await _context.SaveChangesAsync(cancellationToken);
+
             if (result.Succeeded)
             {
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var code = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
 
                 _logger.LogInformation("Confirmation code: {code}", code);
 
@@ -204,7 +204,7 @@ namespace Petsica.Service.Services.Authrization
 
         public async Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request)
         {
-            if (await _userManager.FindByIdAsync(request.UserId) is not { } user)
+            if (await _userManager.FindByEmailAsync(request.Email) is not { } user)
                 return Result.Failure(UserErrors.InvalidCode);
 
             if (user.EmailConfirmed)
@@ -212,19 +212,13 @@ namespace Petsica.Service.Services.Authrization
 
             var code = request.Code;
 
-            try
-            {
-                code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
-            }
-            catch (FormatException)
-            {
-                return Result.Failure(UserErrors.InvalidCode);
-            }
+            var result = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", code);
 
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-
-            if (result.Succeeded)
+            if (result == true)
             {
+
+                user.EmailConfirmed = true;
+
                 if (user.Type == RoleName.Member)
                     await _userManager.AddToRoleAsync(user, DefaultRoles.Member.Name);
                 else if (user.Type == RoleName.Seller)
@@ -238,10 +232,7 @@ namespace Petsica.Service.Services.Authrization
                 return Result.Success();
             }
 
-
-            var error = result.Errors.First();
-
-            return Result.Failure(new Errors(error.Code, error.Description, StatusCodes.Status400BadRequest));
+            return Result.Failure(UserErrors.InvalidCode);
         }
 
         public async Task<Result> ResendConfirmationEmailAsync(ResendConfirmationEmailRequest request)
@@ -252,8 +243,7 @@ namespace Petsica.Service.Services.Authrization
             if (user.EmailConfirmed)
                 return Result.Failure(UserErrors.DuplicatedConfirmation);
 
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var code = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
 
             _logger.LogInformation("Confirmation code: {code}", code);
 
@@ -268,11 +258,22 @@ namespace Petsica.Service.Services.Authrization
             if (user is null || !user.EmailConfirmed)
                 return Result.Failure(UserErrors.InvalidCode);
 
+
             IdentityResult result;
 
             try
             {
-                var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(request.Code));
+                var VerifyTwoFactor = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", request.Code);
+
+                if (VerifyTwoFactor == false)
+                {
+                    return Result.Failure(UserErrors.InvalidCode);
+
+                }
+
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+
                 result = await _userManager.ResetPasswordAsync(user, code, request.NewPassword);
             }
             catch (FormatException)
@@ -296,8 +297,8 @@ namespace Petsica.Service.Services.Authrization
             if (!user.EmailConfirmed)
                 return Result.Failure(UserErrors.EmailNotConfirmed);
 
-            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-            code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            var code = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+
 
             _logger.LogInformation("Reset code: {code}", code);
 
@@ -346,7 +347,7 @@ namespace Petsica.Service.Services.Authrization
                 templateModel: new Dictionary<string, string>
                 {
                 { "{{name}}", user.UserName! },
-                { "{{action_url}}", $"{origin}/auth/forgetPassword?email={user.Email}&code={code}" }
+                { "{{Code}}",code}
                 }
             );
 
@@ -363,7 +364,7 @@ namespace Petsica.Service.Services.Authrization
                 templateModel: new Dictionary<string, string>
                 {
                 { "{{name}}", user.UserName! },
-                    { "{{action_url}}", $"{origin}/auth/emailConfirmation?userId={user.Id}&code={code}" }
+                    { "{{Code}}",code }
                 }
             );
 

@@ -6,7 +6,7 @@ namespace Petsica.Shared.Contracts.Authrization.Validation
     {
         public ConfirmEmailRequestValidator()
         {
-            RuleFor(x => x.UserId)
+            RuleFor(x => x.Email)
                 .NotEmpty();
 
             RuleFor(x => x.Code)
