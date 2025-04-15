@@ -21,8 +21,8 @@ namespace Petsica.Shared.Contracts.Authrization.Validation
                .Must(name => RoleName.GetAllRoleNames().Contains(name));
 
             RuleFor(x => x.NationalID)
-                .Empty();
-                
+                .NotEmpty();
+
 
 
         }
