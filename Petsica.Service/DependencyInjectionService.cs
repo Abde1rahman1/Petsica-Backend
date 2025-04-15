@@ -37,6 +37,8 @@ namespace Petsica.Service
 
             services.AddScoped<ICartService, CartService>();
 
+            services.AddScoped<IOrderService, OrderService>();
+
 
             services.AddHttpContextAccessor();
 

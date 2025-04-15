@@ -2,14 +2,24 @@
 namespace Petsica.Core.Persistence.EntitiesConfigurations.Marketplace;
 public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
+
     public void Configure(EntityTypeBuilder<Order> builder)
     {
         builder.HasKey(o => o.OrderID);
 
         #region Relationships
+
         builder.HasOne(o => o.User)
                .WithMany(u => u.Orders)
-               .HasForeignKey(o => o.UserID).OnDelete(DeleteBehavior.NoAction);
+               .HasForeignKey(o => o.UserID)
+               .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasOne(o => o.Seller)
+               .WithMany()
+               .HasForeignKey(o => o.SellerID)
+               .OnDelete(DeleteBehavior.NoAction);
+
         #endregion
     }
+
 }

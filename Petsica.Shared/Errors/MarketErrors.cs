@@ -36,8 +36,17 @@ namespace Petsica.Shared.Error
         public static readonly Errors CartItemNotFound =
             new("Cart.ItemNotFound", "This item does not exist in the cart.", StatusCodes.Status404NotFound);
 
+        public static readonly Errors OrdersNotFound =
+        new("Orders.NotFound", "No orders were found for the given user.", StatusCodes.Status404NotFound);
 
+        public static readonly Errors OrderNotFound =
+		new("Order.NotFound", "This order does not exist.", StatusCodes.Status404NotFound);
 
+        public static readonly Errors OrderAlreadyCompleted =
+		new("Order.AlreadyCompleted", "This order has already been completed and cannot be cancelled.", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors OrderAlreadyCancelled =
+		new("Order.AlreadyCancelled", "This order has already been cancelled.", StatusCodes.Status400BadRequest);
 
 
     }
