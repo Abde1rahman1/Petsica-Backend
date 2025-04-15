@@ -1,42 +1,47 @@
-﻿using Serilog;
+﻿using Petsica.Shared;
+using Petsica.Shared.Hubs;
+using Serilog;
 
 namespace Petsica.API
 {
     public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+	{
+		public static void Main(string[] args)
+		{
+			var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDependencies(builder.Configuration);
+			builder.Services.AddDependencies(builder.Configuration);
 
-            builder.Host.UseSerilog((context, configuration) =>
-                configuration.ReadFrom.Configuration(context.Configuration)
-            );
+			builder.Services.AddSignalR();
 
-            var app = builder.Build();
+			builder.Host.UseSerilog((context, configuration) =>
+				configuration.ReadFrom.Configuration(context.Configuration)
+			);
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+			var app = builder.Build();
 
-            app.UseSerilogRequestLogging();
+			if (app.Environment.IsDevelopment())
+			{
+				app.UseSwagger();
+				app.UseSwaggerUI();
+			}
 
-            app.UseHttpsRedirection();
+			
+			app.UseSerilogRequestLogging();
 
-            app.UseCors();
+			app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+			app.UseCors();  
 
-            app.MapControllers();
+			app.MapControllers();
 
-            app.UseExceptionHandler();
+			// Map SignalR hubs
+			app.MapHub<ChatHub>("/chatHub").RequireCors("AllowFrontend");
+			app.MapHub<UserChatHub>("/userChatHub").RequireCors("AllowFrontend");
 
-            app.Run();
+			app.UseExceptionHandler("/Home/Error");
 
-        }
-    }
+			app.Run();
+		}
+	}
 }

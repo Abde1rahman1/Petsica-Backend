@@ -9,7 +9,7 @@ public class ClinicMessageClinic
     public string ClinicReceiverID { get; set; }
     public string? ClinicSenderID { get; set; }
     public string Content { get; set; }
-    public DateTime Date { get; set; }
+    public DateTime Date { get; set; } = DateTime.Now;
 
 	#region Navigation Properties
 	[NotMapped]

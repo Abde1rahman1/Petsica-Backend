@@ -348,7 +348,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserCommentPost", b =>
@@ -383,7 +383,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserCommentPosts");
+                    b.ToTable("UserCommentPosts", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserFollow", b =>
@@ -408,7 +408,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserFollows");
+                    b.ToTable("UserFollows", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Community.UserLikePost", b =>
@@ -432,7 +432,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserLikePosts");
+                    b.ToTable("UserLikePosts", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Cart", b =>
@@ -454,7 +454,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.CartItem", b =>
@@ -480,7 +480,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Order", b =>
@@ -521,7 +521,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.OrderItem", b =>
@@ -553,7 +553,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Product", b =>
@@ -605,7 +605,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("SellerID");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.ClinicMessageClinic", b =>
@@ -637,7 +637,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ClinicSenderID");
 
-                    b.ToTable("ClinicMessageClinics");
+                    b.ToTable("ClinicMessageClinics", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.UserMessageClinic", b =>
@@ -670,7 +670,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserMessageClinics");
+                    b.ToTable("UserMessageClinics", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.UserMessageUser", b =>
@@ -703,7 +703,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserSenderID");
 
-                    b.ToTable("UserMessageUsers");
+                    b.ToTable("UserMessageUsers", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.Pet", b =>
@@ -744,7 +744,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Pets");
+                    b.ToTable("Pets", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRemindPet", b =>
@@ -779,7 +779,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserRemindPets");
+                    b.ToTable("UserRemindPets", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRequestPet", b =>
@@ -803,7 +803,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserRequestPets");
+                    b.ToTable("UserRequestPets", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Services.SitterService", b =>
@@ -838,7 +838,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("SitterID");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Services.UserRequestService", b =>
@@ -853,7 +853,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("UserRequestServices");
+                    b.ToTable("UserRequestServices", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.Clinic", b =>
@@ -871,7 +871,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasKey("ClinicID");
 
-                    b.ToTable("Clinics");
+                    b.ToTable("Clinics", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Users.User", b =>
@@ -881,7 +881,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationRole", b =>

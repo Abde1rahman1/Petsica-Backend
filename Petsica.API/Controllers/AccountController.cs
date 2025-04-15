@@ -131,5 +131,14 @@ namespace Petsica.API.Controllers
             return result.IsSuccess ? Ok() : result.ToProblem();
 
         }
-    }
+
+		[HttpGet("allUsers")]
+
+		public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
+		{
+			var result = await _userService.GetAllUsers(User.GetUserId()!);
+
+			return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+		}
+	}
 }

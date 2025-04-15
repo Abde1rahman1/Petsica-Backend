@@ -1,5 +1,6 @@
 ﻿using Petsica.Shared.Contracts.Users.Request;
 using Petsica.Shared.Contracts.Users.Response;
+using System.Threading.Tasks;
 
 namespace Petsica.Service.Abstractions.Users
 {
@@ -19,5 +20,8 @@ namespace Petsica.Service.Abstractions.Users
 
         Task<Result> ApprovalUser(string userId, CancellationToken cancellationToken = default);
 
-    }
+        Task<Result<List<AllUsersResponse>>> GetAllUsers(string userId, CancellationToken cancellationToken = default);
+
+
+	}
 }
