@@ -19,9 +19,7 @@ public class LikeService(ApplicationDbContext context) : ILikeService
 	{
 
 		var check = await _context.UserLikePosts.FirstOrDefaultAsync(u=>u.UserID==user && u.PostID==postId ,cancellationToken );
-		//
-		//
-		// check here 
+		
 
 		var post = await _context.Posts.FirstOrDefaultAsync(p => p.PostID == postId, cancellationToken);
 		var like = new UserLikePost

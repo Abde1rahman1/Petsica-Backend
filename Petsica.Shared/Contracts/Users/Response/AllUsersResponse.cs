@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Petsica.Shared.Contracts.Users.Response;
 public record AllUsersResponse
 (
+	string id,
 	string UserName,
    string Photo
 );
