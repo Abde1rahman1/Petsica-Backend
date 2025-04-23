@@ -20,11 +20,7 @@ namespace Petsica.API.Controllers.Marketplace
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request, CancellationToken cancellationToken)
         {
             var result = await _orderService.CreateOrderFromCartAsync(User.GetUserId()!, request.Address, cancellationToken);
-            if (result.IsSuccess)
-            {
-                return Ok(result.Value);
-            }
-            return result.ToProblem();
+            return result.IsSuccess ? Created() : result.ToProblem();
         }
 
         [HttpGet("userorders")]
