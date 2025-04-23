@@ -35,7 +35,7 @@ public class PostService(
     {
         var post = await _context.Posts.FirstOrDefaultAsync(p => p.PostID == PostId, cancellationToken);
 
-		if (post == null)
+		if (post is null)
 			return Result.Failure(CommunityErrors.InvalidPostId);
 
 		if (post.UserID != userId)
@@ -52,7 +52,7 @@ public class PostService(
     public async Task<Result> DeleteById(string userId, int PostId, CancellationToken cancellationToken)
     {
         var post = await _context.Posts.FirstOrDefaultAsync(p => p.PostID == PostId);
-		if (post == null)
+		if (post is null)
 			return Result.Failure(CommunityErrors.InvalidPostId);
 
 		if (post.UserID != userId)
@@ -75,6 +75,7 @@ public class PostService(
 			.Include(p => p.Likes)
 			.Include(p => p.Comments)
 			.Where(p=>p.IsDeleted==false)
+			.OrderBy(p=>p.Date)
             .ToListAsync(cancellationToken);
 
 

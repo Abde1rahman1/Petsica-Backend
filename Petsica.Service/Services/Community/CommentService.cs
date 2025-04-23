@@ -34,7 +34,8 @@ public class CommentService(ApplicationDbContext context) : ICommentService
 		(
 			CommentId: newComment.CommentID,
 			UserID: newComment.UserID,
-			Content: newComment.Content
+			Content: newComment.Content,
+			Date:newComment.Date
 		);
 
 		return Result.Success(response);
@@ -46,7 +47,7 @@ public class CommentService(ApplicationDbContext context) : ICommentService
 		var post = await _context.UserCommentPosts.FirstOrDefaultAsync(p => p.PostID == PostId,cancellationToken);
 		var comments = await _context.UserCommentPosts
 			.Where(p => p.PostID == PostId && p.IsDeleted==false)
-			.Select(c => new UserCommentPost { Content = c.Content, UserID = c.UserID, CommentID= c.CommentID })
+			.Select(c => new UserCommentPost { Content = c.Content, UserID = c.UserID, CommentID= c.CommentID,Date= c.Date })
 			.ToListAsync(cancellationToken);
 
 		var response = new List<CommentResponse>();
@@ -57,7 +58,8 @@ public class CommentService(ApplicationDbContext context) : ICommentService
 			(
 				CommentId:comment.CommentID,
 				UserID: comment.UserID,
-				Content:comment.Content
+				Content:comment.Content,
+				Date:comment.Date
 			);
 
 			response.Add(commentResponse);
@@ -79,8 +81,9 @@ public class CommentService(ApplicationDbContext context) : ICommentService
 		(
 			CommentId: comment.CommentID,
 			UserID: comment.UserID,
-			Content: comment.Content
-		);
+			Content: comment.Content,
+            Date: comment.Date
+        );
 		return Result.Success(response);
 	}
 
@@ -95,8 +98,9 @@ public class CommentService(ApplicationDbContext context) : ICommentService
 		(
 			CommentId: comment.CommentID,
 			UserID: comment.UserID,
-			Content: comment.Content
-		);
+			Content: comment.Content,
+            Date: comment.Date
+        );
 		return Result.Success(response);
 	}
 
