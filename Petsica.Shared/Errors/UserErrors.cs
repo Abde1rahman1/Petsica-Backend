@@ -41,10 +41,15 @@ namespace Petsica.Shared.Error
          new("User.NoServicesYet", "There are no services available yet", StatusCodes.Status400BadRequest);
 
         public static readonly Errors ServiceNotFound =
-       new("User.ServiceNotFound", "There are no services available yet", StatusCodes.Status400BadRequest);
+          new("User.ServiceNotFound", "There are no services available yet", StatusCodes.Status400BadRequest);
 
         public static readonly Errors NotApproval =
-       new("User.NotApproval", "user not Approval yet ", StatusCodes.Status400BadRequest);
+           new("User.NotApproval", "user not Approval yet ", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors InvalidType =
+            new("User.InvalidType", "this type is Invalid", StatusCodes.Status400BadRequest);
+        public static readonly Errors ExistNotEmail =
+           new("User.ExistNotEmail", " email is Not exists", StatusCodes.Status409Conflict);
 
     }
 }

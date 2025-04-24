@@ -1,4 +1,5 @@
 ﻿using Petsica.Core.Const;
+using Petsica.Shared.Const;
 using Petsica.Shared.Contracts.Authrization.Request;
 namespace Petsica.Shared.Contracts.Authrization.Validation
 {

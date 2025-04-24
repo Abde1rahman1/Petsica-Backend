@@ -1,6 +1,5 @@
 ﻿using Petsica.Shared.Contracts.Users.Request;
 using Petsica.Shared.Contracts.Users.Response;
-using System.Threading.Tasks;
 
 namespace Petsica.Service.Abstractions.Users
 {
@@ -17,11 +16,10 @@ namespace Petsica.Service.Abstractions.Users
         Task<Result<IEnumerable<UserApprovalResponse>>> GetSellerApproval(string userId, CancellationToken cancellationToken = default);
         Task<Result<IEnumerable<UserApprovalResponse>>> GetSitterApproval(string userId, CancellationToken cancellationToken = default);
         Task<Result<IEnumerable<UserApprovalResponse>>> GetClinicApproval(string userId, CancellationToken cancellationToken = default);
-
         Task<Result> ApprovalUser(string userId, CancellationToken cancellationToken = default);
-
         Task<Result<List<AllUsersResponse>>> GetAllUsers(string userId, CancellationToken cancellationToken = default);
+        Task<Result> SetAdmin(SetAdminEmailRequest request, CancellationToken cancellationToken = default);
 
 
-	}
+    }
 }

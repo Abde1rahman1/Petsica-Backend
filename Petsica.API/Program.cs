@@ -1,47 +1,55 @@
-﻿using Petsica.Shared;
+﻿using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Petsica.Shared;
 using Petsica.Shared.Hubs;
 using Serilog;
 
 namespace Petsica.API
 {
     public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-			builder.Services.AddDependencies(builder.Configuration);
+            builder.Services.AddDependencies(builder.Configuration);
 
-			builder.Services.AddSignalR();
+            builder.Services.AddSignalR();
 
-			builder.Host.UseSerilog((context, configuration) =>
-				configuration.ReadFrom.Configuration(context.Configuration)
-			);
+            builder.Host.UseSerilog((context, configuration) =>
+                configuration.ReadFrom.Configuration(context.Configuration)
+            );
 
-			var app = builder.Build();
+            var app = builder.Build();
 
-			if (app.Environment.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
 
-			
-			app.UseSerilogRequestLogging();
 
-			app.UseHttpsRedirection();
+            app.UseSerilogRequestLogging();
 
-			app.UseCors();  
+            app.UseHttpsRedirection();
 
-			app.MapControllers();
+            app.UseCors();
 
-			// Map SignalR hubs
-			app.MapHub<ChatHub>("/chatHub").RequireCors("AllowFrontend");
-			app.MapHub<UserChatHub>("/userChatHub").RequireCors("AllowFrontend");
+            app.MapControllers();
 
-			app.UseExceptionHandler("/Home/Error");
+            //Map Health Checks
+            app.MapHealthChecks("health", new HealthCheckOptions
+            {
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
 
-			app.Run();
-		}
-	}
+            // Map SignalR hubs
+            app.MapHub<ChatHub>("/chatHub").RequireCors("AllowFrontend");
+            app.MapHub<UserChatHub>("/userChatHub").RequireCors("AllowFrontend");
+
+            app.UseExceptionHandler("/Home/Error");
+
+            app.Run();
+        }
+    }
 }

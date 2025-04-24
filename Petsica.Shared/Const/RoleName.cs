@@ -1,4 +1,4 @@
-﻿namespace Petsica.Core.Const
+﻿namespace Petsica.Shared.Const
 {
     public static class RoleName
     {

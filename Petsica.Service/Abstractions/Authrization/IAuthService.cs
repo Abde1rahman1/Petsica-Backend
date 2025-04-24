@@ -11,6 +11,5 @@
         Task<Result> SendResetPasswordCodeAsync(string email);
         Task<Result> ResetPasswordAsync(ResetPasswordRequest request);
         Task<Result> ClinicRegisterAsync(ClinicRegisterRequest request, CancellationToken cancellationToken = default);
-
     }
 }

@@ -1,4 +1,6 @@
-﻿using Petsica.Core.Const;
+﻿using Hangfire;
+using Petsica.Core.Const;
+using Petsica.Shared.Const;
 using Petsica.Shared.Email.Helpers;
 
 namespace Petsica.Service.Services.Authrization
@@ -127,6 +129,9 @@ namespace Petsica.Service.Services.Authrization
 
         public async Task<Result> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
         {
+            if (request.Type == RoleName.Admin || request.Type == RoleName.Clinic)
+                return Result.Failure(UserErrors.InvalidType);
+
             var emailIsExists = await _userManager.Users.AnyAsync(x => x.Email == request.Email, cancellationToken);
 
             if (emailIsExists)
@@ -164,6 +169,9 @@ namespace Petsica.Service.Services.Authrization
 
         public async Task<Result> ClinicRegisterAsync(ClinicRegisterRequest request, CancellationToken cancellationToken = default)
         {
+            if (request.Type != RoleName.Clinic)
+                return Result.Failure(UserErrors.InvalidType);
+
             var emailIsExists = await _userManager.Users.AnyAsync(x => x.Email == request.Email, cancellationToken);
 
             if (emailIsExists)
@@ -201,6 +209,8 @@ namespace Petsica.Service.Services.Authrization
 
             return Result.Failure(new Errors(error.Code, error.Description, StatusCodes.Status400BadRequest));
         }
+
+
 
         public async Task<Result> ConfirmEmailAsync(ConfirmEmailRequest request)
         {
@@ -351,7 +361,7 @@ namespace Petsica.Service.Services.Authrization
                 }
             );
 
-            await _emailSender.SendEmailAsync(user.Email!, "✅ Petsica: Change Password", emailBody);
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email!, "✅ Petsica: Change Password", emailBody));
 
             await Task.CompletedTask;
         }
@@ -368,7 +378,7 @@ namespace Petsica.Service.Services.Authrization
                 }
             );
 
-            await _emailSender.SendEmailAsync(user.Email!, "✅ Petsica: Email Confirmation", emailBody);
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email!, "✅ Petsica: Email Confirmation", emailBody));
 
             await Task.CompletedTask;
         }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Petsica.Service.Abstractions.Users;
+using Petsica.Shared.Const;
+using Petsica.Shared.Contracts.Authrization.Request;
 using Petsica.Shared.Contracts.Users.Request;
 using Petsica.Shared.Extensions;
 using Petsica.Shared.Result;
@@ -132,13 +134,23 @@ namespace Petsica.API.Controllers
 
         }
 
-		[HttpGet("allUsers")]
+        [HttpGet("allUsers")]
 
-		public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
-		{
-			var result = await _userService.GetAllUsers(User.GetUserId()!);
+        public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
+        {
+            var result = await _userService.GetAllUsers(User.GetUserId()!);
 
-			return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
-		}
-	}
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+        }
+
+
+        [HttpPost("SetAdmin")]
+        [Authorize(Roles = RoleName.Admin)]
+        public async Task<IActionResult> ResetPassword([FromBody] SetAdminEmailRequest request)
+        {
+            var result = await _userService.SetAdmin(request);
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
+        }
+    }
 }

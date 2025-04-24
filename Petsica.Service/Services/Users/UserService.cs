@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Petsica.Core.Const;
+﻿using Petsica.Core.Const;
 using Petsica.Core.Entities.Services;
 using Petsica.Service.Abstractions.Users;
+using Petsica.Shared.Const;
 using Petsica.Shared.Contracts.Users.Request;
 using Petsica.Shared.Contracts.Users.Response;
 
@@ -238,18 +238,37 @@ namespace Petsica.Service.Services.Users
         }
 
 
-		public async Task<Result<List<AllUsersResponse>>> GetAllUsers(string userId, CancellationToken cancellationToken = default)
-		{
-			var users = await _userManager.Users
-	                          .Select(u => new AllUsersResponse(u.UserName, u.Photo))
-	                          .ToListAsync();
+        public async Task<Result<List<AllUsersResponse>>> GetAllUsers(string userId, CancellationToken cancellationToken = default)
+        {
+            var users = await _userManager.Users
+                              .Select(u => new AllUsersResponse(u.UserName, u.Photo))
+                              .ToListAsync();
 
 
-			return Result<List<AllUsersResponse>>.Success(users);
-		}
-	}
+            return Result<List<AllUsersResponse>>.Success(users);
+        }
 
-	
+        public async Task<Result> SetAdmin(SetAdminEmailRequest request, CancellationToken cancellationToken = default)
+        {
+            if (await _userManager.FindByEmailAsync(request.Email) is not { } user)
+                return Result.Failure(UserErrors.ExistNotEmail);
+
+            if (!user.EmailConfirmed)
+                return Result.Failure(UserErrors.EmailNotConfirmed);
+
+            if (user.Type != RoleName.Member)
+                return Result.Failure(UserErrors.InvalidType);
+
+            var result = await _userManager.AddToRoleAsync(user, DefaultRoles.Admin.Name);
+
+            if (result.Succeeded)
+                return Result.Success();
+
+            return Result.Failure(UserErrors.DisabledUser);
+        }
+    }
+
+
 
 
 }

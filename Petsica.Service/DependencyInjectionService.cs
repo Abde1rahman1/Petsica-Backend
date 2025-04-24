@@ -1,3 +1,4 @@
+using Hangfire;
 using Petsica.Service.Abstractions.Community;
 using Petsica.Service.Abstractions.Marketplace;
 using Petsica.Service.Abstractions.Messages;
@@ -41,27 +42,28 @@ namespace Petsica.Service
 
             services.AddScoped<IOrderService, OrderService>();
 
-			//services.AddScoped<IClinicChatService, ClinicChatService>();
+            //services.AddScoped<IClinicChatService, ClinicChatService>();
 
-			services.AddScoped<IUserChatService, UserChatService>();
+            services.AddScoped<IUserChatService, UserChatService>();
 
-			services.AddHttpContextAccessor();
+            services.AddHttpContextAccessor();
 
             return services;
         }
 
 
-        //public static IServiceCollection MailSettings(this IServiceCollection services, IConfiguration configuration)
-        //{
-        //    services.AddOptions<MailSettings>()
-        //          .BindConfiguration(nameof(MailSettings))
-        //          .ValidateDataAnnotations()
-        //          .ValidateOnStart();
+        public static IServiceCollection AddBackgroundJobsConfig(this IServiceCollection services,
+       IConfiguration configuration)
+        {
+            services.AddHangfire(config => config
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
 
+            services.AddHangfireServer();
 
-
-
-        //    return services;
-        //}
+            return services;
+        }
     }
 }
