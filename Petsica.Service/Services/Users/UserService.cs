@@ -241,8 +241,9 @@ namespace Petsica.Service.Services.Users
         public async Task<Result<List<AllUsersResponse>>> GetAllUsers(string userId, CancellationToken cancellationToken = default)
         {
             var users = await _userManager.Users
-                              .Select(u => new AllUsersResponse(u.UserName, u.Photo))
+                              .Select(u => new AllUsersResponse(u.Id, u.UserName, u.Photo))
                               .ToListAsync();
+
 
 
             return Result<List<AllUsersResponse>>.Success(users);

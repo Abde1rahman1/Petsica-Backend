@@ -9,5 +9,6 @@ public record CommentResponse
 (
 	int CommentId,
 	string Content,
-	string UserID
+	string UserID,
+	DateTime Date
 );
