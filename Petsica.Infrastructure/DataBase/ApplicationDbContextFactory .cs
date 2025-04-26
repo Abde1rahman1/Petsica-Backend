@@ -17,7 +17,7 @@ public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<Applicati
         //optionsBuilder.UseSqlServer("Server=(localdb)\\ProjectModels;Database=Petsica;Trusted_Connection=True;Encrypt=False");
 
         //Abdoo
-        // optionsBuilder.UseSqlServer("Server=.;Database=Petsicaa;Trusted_Connection=True;Encrypt=False");
+         optionsBuilder.UseSqlServer("Server=.;Database=Petsicaa;Trusted_Connection=True;Encrypt=False");
         //optionsBuilder.UseSqlServer("Server=.;Database=Petsicaa;Trusted_Connection=True;Encrypt=False");
 
         //Public

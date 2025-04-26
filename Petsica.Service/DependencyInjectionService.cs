@@ -1,10 +1,12 @@
 using Hangfire;
 using Petsica.Service.Abstractions.Community;
+using Petsica.Service.Abstractions.Dashboard;
 using Petsica.Service.Abstractions.Marketplace;
 using Petsica.Service.Abstractions.Messages;
 using Petsica.Service.Abstractions.Pets;
 using Petsica.Service.Abstractions.Users;
 using Petsica.Service.Service.Community;
+using Petsica.Service.Services;
 using Petsica.Service.Services.Chat;
 using Petsica.Service.Services.Community;
 using Petsica.Service.Services.Email;
@@ -45,6 +47,8 @@ namespace Petsica.Service
             //services.AddScoped<IClinicChatService, ClinicChatService>();
 
             services.AddScoped<IUserChatService, UserChatService>();
+
+            services.AddScoped<IDashboardService, DashboardService>();
 
             services.AddHttpContextAccessor();
 
