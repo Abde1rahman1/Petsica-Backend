@@ -1,5 +1,6 @@
 ﻿using Petsica.Core.Const;
 using Petsica.Infrastructure.DBModel;
+using Petsica.Shared.Const;
 
 namespace Petsica.Infrastructure.DataBase.Configurations
 {
@@ -27,7 +28,9 @@ namespace Petsica.Infrastructure.DataBase.Configurations
                 SecurityStamp = DefaultUsers.Admin.SecurityStamp,
                 ConcurrencyStamp = DefaultUsers.Admin.ConcurrencyStamp,
                 EmailConfirmed = true,
-                PasswordHash = DefaultUsers.Admin.PasswordHash
+                PasswordHash = DefaultUsers.Admin.PasswordHash,
+                Type = RoleName.Admin
+
 
             });
         }
