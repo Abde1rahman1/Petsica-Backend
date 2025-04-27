@@ -74,7 +74,7 @@ namespace Petsica.API.Controllers
         }
 
         [HttpGet("GetASitterService")]
-        public async Task<IActionResult> GetASitterService(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllSitterService(CancellationToken cancellationToken)
         {
             var result = await _userService.GetAllSitterService(User.GetUserId()!, cancellationToken);
 
@@ -125,9 +125,9 @@ namespace Petsica.API.Controllers
         }
 
         [HttpPost("ApprovalUser")]
-        public async Task<IActionResult> ApprovalUser([FromBody] string userId, CancellationToken cancellationToken)
+        public async Task<IActionResult> ApprovalUser([FromBody] ApprovalUserRequest request, CancellationToken cancellationToken)
         {
-            var result = await _userService.ApprovalUser(userId, cancellationToken);
+            var result = await _userService.ApprovalUser(request, cancellationToken);
 
 
             return result.IsSuccess ? Ok() : result.ToProblem();
@@ -138,7 +138,25 @@ namespace Petsica.API.Controllers
 
         public async Task<IActionResult> GetAllUsers(CancellationToken cancellationToken)
         {
-            var result = await _userService.GetAllUsers(User.GetUserId()!);
+            var result = await _userService.GetAllUsers(User.GetUserId()!, cancellationToken);
+
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+        }
+
+        [HttpGet("UserRequsestsDetails")]
+
+        public async Task<IActionResult> RequsestsDetails([FromBody] ApprovalUserRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _userService.UserRequsestsDetails(request, cancellationToken);
+
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+        }
+
+        [HttpGet("ClinicRequsestsDetails")]
+
+        public async Task<IActionResult> ClinicRequsestsDetails([FromBody] ApprovalUserRequest request, CancellationToken cancellationToken)
+        {
+            var result = await _userService.ClinicRequsestsDetails(request, cancellationToken);
 
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
