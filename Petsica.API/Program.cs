@@ -33,7 +33,8 @@ namespace Petsica.API
 
             app.UseHttpsRedirection();
 
-            app.UseCors();
+
+            app.UseCors("AllowFrontend");
 
             app.MapControllers();
 
