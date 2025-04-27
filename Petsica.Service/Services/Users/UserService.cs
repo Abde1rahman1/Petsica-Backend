@@ -288,10 +288,16 @@ namespace Petsica.Service.Services.Users
 
         public async Task<Result<UserApprovalResponse>> UserRequsestsDetails(ApprovalUserRequest request, CancellationToken cancellationToken = default)
         {
+
             var user = await _userManager.FindByIdAsync(request.Userid);
 
             if (user is null)
                 return Result.Failure<UserApprovalResponse>(UserErrors.UserNotFound);
+
+            if (user.Type == RoleName.Admin || user.Type == RoleName.Clinic)
+                return Result.Failure<UserApprovalResponse>(UserErrors.InvalidType);
+
+
 
             var result = user.Adapt<UserApprovalResponse>();
 
@@ -304,6 +310,9 @@ namespace Petsica.Service.Services.Users
 
             if (user is null)
                 return Result.Failure<ClinicApprovalResponse>(UserErrors.UserNotFound);
+
+            if (user.Type != RoleName.Clinic)
+                return Result.Failure<ClinicApprovalResponse>(UserErrors.InvalidType);
 
             var result = user.Adapt<ClinicApprovalResponse>();
 
