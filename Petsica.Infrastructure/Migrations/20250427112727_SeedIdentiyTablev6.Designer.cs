@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petsica.Infrastructure;
 
@@ -11,9 +12,11 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427112727_SeedIdentiyTablev6")]
+    partial class SeedIdentiyTablev6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1066,7 +1069,6 @@ namespace Petsica.Infrastructure.Migrations
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "6B5AD15259FF426FBDC89A431C9541A2",
                             TwoFactorEnabled = false,
-                            Type = "ADMIN",
                             UserName = "Admin@Petsica.com"
                         });
                 });

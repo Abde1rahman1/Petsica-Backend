@@ -1,16 +1,23 @@
-﻿using Petsica.Core.Const;
+﻿using Hangfire;
+using Petsica.Core.Const;
 using Petsica.Core.Entities.Services;
 using Petsica.Service.Abstractions.Users;
 using Petsica.Shared.Const;
 using Petsica.Shared.Contracts.Users.Request;
 using Petsica.Shared.Contracts.Users.Response;
+using Petsica.Shared.Email.Helpers;
 
 namespace Petsica.Service.Services.Users
 {
-    public class UserService(UserManager<ApplicationUser> userManager, ApplicationDbContext context) : IUserService
+    public class UserService(UserManager<ApplicationUser> userManager,
+        ApplicationDbContext context,
+         IEmailSender emailSender,
+     IHttpContextAccessor httpContextAccessor) : IUserService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ApplicationDbContext _context = context;
+        private readonly IEmailSender _emailSender = emailSender;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public async Task<Result<UserProfileResponse>> GetProfileAsync(string userId)
         {
@@ -170,68 +177,78 @@ namespace Petsica.Service.Services.Users
 
 
 
-        public async Task<Result<IEnumerable<UserApprovalResponse>>> GetSellerApproval(string userId, CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<UserApprovallistResponse>>> GetSellerApproval(string userId, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user is null || !(user.Type == RoleName.Admin))
-                return Result.Failure<IEnumerable<UserApprovalResponse>>(UserErrors.ServiceNotFound);
+                return Result.Failure<IEnumerable<UserApprovallistResponse>>(UserErrors.ServiceNotFound);
 
             var setters = _userManager.Users
                 .Where(x => x.Type == RoleName.Seller && x.IsApproval == false)
-                .ProjectToType<UserApprovalResponse>()
+                .ProjectToType<UserApprovallistResponse>()
                 .ToList();
 
 
-            return Result.Success<IEnumerable<UserApprovalResponse>>(setters);
+            return Result.Success<IEnumerable<UserApprovallistResponse>>(setters);
 
         }
-        public async Task<Result<IEnumerable<UserApprovalResponse>>> GetSitterApproval(string userId, CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<UserApprovallistResponse>>> GetSitterApproval(string userId, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user is null || !(user.Type == RoleName.Admin))
-                return Result.Failure<IEnumerable<UserApprovalResponse>>(UserErrors.ServiceNotFound);
+                return Result.Failure<IEnumerable<UserApprovallistResponse>>(UserErrors.ServiceNotFound);
 
             var sitters = _userManager.Users
                 .Where(x => x.Type == RoleName.Sitter && x.IsApproval == false)
-                .ProjectToType<UserApprovalResponse>()
+                .ProjectToType<UserApprovallistResponse>()
                 .ToList();
 
 
-            return Result.Success<IEnumerable<UserApprovalResponse>>(sitters);
+            return Result.Success<IEnumerable<UserApprovallistResponse>>(sitters);
 
         }
 
-        public async Task<Result<IEnumerable<UserApprovalResponse>>> GetClinicApproval(string userId, CancellationToken cancellationToken = default)
+        public async Task<Result<IEnumerable<UserApprovallistResponse>>> GetClinicApproval(string userId, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(userId);
 
             if (user is null || !(user.Type == RoleName.Admin))
-                return Result.Failure<IEnumerable<UserApprovalResponse>>(UserErrors.ServiceNotFound);
+                return Result.Failure<IEnumerable<UserApprovallistResponse>>(UserErrors.ServiceNotFound);
 
             var clinics = _userManager.Users
                 .Where(x => x.Type == RoleName.Clinic && x.IsApproval == false)
-                .ProjectToType<UserApprovalResponse>()
+                .ProjectToType<UserApprovallistResponse>()
                 .ToList();
 
 
-            return Result.Success<IEnumerable<UserApprovalResponse>>(clinics);
+            return Result.Success<IEnumerable<UserApprovallistResponse>>(clinics);
 
         }
 
 
-        public async Task<Result> ApprovalUser(string userId, CancellationToken cancellationToken = default)
+        public async Task<Result> ApprovalUser(ApprovalUserRequest request, CancellationToken cancellationToken = default)
         {
 
-            await _userManager.Users
-                .Where(x => x.Id == userId)
-                .ExecuteUpdateAsync(setters =>
-                setters
-                        .SetProperty(x => x.IsApproval, true)
-                        , cancellationToken
+            var user = await _userManager.FindByIdAsync(request.Userid);
 
-                );
+            if (user is null)
+                return Result.Failure(UserErrors.UserNotFound);
+
+            //if (user.EmailConfirmed == false)
+            //    return Result.Failure(UserErrors.EmailNotConfirmed);
+
+            user.IsApproval = true;
+
+            await _userManager.Users.Where(x => x.Id == request.Userid).
+                     ExecuteUpdateAsync(service =>
+                        service.
+                        SetProperty(x => x.IsApproval, true), cancellationToken
+                     );
+
+            await SendApprovalEmail(user);
+
 
             return Result.Success();
 
@@ -267,9 +284,50 @@ namespace Petsica.Service.Services.Users
 
             return Result.Failure(UserErrors.DisabledUser);
         }
+
+
+        public async Task<Result<UserApprovalResponse>> UserRequsestsDetails(ApprovalUserRequest request, CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.FindByIdAsync(request.Userid);
+
+            if (user is null)
+                return Result.Failure<UserApprovalResponse>(UserErrors.UserNotFound);
+
+            var result = user.Adapt<UserApprovalResponse>();
+
+            return Result.Success(result);
+        }
+
+        public async Task<Result<ClinicApprovalResponse>> ClinicRequsestsDetails(ApprovalUserRequest request, CancellationToken cancellationToken = default)
+        {
+            var user = await _userManager.FindByIdAsync(request.Userid);
+
+            if (user is null)
+                return Result.Failure<ClinicApprovalResponse>(UserErrors.UserNotFound);
+
+            var result = user.Adapt<ClinicApprovalResponse>();
+
+            return Result.Success(result);
+        }
+
+
+        private async Task SendApprovalEmail(ApplicationUser user)
+        {
+            var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;
+
+            var emailBody = EmailBodyBuilder.GenerateEmailBody("Approved",
+                templateModel: new Dictionary<string, string>
+                {
+                { "{{name}}", user.UserName! },
+                }
+            );
+
+            BackgroundJob.Enqueue(() => _emailSender.SendEmailAsync(user.Email!, "✅ Petsica: Approved", emailBody));
+
+            await Task.CompletedTask;
+        }
+
     }
-
-
 
 
 }

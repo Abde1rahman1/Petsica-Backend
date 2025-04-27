@@ -50,6 +50,8 @@ namespace Petsica.Shared.Error
             new("User.InvalidType", "this type is Invalid", StatusCodes.Status400BadRequest);
         public static readonly Errors ExistNotEmail =
            new("User.ExistNotEmail", " email is Not exists", StatusCodes.Status409Conflict);
+        public static readonly Errors UserNotFound =
+          new("Pet.UserNotFound", "No User was found with the given ID", StatusCodes.Status404NotFound);
 
     }
 }

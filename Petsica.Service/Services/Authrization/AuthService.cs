@@ -29,6 +29,9 @@ namespace Petsica.Service.Services.Authrization
             if (await _userManager.FindByEmailAsync(email) is not { } user)
                 return Result.Failure<AuthResponse>(UserErrors.InvalidCredentials);
 
+            if ((user.Type == RoleName.Seller || user.Type == RoleName.Sitter || user.Type == RoleName.Clinic) && !user.IsApproval)
+                return Result.Failure<AuthResponse>(UserErrors.NotApproval);
+
             if (user.IsDisabled)
                 return Result.Failure<AuthResponse>(UserErrors.DisabledUser);
 

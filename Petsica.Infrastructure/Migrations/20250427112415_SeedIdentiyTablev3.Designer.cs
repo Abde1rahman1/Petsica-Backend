@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petsica.Infrastructure;
 
@@ -11,9 +12,11 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427112415_SeedIdentiyTablev3")]
+    partial class SeedIdentiyTablev3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,13 +287,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = "a150d2df-c1c1-4317-954a-e39ce0db0682",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -915,53 +911,6 @@ namespace Petsica.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a",
-                            ConcurrencyStamp = "13ac201a-1f5b-4871-bb36-6912b4ed12bf",
-                            IsDefault = false,
-                            IsDelete = false,
-                            Name = "ADMIN",
-                            NormalizedName = "ADMIN"
-                        },
-                        new
-                        {
-                            Id = "f3056a00-6914-4873-9f31-e3eb3ba6633a",
-                            ConcurrencyStamp = "4e2c6469-ce64-4d4a-acb1-72ddabb6f0db",
-                            IsDefault = true,
-                            IsDelete = false,
-                            Name = "MEMBER",
-                            NormalizedName = "MEMBER"
-                        },
-                        new
-                        {
-                            Id = "220229cd-8d7f-4b6e-9411-4c8bf3df079c",
-                            ConcurrencyStamp = "3cd7fbee-f947-4af1-be3f-1765dc49ced9",
-                            IsDefault = false,
-                            IsDelete = false,
-                            Name = "SELLER",
-                            NormalizedName = "SELLER"
-                        },
-                        new
-                        {
-                            Id = "9cc3c82c-9f0a-44c6-ae43-f28b6c056ee5",
-                            ConcurrencyStamp = "f9683f9e-57f3-4997-ac39-8ffa3b63b214",
-                            IsDefault = false,
-                            IsDelete = false,
-                            Name = "SITTER",
-                            NormalizedName = "SITTER"
-                        },
-                        new
-                        {
-                            Id = "8be5290b-5b0c-4e48-b6d4-5594d1495622",
-                            ConcurrencyStamp = "8341db82-f2ae-480c-a55e-4604dba79030",
-                            IsDefault = false,
-                            IsDelete = false,
-                            Name = "CLINIC",
-                            NormalizedName = "CLINIC"
-                        });
                 });
 
             modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationUser", b =>
@@ -1048,27 +997,6 @@ namespace Petsica.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "a150d2df-c1c1-4317-954a-e39ce0db0682",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7fa50e48-4080-4d01-8903-7c18c2e65392",
-                            Email = "Admin@Petsica.com",
-                            EmailConfirmed = true,
-                            IsApproval = false,
-                            IsDisabled = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@PETSICA.COM",
-                            NormalizedUserName = "ADMIN@PETSICA.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKRku5u6K325Irl1Utujiuil/WUhjTvShS9mJLXxO+2v/GKrMT1Ofhdp/0taFUO2bA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "6B5AD15259FF426FBDC89A431C9541A2",
-                            TwoFactorEnabled = false,
-                            Type = "ADMIN",
-                            UserName = "Admin@Petsica.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

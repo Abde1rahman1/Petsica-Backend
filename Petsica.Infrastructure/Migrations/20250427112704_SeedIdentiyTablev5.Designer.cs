@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petsica.Infrastructure;
 
@@ -11,9 +12,11 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427112704_SeedIdentiyTablev5")]
+    partial class SeedIdentiyTablev5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,183 +48,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ClaimType = "permissions",
-                            ClaimValue = "pets:read",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ClaimType = "permissions",
-                            ClaimValue = "pets:add",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ClaimType = "permissions",
-                            ClaimValue = "pets:update",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            ClaimType = "permissions",
-                            ClaimValue = "pets:delete",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            ClaimType = "permissions",
-                            ClaimValue = "categories:read",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            ClaimType = "permissions",
-                            ClaimValue = "categories:add",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            ClaimType = "permissions",
-                            ClaimValue = "categories:update",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            ClaimType = "permissions",
-                            ClaimValue = "users:read",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            ClaimType = "permissions",
-                            ClaimValue = "users:add",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            ClaimType = "permissions",
-                            ClaimValue = "users:update",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            ClaimType = "permissions",
-                            ClaimValue = "roles:read",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            ClaimType = "permissions",
-                            ClaimValue = "roles:add",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            ClaimType = "permissions",
-                            ClaimValue = "roles:update",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            ClaimType = "permissions",
-                            ClaimValue = "userFollows:read",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            ClaimType = "permissions",
-                            ClaimValue = "userFollows:add",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            ClaimType = "permissions",
-                            ClaimValue = "userFollows:update",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            ClaimType = "permissions",
-                            ClaimValue = "likes:read",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            ClaimType = "permissions",
-                            ClaimValue = "likes:add",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            ClaimType = "permissions",
-                            ClaimValue = "likes:update",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            ClaimType = "permissions",
-                            ClaimValue = "comments:read",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            ClaimType = "permissions",
-                            ClaimValue = "comments:add",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            ClaimType = "permissions",
-                            ClaimValue = "comments:update",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            ClaimType = "permissions",
-                            ClaimValue = "posts:read",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            ClaimType = "permissions",
-                            ClaimValue = "posts:add",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        },
-                        new
-                        {
-                            Id = 25,
-                            ClaimType = "permissions",
-                            ClaimValue = "posts:update",
-                            RoleId = "a62e6ef4-d653-46dc-8cf8-cd9fa4512f4a"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -1066,7 +892,6 @@ namespace Petsica.Infrastructure.Migrations
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "6B5AD15259FF426FBDC89A431C9541A2",
                             TwoFactorEnabled = false,
-                            Type = "ADMIN",
                             UserName = "Admin@Petsica.com"
                         });
                 });
