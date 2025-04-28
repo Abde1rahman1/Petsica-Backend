@@ -32,10 +32,11 @@ namespace Petsica.API
             app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
-
+           
             app.UseRouting();
             app.UseCors("AllowFrontend");
-
+            app.UseAuthentication(); 
+            app.UseAuthorization();
             app.MapControllers();
          
             //Map Health Checks
