@@ -5,7 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Petsica.Shared.Contracts.Dashboard.Response;
-public record NumberOfConfirmidEmail
+public record UserActivitySummary
 (
-    int TotalNumber
+     string UserID ,
+    int PostsCount ,
+    int CommentsCount ,
+    int LikesCount
 );
