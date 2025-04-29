@@ -37,6 +37,11 @@
 - **Route**: `/api/posts/delete/{PostId}`
 - **Description**: delete specific post.
 - **Response**: 200 OK
+   **Get My Posts**
+- **Method**: `GET`
+- **Route**: `/api/posts/myPosts`
+- **Description**: return my post.
+- **Response**: List of (postId , Content, UserId, Date, photo, LikesCount, CommentCount)
 
 ## Comments
 ### **Add a Comment**
