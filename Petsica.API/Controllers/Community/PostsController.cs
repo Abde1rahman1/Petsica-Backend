@@ -52,4 +52,12 @@ public class PostsController(IPostService postService) : ControllerBase
         var result = await _postService.DeleteById(User.GetUserId()!, PostId, cancellationToken);
         return result.IsSuccess ? Ok() : result.ToProblem();
 	}
+
+    [HttpGet("myPosts")]
+    public async Task<IActionResult> GetMyPosts(CancellationToken cancellationToken)
+    {
+        var result = await _postService.GetMyPostsAsync(User.GetUserId()!, cancellationToken);
+
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+    }
 }
