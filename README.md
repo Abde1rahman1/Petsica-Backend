@@ -1,5 +1,5 @@
-### Petsica Backend endpoints
-### Community endpoints
+# Petsica Backend endpoints
+# Community endpoints
 # Endpoints
 ## Post
 ### **Add a Post**
