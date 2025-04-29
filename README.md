@@ -49,17 +49,9 @@
     "content": "This is the content of the post."
   }
 ```
-
 - **Response Body**:
-  200 OK
-  ```json
-  {
-  "CommentId": "1",
-  "UserID":"2",
-  "Content":"content",
-  "Date":"12-12-2002"
-  }
-  ```
+  204 
+
   ### **Get Comments by PostId**
   - **Method**: `GET`
 - **Route**: `/api/Comments/{postId}`
@@ -85,26 +77,14 @@
   }
 - **Response Body**:
   200 OK
-  ```json
-  {
-  "CommentId": "1",
-  "UserID":"2",
-  "Content":"content",
-  "Date":"12-12-2002"
-  }
+
   ```
   ### **Delete Post**
 - **Method**: `POST`
 - **Route**: `/api/Comments/delete/{CommentId}`
 - **Description**: delete specific post.
 - **Response**:   200 OK
-  ```json
-  {
-  "CommentId": "1",
-  "UserID":"2",
-  "Content":"content",
-  "Date":"12-12-2002"
-  }
+
 
   
   
