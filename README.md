@@ -95,7 +95,7 @@
   ```
   ### **Delete Post**
 - **Method**: `POST`
-- **Route**: `/api/posts/delete/{PostId}`
+- **Route**: `/api/Comments/delete/{CommentId}`
 - **Description**: delete specific post.
 - **Response**:   200 OK
   ```json
