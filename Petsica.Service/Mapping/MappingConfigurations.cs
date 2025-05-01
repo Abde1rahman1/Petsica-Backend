@@ -14,7 +14,7 @@ namespace Petsica.Service.Mapping
                 .Map(des => des.SitterID, src => src.SitterID);
 
             config.NewConfig<PetsResponse, Pet>()
-                .Map(des => des.PetID, src => src.ID);
+                .Map(des => des.PetID, src => src.PetID);
         }
 
     }

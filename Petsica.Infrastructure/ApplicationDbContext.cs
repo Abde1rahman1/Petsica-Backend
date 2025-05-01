@@ -21,7 +21,7 @@ namespace Petsica.Infrastructure
         IdentityDbContext<ApplicationUser, ApplicationRole, string>(options)
     {
         #region Tables
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> User { get; set; }
         public DbSet<Pet> Pets { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<UserCommentPost> UserCommentPosts { get; set; }
@@ -43,7 +43,7 @@ namespace Petsica.Infrastructure
         public DbSet<ClinicMessageClinic> ClinicMessageClinics { get; set; }
         public DbSet<UserMessageClinic> UserMessageClinics { get; set; }
         public DbSet<UserMessageUser> UserMessageUsers { get; set; }
-        public DbSet<UserRequestPet> UserRequestPets { get; set; }
+        //  public DbSet<UserRequestPet> UserRequestPets { get; set; }
         public DbSet<UserRemindPet> UserRemindPets { get; set; }
         public DbSet<UserFollow> UserFollows { get; set; }
         #endregion
@@ -73,7 +73,7 @@ namespace Petsica.Infrastructure
             modelBuilder.ApplyConfiguration(new ClinicMessageClinicConfiguration());
             modelBuilder.ApplyConfiguration(new UserMessageClinicConfiguration());
             modelBuilder.ApplyConfiguration(new UserMessageUserConfiguration());
-            modelBuilder.ApplyConfiguration(new UserRequestPetConfiguration());
+            //     modelBuilder.ApplyConfiguration(new UserRequestPetConfiguration());
             modelBuilder.ApplyConfiguration(new UserRemindPetConfiguration());
 
             modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());

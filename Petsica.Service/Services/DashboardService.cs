@@ -1,15 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Petsica.Core.Entities.Community;
-using Petsica.Service.Abstractions.Dashboard;
+﻿using Petsica.Service.Abstractions.Dashboard;
 using Petsica.Shared.Contracts.Dashboard.Response;
-using Petsica.Shared.Contracts.Users.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Petsica.Service.Services;
 public class DashboardService(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : IDashboardService
@@ -19,7 +9,7 @@ public class DashboardService(ApplicationDbContext context, UserManager<Applicat
 
     public async Task<Result<NumberOfUsers>> GetUserCountsByRole(CancellationToken cancellationToken = default)
     {
-        
+
         var roleCounts = await _userManager.Users
             .GroupBy(ur => ur.Type)
             .Select(g => new { RoleName = g.Key, Count = g.Count() })
@@ -30,15 +20,15 @@ public class DashboardService(ApplicationDbContext context, UserManager<Applicat
             sitter: roleCounts.FirstOrDefault(rc => rc.RoleName == "SITTER")?.Count ?? 0,
             clinic: roleCounts.FirstOrDefault(rc => rc.RoleName == "CLINIC")?.Count ?? 0);
         return Result<NumberOfUsers>.Success(users);
-        
 
-      
+
+
     }
 
     public async Task<Result<List<GeneralInfoForAllUsersResponse>>> GetGeneralInfoAsync(CancellationToken cancellationToken = default)
     {
         var users = await _userManager.Users
-                          .Select(u => new GeneralInfoForAllUsersResponse(u.Id, u.UserName,u.Email,u.Type))
+                          .Select(u => new GeneralInfoForAllUsersResponse(u.Id, u.UserName, u.Email, u.Type))
                           .ToListAsync();
 
 
@@ -46,7 +36,7 @@ public class DashboardService(ApplicationDbContext context, UserManager<Applicat
         return Result<List<GeneralInfoForAllUsersResponse>>.Success(users);
     }
 
-   
+
 
     public async Task<Result<EmailConfirmationStatsResponse>> GetEmailConfirmationStatsAsync(CancellationToken cancellationToken)
     {
@@ -69,7 +59,7 @@ public class DashboardService(ApplicationDbContext context, UserManager<Applicat
     public async Task<List<UserActivitySummary>> GetAllTimeUserActivityAsync(CancellationToken cancellationToken = default)
     {
         // Retrieve all-time activity counts for each user
-        var userActivitySummaries = await _context.Users
+        var userActivitySummaries = await _context.User
             .Select(user => new UserActivitySummary
             (
                 user.UserID,  // Ensure UserID is the correct property in the User model
@@ -84,7 +74,7 @@ public class DashboardService(ApplicationDbContext context, UserManager<Applicat
 
     public async Task<List<UserLeaderboard>> GetTopContributorsAsync(CancellationToken cancellationToken = default)
     {
-        var users = await _context.Users.ToListAsync(); // Fetch users first
+        var users = await _context.User.ToListAsync(); // Fetch users first
 
         var postCounts = await _context.Posts
             .GroupBy(p => p.UserID)
@@ -114,16 +104,16 @@ public class DashboardService(ApplicationDbContext context, UserManager<Applicat
         return leaderboard;
     }
 
-    public async Task<List<GetTopPostsResponse>> GetTopPostsAsync(CancellationToken cancellationToken=default)
+    public async Task<List<GetTopPostsResponse>> GetTopPostsAsync(CancellationToken cancellationToken = default)
     {
         var topPosts = await _context.Posts
-            .OrderByDescending(p => p.LikesCount + p.CommentsCount) 
+            .OrderByDescending(p => p.LikesCount + p.CommentsCount)
             .Take(5)
             .Select(p => new GetTopPostsResponse(
-                p.PostID.ToString(),   
+                p.PostID.ToString(),
                 p.Content,
                 p.Date,
-                p.Photo ?? "No Photo", 
+                p.Photo ?? "No Photo",
                 p.LikesCount,
                 p.CommentsCount,
                 p.UserID
