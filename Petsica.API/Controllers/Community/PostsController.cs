@@ -50,11 +50,11 @@ public class PostsController(IPostService postService) : ControllerBase
         return result.IsSuccess ? Ok() : result.ToProblem();
     }
 
-    //    [HttpGet("myPosts")]
-    //    public async Task<IActionResult> GetMyPosts(CancellationToken cancellationToken)
-    //    {
-    //        var result = await _postService.GetMyPostsAsync(User.GetUserId()!, cancellationToken);
+    [HttpGet("myPosts")]
+    public async Task<IActionResult> GetMyPosts(CancellationToken cancellationToken)
+    {
+        var result = await _postService.GetMyPostsAsync(User.GetUserId()!, cancellationToken);
 
-    //        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
-    //    }
+        return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+    }
 }
