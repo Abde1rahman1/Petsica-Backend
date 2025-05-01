@@ -32,12 +32,13 @@ namespace Petsica.API
             app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
-
-
+           
+            app.UseRouting();
             app.UseCors("AllowFrontend");
-
+            app.UseAuthentication(); 
+            app.UseAuthorization();
             app.MapControllers();
-
+         
             //Map Health Checks
             app.MapHealthChecks("health", new HealthCheckOptions
             {
@@ -45,7 +46,9 @@ namespace Petsica.API
             });
 
             // Map SignalR hubs
+
             app.MapHub<ChatHub>("/chatHub").RequireCors("AllowFrontend");
+            app.MapHub<ClinicChatHub>("/clinicChatHub").RequireCors("AllowFrontend");
             app.MapHub<UserChatHub>("/userChatHub").RequireCors("AllowFrontend");
 
             app.UseExceptionHandler("/Home/Error");

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Petsica.Core.Entities.Messages;
 using Petsica.Service.Abstractions.Messages;
 using Petsica.Shared.Contracts.Messages;
@@ -11,29 +12,30 @@ namespace Petsica.API.Controllers.Messages;
 [ApiController]
 public class ChatsController : ControllerBase
 {
-	private readonly IClinicChatService _chatService;
-	private readonly IHubContext<ChatHub> _hubContext;
+    private readonly IClinicChatService _clinicChatService;
+    private readonly IHubContext<ClinicChatHub> _hubContext;
+    public ChatsController(IClinicChatService clinicChatService, IHubContext<ClinicChatHub> hubContext)
+    {
+        _clinicChatService = clinicChatService;
+        _hubContext = hubContext;
+    }
 
-	public ChatsController(IClinicChatService chatService, IHubContext<ChatHub> hubContext)
-	{
-		_chatService = chatService;
-		_hubContext = hubContext;
-	}
 
-	[HttpPost("send")]
-	public async Task<IActionResult> SendMessage(ClinicChatRequest message)
-	{
-		await _chatService.SaveMessageAsync(message);
-		await _hubContext.Clients.User(message.ClinicReceiverID)
-			.SendAsync("ReceiveMessage", message.ClinicSenderID, message.Content, DateTime.UtcNow);
+    
 
-		return Ok();
-	}
 
-	[HttpGet("history")]
-	public async Task<IActionResult> GetChatHistory(string clinic1Id, string clinic2Id)
-	{
-		var messages = await _chatService.GetMessagesAsync(clinic1Id, clinic2Id);
-		return Ok(messages);
-	}
+    [HttpPost("send-message")]
+    public async Task<IActionResult> SendMessage([FromBody] ClinicChatRequest request)
+    {
+        await _clinicChatService.SendMessageAsync(request);
+        await _hubContext.Clients.User(request.ClinicReceiverID).SendAsync("ReceiveMessage", request);
+        return Ok();
+    }
+
+    [HttpGet("get-messages/{clinicReceiverID}/{clinicSenderID}")]
+    public async Task<IActionResult> GetMessages( string clinicReceiverID, string clinicSenderID)
+    {
+        var messages = await _clinicChatService.GetMessagesAsync(clinicReceiverID, clinicSenderID);
+        return Ok(messages);
+    }
 }

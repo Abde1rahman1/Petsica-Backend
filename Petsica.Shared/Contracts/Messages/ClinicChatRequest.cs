@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Petsica.Shared.Contracts.Messages;
 public record ClinicChatRequest
-(string ClinicReceiverID,
-string ClinicSenderID,
-string Content
+(
+	string ClinicReceiverID,
+	string ClinicSenderID,
+	string Content,
+	string Date
 	);

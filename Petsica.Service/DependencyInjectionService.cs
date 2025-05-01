@@ -46,7 +46,7 @@ namespace Petsica.Service
 
             services.AddScoped<IOrderService, OrderService>();
 
-            //services.AddScoped<IClinicChatService, ClinicChatService>();
+            services.AddScoped<IClinicChatService, ClinicChatService>();
 
             services.AddScoped<IUserChatService, UserChatService>();
 

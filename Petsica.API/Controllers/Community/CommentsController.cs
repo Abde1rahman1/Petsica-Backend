@@ -21,7 +21,7 @@ namespace Petsica.API.Controllers.Community
 		{
 
 			var result = await _commentService.AddAsync(User.GetUserId()!,PostID, commentRequest, cancellationToken);
-			return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+			return result.IsSuccess ? Created() : BadRequest(result.Error);
 		}
 		
 		[HttpGet("{PostId}")]
@@ -36,7 +36,7 @@ namespace Petsica.API.Controllers.Community
 		public async Task<IActionResult> Update(int CommentId, [FromBody] CommentRequest request, CancellationToken cancellationToken = default)
 		{
 			var result = await _commentService.UpdatePostById(CommentId, request, cancellationToken);
-			return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+			return result.IsSuccess ? Ok() : BadRequest(result.Error);
 		}
 
 		[HttpPost("delete/{CommentId}")]
@@ -44,7 +44,7 @@ namespace Petsica.API.Controllers.Community
 		public async Task<IActionResult> DeleteById(int CommentId, CancellationToken cancellationToken)
 		{
 			var result = await _commentService.DeleteById(CommentId, cancellationToken);
-			return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+			return result.IsSuccess ? Ok() : BadRequest(result.Error);
 		}
 	}
 }

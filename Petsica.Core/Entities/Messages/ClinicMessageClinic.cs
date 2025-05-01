@@ -1,6 +1,7 @@
 ﻿
 
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Petsica.Core.Entities.Messages;
 public class ClinicMessageClinic
@@ -13,8 +14,10 @@ public class ClinicMessageClinic
 
 	#region Navigation Properties
 	[NotMapped]
+    [JsonIgnore]
 	public Clinic Receiver { get; set; }
 	[NotMapped]
-	public Clinic Sender { get; set; }
+    [JsonIgnore]
+    public Clinic Sender { get; set; }
     #endregion
 }
