@@ -93,16 +93,21 @@ namespace Petsica.Service.Services.Pets
 
         //}
 
-        public async Task<Result<IEnumerable<PetsResponse>>> GetAllPetsAsync(string userId, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<Pet>>> GetAllPetsAsync(string userId, CancellationToken cancellationToken)
         {
             var response = await _context.Pets.
                 Where(x => x.UserID == userId)
-                .ProjectToType<PetsResponse>()
+                .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
-            return Result.Success<IEnumerable<PetsResponse>>(response);
+
+
+            return Result.Success<IEnumerable<Pet>>(response);
 
         }
+
+
+
 
 
         public async Task<Result> PetAdoptionOn(string userId, int petId, CancellationToken cancellationToken)

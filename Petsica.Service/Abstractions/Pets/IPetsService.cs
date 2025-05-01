@@ -1,4 +1,5 @@
-﻿using Petsica.Shared.Contracts.Pets.Request;
+﻿using Petsica.Core.Entities.Pets;
+using Petsica.Shared.Contracts.Pets.Request;
 using Petsica.Shared.Contracts.Pets.Response;
 
 namespace Petsica.Service.Abstractions.Pets
@@ -7,7 +8,7 @@ namespace Petsica.Service.Abstractions.Pets
     {
         Task<Result> AddPetAsync(string userId, AddPetRequest request, CancellationToken cancellationToken);
         Task<Result<PetsServiceResponse>> GetPetProfil(string userId, int PetID, CancellationToken cancellationToken);
-        Task<Result<IEnumerable<PetsResponse>>> GetAllPetsAsync(string userId, CancellationToken cancellationToken);
+        Task<Result<IEnumerable<Pet>>> GetAllPetsAsync(string userId, CancellationToken cancellationToken);
 
         // Pet Service 
         Task<Result> PetAdoptionOn(string userId, int petId, CancellationToken cancellationToken);

@@ -1,7 +1,7 @@
 ﻿namespace Petsica.Shared.Contracts.Pets.Response
 {
     public record PetsResponse(
-    int PetID,
+    int ID,
     string Species,
     string Photo,
     string Gender,

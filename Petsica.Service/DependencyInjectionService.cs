@@ -1,4 +1,5 @@
 using Hangfire;
+using MapsterMapper;
 using Petsica.Service.Abstractions.Community;
 using Petsica.Service.Abstractions.Dashboard;
 using Petsica.Service.Abstractions.Marketplace;
@@ -13,6 +14,7 @@ using Petsica.Service.Services.Email;
 using Petsica.Service.Services.Marketplace;
 using Petsica.Service.Services.Pets;
 using Petsica.Service.Services.Users;
+using System.Reflection;
 
 namespace Petsica.Service
 {
@@ -68,6 +70,17 @@ namespace Petsica.Service
             services.AddHangfireServer();
 
             return services;
+        }
+        public static IServiceCollection AddMapsterConfig(this IServiceCollection services)
+        {
+            var mappingConfig = TypeAdapterConfig.GlobalSettings;
+            mappingConfig.Scan(Assembly.GetExecutingAssembly());
+
+            services.AddSingleton<IMapper>(new Mapper(mappingConfig));
+
+            return services;
+
+
         }
     }
 }
