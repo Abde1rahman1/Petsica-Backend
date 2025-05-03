@@ -8,6 +8,10 @@ public class Pet
     public string Gender { get; set; }
     public string Name { get; set; }
     public string Breed { get; set; }
+    public bool IsActive { get; set; } = false;
+    public bool Mating { get; set; } = false;
+    public bool Adoption { get; set; } = false;
+
 
 
     #region Foreign Key

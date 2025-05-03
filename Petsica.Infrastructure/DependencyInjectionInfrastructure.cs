@@ -1,9 +1,5 @@
-﻿using Mapster;
-using MapsterMapper;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Petsica.Infrastructure.Mapping;
-using System.Reflection;
 
 namespace Petsica.Infrastructure
 {
@@ -23,17 +19,17 @@ namespace Petsica.Infrastructure
             return services;
         }
 
-        public static IServiceCollection AddMapsterConfig(this IServiceCollection services)
-        {
-            var mappingConfig = TypeAdapterConfig.GlobalSettings;
-            mappingConfig.Scan(Assembly.GetExecutingAssembly());
+        //public static IServiceCollection AddMapsterConfig(this IServiceCollection services)
+        //{
+        //    var mappingConfig = TypeAdapterConfig.GlobalSettings;
+        //    mappingConfig.Scan(Assembly.GetExecutingAssembly());
 
-            new MappingConfigurations().Register(mappingConfig);
+        //    new MappingConfigurations().Register(mappingConfig);
 
-            services.AddSingleton<IMapper>(new Mapper(mappingConfig));
+        //    services.AddSingleton<IMapper>(new Mapper(mappingConfig));
 
-            return services;
-        }
+        //    return services;
+        //}
 
     }
 }

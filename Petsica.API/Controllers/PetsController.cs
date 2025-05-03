@@ -56,45 +56,26 @@ namespace Petsica.API.Controllers
             return result.IsSuccess ? Ok(result) : result.ToProblem();
         }
 
-        [HttpPost("PetAdoptionOn/{petId}")]
-        public async Task<IActionResult> PetAdoptionOn([FromRoute] int petId, CancellationToken cancellationToken)
+        [HttpPost("PetAdoptionToggle/{petId}")]
+        public async Task<IActionResult> PetAdoptionToggle([FromRoute] int petId, CancellationToken cancellationToken)
         {
-            var result = await _service.PetAdoptionOn(User.GetUserId()!, petId, cancellationToken);
+            var result = await _service.PetAdoptionToggle(User.GetUserId()!, petId, cancellationToken);
 
             return result.IsSuccess ? Created() : result.ToProblem();
 
         }
-        [HttpPost("PetAdoptionOff/{petId}")]
-        public async Task<IActionResult> PetAdoptionOff([FromRoute] int petId, CancellationToken cancellationToken)
+        [HttpPost("PetMatingToggle/{petId}")]
+        public async Task<IActionResult> PetMatingToggle([FromRoute] int petId, CancellationToken cancellationToken)
         {
-            var result = await _service.PetAdoptionOff(User.GetUserId()!, petId, cancellationToken);
+            var result = await _service.PetMatingToggle(User.GetUserId()!, petId, cancellationToken);
 
             return result.IsSuccess ? Ok() : result.ToProblem();
 
         }
 
-        [HttpPost("PetMatingOn/{petId}")]
-        public async Task<IActionResult> PetMatingOn([FromRoute] int petId, CancellationToken cancellationToken)
-        {
-            var result = await _service.PetMatingOn(User.GetUserId()!, petId, cancellationToken);
+        [HttpGet("GetPetProfil/{petId}")]
 
-            return result.IsSuccess ? Ok() : result.ToProblem();
-
-        }
-
-        [HttpPost("PetMatingOff/{petId}")]
-
-        public async Task<IActionResult> PetMatingOff([FromRoute] int petId, CancellationToken cancellationToken)
-        {
-            var result = await _service.PetMatingOff(User.GetUserId()!, petId, cancellationToken);
-
-            return result.IsSuccess ? Ok() : result.ToProblem();
-
-        }
-
-        [HttpGet("GetPetService/{petId}")]
-
-        public async Task<IActionResult> GetPetService([FromRoute] int petId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetPetProfil([FromRoute] int petId, CancellationToken cancellationToken)
         {
             var result = await _service.GetPetProfil(User.GetUserId()!, petId, cancellationToken);
 

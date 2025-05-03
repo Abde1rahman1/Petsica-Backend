@@ -150,7 +150,7 @@ namespace Petsica.Service.Services.Authrization
             };
 
 
-            await _context.Users.AddAsync(userContext, cancellationToken);
+            await _context.User.AddAsync(userContext, cancellationToken);
 
             await _context.SaveChangesAsync(cancellationToken);
             if (result.Succeeded)
