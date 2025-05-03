@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace Petsica.Shared.Contracts.Marketplace.Response
 {
-    public record OrderSummaryResponse(
+    public record SellerOrderResponse(
+    int SellerOrderId,
+    string SellerId,
     int OrderId,
-    decimal TotalPrice,
     DateTime CreatedAt,
-    bool Status
+    int TotalQuantity,
+    decimal TotalPrice,
+    bool Status,
+    bool IsCancelled,
+    List<OrderItemResponse> OrderItems
     );
 
 }

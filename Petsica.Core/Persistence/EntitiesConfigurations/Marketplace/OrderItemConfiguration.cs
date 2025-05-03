@@ -12,11 +12,19 @@ namespace Petsica.Core.Persistence.EntitiesConfigurations.Marketplace
         {
             builder.HasKey(oi => oi.Id);
 
+            builder.Property(oi => oi.Price)
+                   .HasPrecision(18, 2);
+
+            builder.Property(oi => oi.Discount)
+                   .HasPrecision(18, 2);
+
+            builder.Property(oi => oi.Quantity)
+                   .IsRequired();
+
             #region Relationships
-            builder.HasOne(oi => oi.Order)
-                   .WithMany(o => o.OrderItems)
-                   .HasForeignKey(oi => oi.OrderId)
-                   .OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(oi => oi.SellerOrder)
+                   .WithMany(so => so.OrderItems)
+                   .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(oi => oi.Product)
                    .WithMany(p => p.OrderItems)

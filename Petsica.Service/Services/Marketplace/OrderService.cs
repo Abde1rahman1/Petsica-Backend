@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Petsica.Core.Entities.Marketplace;
 using Petsica.Service.Abstractions.Marketplace;
+using Petsica.Shared.Contracts.Marketplace.Request;
 using Petsica.Shared.Contracts.Marketplace.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Petsica.Service.Services.Marketplace
 {
@@ -14,18 +16,16 @@ namespace Petsica.Service.Services.Marketplace
     {
         private readonly ApplicationDbContext _context = context;
 
-        public async Task<Result<List<OrderResponse>>> CreateOrderFromCartAsync(string userId, string address, CancellationToken cancellationToken)
+        public async Task<Result<List<OrderResponse>>> CreateOrderFromCartAsync(string userId, CreateOrderRequest request, CancellationToken cancellationToken)
         {
-            // جلب الكارت الخاص باليوزر
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync(c => c.UserID == userId, cancellationToken);
 
             if (cart == null || !cart.CartItems.Any())
-                return Result.Failure<List<OrderResponse>>(MarketErrors.CartNotFound); // استخدام Result.Failure مع الخطأ المناسب
+                return Result.Failure<List<OrderResponse>>(MarketErrors.CartNotFound);
 
-            // تجميع المنتجات حسب الـ Seller
             var groupedItems = cart.CartItems
                 .GroupBy(ci => ci.Product.SellerID)
                 .Select(g => new
@@ -35,13 +35,13 @@ namespace Petsica.Service.Services.Marketplace
                 })
                 .ToList();
 
-            List<OrderResponse> orderResponses = new List<OrderResponse>();
+            decimal totalPrice = 0;
+            List<SellerOrder> sellerOrders = new();
 
-            // لكل Seller هنعمل أوردر منفصل
             foreach (var group in groupedItems)
             {
-                decimal totalPrice = 0;
-                List<OrderItem> orderItems = new List<OrderItem>();
+                decimal sellerTotalPrice = 0;
+                List<OrderItem> sellerOrderItems = new();
 
                 foreach (var cartItem in group.Items)
                 {
@@ -54,110 +54,99 @@ namespace Petsica.Service.Services.Marketplace
                         return Result.Failure<List<OrderResponse>>(MarketErrors.ExceedAvailableStock);
 
                     product.Quantity -= cartItem.Quantity;
-                    totalPrice += (product.Price - product.Discount) * cartItem.Quantity;
 
-                    orderItems.Add(new OrderItem
+                    var priceAfterDiscount = product.Price - product.Discount;
+                    var totalItemPrice = priceAfterDiscount * cartItem.Quantity;
+
+                    sellerTotalPrice += totalItemPrice;
+
+                    var orderItem = new OrderItem
                     {
                         ProductId = cartItem.ProductId,
                         Quantity = cartItem.Quantity,
                         Price = product.Price,
-                        TotalPrice = (product.Price - product.Discount) * cartItem.Quantity
-                    });
+                        Discount = product.Discount,
+                        TotalPrice = totalItemPrice
+                    };
+
+                    sellerOrderItems.Add(orderItem);
                 }
 
-                var order = new Order
+                var sellerOrder = new SellerOrder
                 {
-                    UserID = userId,
-                    SellerID = group.SellerId,
-                    TotalPrice = totalPrice,
-                    CreatedAt = DateTime.UtcNow,
-                    Status = false, 
-                    OrderItems = orderItems,
-                    Address = address 
+                    SellerId = group.SellerId,
+                    TotalPrice = sellerTotalPrice,
+                    Status = false,
+                    IsCancelled = false,
+                    OrderItems = sellerOrderItems
                 };
 
-                await _context.Orders.AddAsync(order, cancellationToken);
-                await _context.SaveChangesAsync(cancellationToken);
-
-                var orderResponse = new OrderResponse(
-                    OrderID: order.OrderID,
-                    TotalPrice: order.TotalPrice,
-                    CreatedAt: order.CreatedAt,
-                    Status: order.Status,
-                    Address: order.Address,
-                    OrderItems: order.OrderItems.Select(oi => new OrderItemResponse(
-                        ProductId: oi.ProductId,
-                        ProductName: oi.Product.Name,
-                        Quantity: oi.Quantity,
-                        Price: oi.Price,
-                        TotalPrice: oi.TotalPrice
-                    )).ToList()
-                );
-
-                orderResponses.Add(orderResponse);
+                totalPrice += sellerTotalPrice;
+                sellerOrders.Add(sellerOrder);
             }
 
-            _context.CartItems.RemoveRange(cart.CartItems); 
-            _context.Carts.Remove(cart); 
+            var order = new Order
+            {
+                UserID = userId,
+                TotalPrice = totalPrice,
+                CreatedAt = DateTime.UtcNow,
+                Status = false,
+                Address = request.Address,
+                PhoneNumber = request.PhoneNumber,
+                SellerOrders = sellerOrders
+            };
+
+            await _context.Orders.AddAsync(order, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(orderResponses);
+            _context.CartItems.RemoveRange(cart.CartItems);
+            _context.Carts.Remove(cart);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return Result.Success(new List<OrderResponse>());
         }
+
 
         public async Task<Result<List<OrderResponse>>> GetOrdersForUserAsync(string userId, CancellationToken cancellationToken)
         {
             var orders = await _context.Orders
                 .Where(o => o.UserID == userId)
-                .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Product)
+                .Include(o => o.SellerOrders)
+                    .ThenInclude(so => so.OrderItems)
+                        .ThenInclude(oi => oi.Product)
                 .ToListAsync(cancellationToken);
 
             if (orders == null || !orders.Any())
                 return Result.Failure<List<OrderResponse>>(MarketErrors.OrdersNotFound);
 
-            var orderResponses = orders.Select(order => new OrderResponse(
-                OrderID: order.OrderID,
-                TotalPrice: order.TotalPrice,
-                CreatedAt: order.CreatedAt,
-                Status: order.Status,
-                Address: order.Address,
-                OrderItems: order.OrderItems.Select(oi => new OrderItemResponse(
-                    ProductId: oi.ProductId,
-                    ProductName: oi.Product.Name,
-                    Quantity: oi.Quantity,
-                    Price: oi.Price,
-                    TotalPrice: oi.TotalPrice
-                )).ToList()
-            )).ToList();
+            var orderResponses = orders.Select(order =>
+            {
+                var orderItems = order.SellerOrders
+                    .SelectMany(so => so.OrderItems)
+                    .Select(oi => new OrderItemResponse(
+                        ProductId: oi.ProductId,
+                        ProductName: oi.Product.Name,
+                        Photo: oi.Product.Photo,
+                        Quantity: oi.Quantity,
+                        Price: oi.Price,
+                        TotalPrice: oi.TotalPrice
+                    )).ToList();
 
-            return Result.Success(orderResponses);
-        }
+                var totalQuantity = orderItems.Sum(oi => oi.Quantity);
+                var isCompleted = order.Status;
 
-        public async Task<Result<List<OrderResponse>>> GetOrdersForSellerAsync(string sellerId, CancellationToken cancellationToken)
-        {
-            var orders = await _context.Orders
-                .Include(o => o.OrderItems)
-                .ThenInclude(oi => oi.Product)
-                .Where(o => o.SellerID == sellerId)
-                .ToListAsync(cancellationToken);
-
-            if (!orders.Any())
-                return Result.Failure<List<OrderResponse>>(MarketErrors.OrdersNotFound);
-
-            var orderResponses = orders.Select(order => new OrderResponse(
-                OrderID: order.OrderID,
-                TotalPrice: order.TotalPrice,
-                CreatedAt: order.CreatedAt,
-                Status: order.Status,
-                Address: order.Address,
-                OrderItems: order.OrderItems.Select(oi => new OrderItemResponse(
-                    ProductId: oi.ProductId,
-                    ProductName: oi.Product.Name,
-                    Quantity: oi.Quantity,
-                    Price: oi.Price,
-                    TotalPrice: oi.TotalPrice
-                )).ToList()
-            )).ToList();
+                return new OrderResponse(
+                    OrderID: order.OrderID,
+                    UserId: order.UserID,
+                    TotalPrice: order.TotalPrice,
+                    CreatedAt: order.CreatedAt,
+                    Status: isCompleted,
+                    Address: order.Address,
+                    PhoneNumber: order.PhoneNumber,
+                    OrderItems: orderItems,
+                    TotalQuantity: totalQuantity
+                );
+            }).ToList();
 
             return Result.Success(orderResponses);
         }
@@ -165,50 +154,103 @@ namespace Petsica.Service.Services.Marketplace
         public async Task<Result<OrderResponse>> GetOrderByIdForUserAsync(int orderId, string userId, CancellationToken cancellationToken)
         {
             var order = await _context.Orders
-                .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Product)
-                .FirstOrDefaultAsync(o => o.OrderID == orderId && o.UserID == userId, cancellationToken);
+                .Where(o => o.OrderID == orderId && o.UserID == userId)
+                .Include(o => o.SellerOrders)
+                    .ThenInclude(so => so.OrderItems)
+                        .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (order is null)
                 return Result.Failure<OrderResponse>(MarketErrors.OrderNotFound);
 
+            var orderItems = order.SellerOrders
+                .SelectMany(so => so.OrderItems)
+                .Select(oi => new OrderItemResponse(
+                    ProductId: oi.ProductId,
+                    ProductName: oi.Product.Name,
+                    Photo: oi.Product.Photo,
+                    Quantity: oi.Quantity,
+                    Price: oi.Price,
+                    TotalPrice: oi.TotalPrice
+                )).ToList();
+
+            var totalQuantity = orderItems.Sum(oi => oi.Quantity);
+
             var orderResponse = new OrderResponse(
                 OrderID: order.OrderID,
+                UserId: order.UserID,
                 TotalPrice: order.TotalPrice,
                 CreatedAt: order.CreatedAt,
                 Status: order.Status,
                 Address: order.Address,
-                OrderItems: order.OrderItems.Select(oi => new OrderItemResponse(
-                    ProductId: oi.ProductId,
-                    ProductName: oi.Product.Name,
-                    Quantity: oi.Quantity,
-                    Price: oi.Price,
-                    TotalPrice: oi.TotalPrice
-                )).ToList()
+                PhoneNumber: order.PhoneNumber,
+                OrderItems: orderItems,
+                TotalQuantity: totalQuantity
             );
 
             return Result.Success(orderResponse);
         }
 
-        public async Task<Result<OrderResponse>> GetOrderByIdForSellerAsync(int orderId, string sellerId, CancellationToken cancellationToken)
+
+        public async Task<Result<List<SellerOrderResponse>>> GetOrdersForSellerAsync(string sellerId, CancellationToken cancellationToken)
         {
-            var order = await _context.Orders
-                .Include(o => o.OrderItems)
+            var sellerOrders = await _context.SellerOrder
+                .Where(so => so.SellerId == sellerId)
+                .Include(so => so.Order)
+                .Include(so => so.OrderItems)
                     .ThenInclude(oi => oi.Product)
-                .FirstOrDefaultAsync(o => o.OrderID == orderId && o.SellerID == sellerId, cancellationToken);
+                .ToListAsync(cancellationToken);
 
-            if (order is null)
-                return Result.Failure<OrderResponse>(MarketErrors.OrdersNotFound);
+            if (!sellerOrders.Any())
+                return Result.Failure<List<SellerOrderResponse>>(MarketErrors.OrdersNotFound);
 
-            var response = new OrderResponse(
-                OrderID: order.OrderID,
-                TotalPrice: order.TotalPrice,
-                CreatedAt: order.CreatedAt,
-                Status: order.Status,
-                Address: order.Address,
-                OrderItems: order.OrderItems.Select(oi => new OrderItemResponse(
+            var sellerOrderResponses = sellerOrders.Select(so => new SellerOrderResponse(
+                SellerOrderId: so.SellerOrderId,
+                OrderId: so.OrderId,
+                SellerId: so.SellerId,
+                CreatedAt: so.Order.CreatedAt,
+                TotalQuantity: so.OrderItems.Sum(oi => oi.Quantity),
+                TotalPrice: so.TotalPrice,
+                Status: so.Status,
+                IsCancelled: so.IsCancelled,
+                OrderItems: so.OrderItems.Select(oi => new OrderItemResponse(
                     ProductId: oi.ProductId,
                     ProductName: oi.Product.Name,
+                    Photo: oi.Product.Photo,
+                    Quantity: oi.Quantity,
+                    Price: oi.Price,
+                    TotalPrice: oi.TotalPrice
+                )).ToList()
+            )).ToList();
+
+            return Result.Success(sellerOrderResponses);
+        }
+
+
+        public async Task<Result<SellerOrderResponse>> GetSellerOrderByIdAsync(int sellerOrderId, string sellerId, CancellationToken cancellationToken)
+        {
+            var sellerOrder = await _context.SellerOrder
+                .Include(so => so.Order)
+                .Include(so => so.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(so => so.SellerOrderId == sellerOrderId && so.SellerId == sellerId, cancellationToken);
+
+            if (sellerOrder is null)
+                return Result.Failure<SellerOrderResponse>(MarketErrors.OrdersNotFound);
+
+            var response = new SellerOrderResponse(
+                SellerOrderId: sellerOrder.SellerOrderId,
+                OrderId: sellerOrder.OrderId,
+                SellerId: sellerOrder.SellerId,
+                TotalPrice: sellerOrder.TotalPrice,
+                Status: sellerOrder.Status,
+                IsCancelled: sellerOrder.IsCancelled,
+                CreatedAt: sellerOrder.Order.CreatedAt,
+                TotalQuantity: sellerOrder.OrderItems.Sum(oi => oi.Quantity),
+                OrderItems: sellerOrder.OrderItems.Select(oi => new OrderItemResponse(
+                    ProductId: oi.ProductId,
+                    ProductName: oi.Product.Name,
+                    Photo: oi.Product.Photo,
                     Quantity: oi.Quantity,
                     Price: oi.Price,
                     TotalPrice: oi.TotalPrice
@@ -219,13 +261,42 @@ namespace Petsica.Service.Services.Marketplace
         }
 
 
-        public async Task<Result> MarkOrderAsCompletedAsync(string sellerId, int orderId, CancellationToken cancellationToken)
+
+
+        public async Task<Result> MarkSellerOrderAsCompletedAsync(string sellerId, int sellerOrderId, CancellationToken cancellationToken)
+        {
+            var sellerOrder = await _context.SellerOrder
+                .FirstOrDefaultAsync(so => so.SellerOrderId == sellerOrderId && so.SellerId == sellerId, cancellationToken);
+
+            if (sellerOrder is null)
+                return Result.Failure(MarketErrors.OrdersNotFound);
+
+            if (sellerOrder.IsCancelled)
+                return Result.Failure(MarketErrors.SellerOrderIsCancelled);
+
+            if (sellerOrder.Status)
+                return Result.Failure(MarketErrors.SellerOrderAlreadyCompleted);
+
+            sellerOrder.Status = true;
+
+            _context.SellerOrder.Update(sellerOrder);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return Result.Success();
+        }
+
+        public async Task<Result> MarkOrderAsCompletedByAdminAsync(int orderId, CancellationToken cancellationToken)
         {
             var order = await _context.Orders
-                .FirstOrDefaultAsync(o => o.OrderID == orderId && o.SellerID == sellerId, cancellationToken);
+                .Include(o => o.SellerOrders)
+                .FirstOrDefaultAsync(o => o.OrderID == orderId, cancellationToken);
 
             if (order is null)
-                return Result.Failure(MarketErrors.OrdersNotFound);
+                return Result.Failure(MarketErrors.OrderNotFound);
+
+            if (order.SellerOrders.Any(so => !so.Status))
+                return Result.Failure(MarketErrors.NotAllSellerOrdersCompleted);
+
 
             order.Status = true;
 
@@ -235,55 +306,230 @@ namespace Petsica.Service.Services.Marketplace
             return Result.Success();
         }
 
+
         public async Task<Result> CancelOrderByUserAsync(int orderId, string userId, CancellationToken cancellationToken)
         {
             var order = await _context.Orders
-                .Include(o => o.OrderItems)
+                .Include(o => o.SellerOrders)
                 .FirstOrDefaultAsync(o => o.OrderID == orderId && o.UserID == userId, cancellationToken);
 
             if (order is null)
                 return Result.Failure(MarketErrors.OrderNotFound);
 
-            if (order.Status)
-                return Result.Failure(MarketErrors.OrderAlreadyCompleted);
-
             if (order.IsCancelled)
                 return Result.Failure(MarketErrors.OrderAlreadyCancelled);
 
+            if (order.Status)
+                return Result.Failure(MarketErrors.OrderAlreadyCompleted);
+
+            if (order.SellerOrders.Any(so => so.Status))
+                return Result.Failure(MarketErrors.OrderPartiallyCompleted);
+
             order.IsCancelled = true;
+
+            foreach (var sellerOrder in order.SellerOrders)
+            {
+                sellerOrder.IsCancelled = true;
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return Result.Success();
         }
 
-        public async Task<Result<List<OrderResponse>>> GetAllOrdersAsync(CancellationToken cancellationToken)
+        public async Task<Result> CancelOrderByAdminAsync(int orderId, CancellationToken cancellationToken)
+        {
+            var order = await _context.Orders
+                .Include(o => o.SellerOrders)
+                .FirstOrDefaultAsync(o => o.OrderID == orderId, cancellationToken);
+
+            if (order is null)
+                return Result.Failure(MarketErrors.OrderNotFound);
+
+            if (order.IsCancelled)
+                return Result.Failure(MarketErrors.OrderAlreadyCancelled);
+
+            if (order.Status)
+                return Result.Failure(MarketErrors.OrderAlreadyCompleted);
+
+            order.IsCancelled = true;
+
+            foreach (var sellerOrder in order.SellerOrders)
+            {
+                sellerOrder.IsCancelled = true;
+            }
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return Result.Success();
+        }
+
+
+        public async Task<Result<List<AdminOrderResponse>>> GetAllOrdersForAdminAsync(CancellationToken cancellationToken)
         {
             var orders = await _context.Orders
-                .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Product)
+                .Include(o => o.SellerOrders)
+                    .ThenInclude(so => so.OrderItems)
+                        .ThenInclude(oi => oi.Product)
                 .ToListAsync(cancellationToken);
 
             if (!orders.Any())
-                return Result.Failure<List<OrderResponse>>(MarketErrors.OrdersNotFound);
+                return Result.Failure<List<AdminOrderResponse>>(MarketErrors.OrdersNotFound);
 
-            var responses = orders.Select(order => new OrderResponse(
-                OrderID: order.OrderID,
-                TotalPrice: order.TotalPrice,
-                CreatedAt: order.CreatedAt,
-                Status: order.Status,
-                Address: order.Address,
-                OrderItems: order.OrderItems.Select(oi => new OrderItemResponse(
-                    ProductId: oi.ProductId,
-                    ProductName: oi.Product.Name,
-                    Quantity: oi.Quantity,
-                    Price: oi.Price,
-                    TotalPrice: oi.TotalPrice
-                )).ToList()
-            )).ToList();
+            var responses = orders.Select(order =>
+            {
+                var orderItems = order.SellerOrders
+                    .SelectMany(so => so.OrderItems)
+                    .Select(oi => new OrderItemResponse(
+                        ProductId: oi.ProductId,
+                        ProductName: oi.Product.Name,
+                        Photo: oi.Product.Photo,
+                        Quantity: oi.Quantity,
+                        Price: oi.Price,
+                        TotalPrice: oi.TotalPrice
+                    )).ToList();
+
+                int totalQuantity = orderItems.Sum(oi => oi.Quantity);
+
+                return new AdminOrderResponse(
+                    OrderID: order.OrderID,
+                    UserId: order.UserID,
+                    TotalQuantity: totalQuantity,
+                    TotalPrice: order.TotalPrice,
+                    CreatedAt: order.CreatedAt,
+                    Status: order.Status,
+                    Address: order.Address,
+                    PhoneNumber: order.PhoneNumber,
+                    OrderItems: orderItems
+                );
+            }).ToList();
 
             return Result.Success(responses);
         }
 
+
+
+        public async Task<Result<List<AdminSellerOrderResponse>>> GetAllSellerOrdersForAdminAsync(CancellationToken cancellationToken)
+        {
+            var sellerOrders = await _context.SellerOrder
+                .Include(so => so.Order)
+                .Include(so => so.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .ToListAsync(cancellationToken);
+
+            if (!sellerOrders.Any())
+                return Result.Failure<List<AdminSellerOrderResponse>>(MarketErrors.SellerOrdersNotFound);
+
+            var responses = sellerOrders.Select(so =>
+            {
+                var orderItems = so.OrderItems.Select(oi => new OrderItemResponse(
+                    ProductId: oi.ProductId,
+                    ProductName: oi.Product.Name,
+                    Photo: oi.Product.Photo,
+                    Quantity: oi.Quantity,
+                    Price: oi.Price,
+                    TotalPrice: oi.TotalPrice
+                )).ToList();
+
+                int totalQuantity = orderItems.Sum(oi => oi.Quantity);
+
+                return new AdminSellerOrderResponse(
+                    SellerOrderId: so.SellerOrderId,
+                    OrderId: so.OrderId,
+                    UserId: so.Order.UserID,
+                    SellerId: so.SellerId,
+                    CreatedAt: so.Order.CreatedAt,
+                    Status: so.Status,
+                    IsCancelled: so.IsCancelled,
+                    TotalQuantity: totalQuantity,
+                    TotalPrice: so.TotalPrice,
+                    OrderItems: orderItems
+                );
+
+            }).ToList();
+
+            return Result.Success(responses);
+        }
+
+
+        public async Task<Result<AdminSellerOrderResponse>> GetSellerOrderByIdForAdminAsync(int sellerOrderId, CancellationToken cancellationToken)
+        {
+            var so = await _context.SellerOrder
+                .Include(so => so.Order)
+                .Include(so => so.OrderItems)
+                    .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(so => so.SellerOrderId == sellerOrderId, cancellationToken);
+
+            if (so == null)
+                return Result.Failure<AdminSellerOrderResponse>(MarketErrors.SellerOrdersNotFound);
+
+            var orderItems = so.OrderItems.Select(oi => new OrderItemResponse(
+                ProductId: oi.ProductId,
+                ProductName: oi.Product.Name,
+                Photo: oi.Product.Photo,
+                Quantity: oi.Quantity,
+                Price: oi.Price,
+                TotalPrice: oi.TotalPrice
+            )).ToList();
+
+            var totalQuantity = orderItems.Sum(oi => oi.Quantity);
+
+            var response = new AdminSellerOrderResponse(
+                SellerOrderId: so.SellerOrderId,
+                OrderId: so.OrderId,
+                UserId: so.Order.UserID,
+                SellerId: so.SellerId,
+                CreatedAt: so.Order.CreatedAt,
+                Status: so.Status,
+                IsCancelled: so.IsCancelled,
+                TotalQuantity: totalQuantity,
+                TotalPrice: so.TotalPrice,
+                OrderItems: orderItems
+            );
+
+            return Result.Success(response);
+        }
+
+
+
+        public async Task<Result<AdminOrderResponse>> GetOrderByIdForAdminAsync(int orderId, CancellationToken cancellationToken)
+        {
+            var order = await _context.Orders
+                .Include(o => o.SellerOrders)
+                    .ThenInclude(so => so.OrderItems)
+                        .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(o => o.OrderID == orderId, cancellationToken);
+
+            if (order == null)
+                return Result.Failure<AdminOrderResponse>(MarketErrors.OrderNotFound);
+
+            var orderItems = order.SellerOrders
+                .SelectMany(so => so.OrderItems)
+                .Select(oi => new OrderItemResponse(
+                    ProductId: oi.ProductId,
+                    ProductName: oi.Product.Name,
+                    Photo: oi.Product.Photo,
+                    Quantity: oi.Quantity,
+                    Price: oi.Price,
+                    TotalPrice: oi.TotalPrice
+                )).ToList();
+
+            var totalQuantity = orderItems.Sum(oi => oi.Quantity);
+
+            var response = new AdminOrderResponse(
+                OrderID: order.OrderID,
+                UserId: order.UserID,
+                TotalQuantity: totalQuantity,
+                TotalPrice: order.TotalPrice,
+                CreatedAt: order.CreatedAt,
+                Status: order.Status,
+                Address: order.Address,
+                PhoneNumber: order.PhoneNumber,
+                OrderItems: orderItems
+            );
+
+            return Result.Success(response);
+        }
 
 
     }
