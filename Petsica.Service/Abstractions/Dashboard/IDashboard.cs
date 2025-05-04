@@ -16,4 +16,16 @@ public interface IDashboardService
     Task<List<UserActivitySummary>> GetAllTimeUserActivityAsync(CancellationToken cancellationToken = default);
     Task<List<UserLeaderboard>> GetTopContributorsAsync(CancellationToken cancellationToken = default);
     Task<List<GetTopPostsResponse>> GetTopPostsAsync(CancellationToken cancellationToken = default);
+    Task<int> GetTotalOrdersAsync();
+    Task<decimal> GetTotalRevenueAsync();
+    Task<int> GetActiveProductsAsync();
+    Task<int> GetCancelledOrdersAsync();
+    Task<int> GetTotalSellersAsync();
+
+   Task<List<TopSellingProduct>> GetTopSellingProductsAsync();
+
+   Task<List<TopSellingSeller>> GetTopSellingSellersAsync();
+
+   Task<List<CategoryWithProductCount>> GetCategoriesWithMostProductsAsync();
+
 }
