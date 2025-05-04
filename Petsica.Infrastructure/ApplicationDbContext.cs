@@ -33,7 +33,7 @@ namespace Petsica.Infrastructure
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-
+        public DbSet<SellerOrder> SellerOrder { get; set; }
 
         //public DbSet<Admin> Admins { get; set; }
         //public DbSet<SitterApproval> SitterApprovals { get; set; }
@@ -64,6 +64,7 @@ namespace Petsica.Infrastructure
             modelBuilder.ApplyConfiguration(new CartConfiguration());
             modelBuilder.ApplyConfiguration(new CartItemConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
+            modelBuilder.ApplyConfiguration(new SellerOrderConfiguration());
 
             //modelBuilder.ApplyConfiguration(new AdminConfiguration());
             //modelBuilder.ApplyConfiguration(new SitterApprovalConfiguration());

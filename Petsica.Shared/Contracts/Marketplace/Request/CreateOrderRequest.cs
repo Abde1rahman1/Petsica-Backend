@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Petsica.Shared.Contracts.Marketplace.Request
 {
     public record CreateOrderRequest(
-    string Address
+    string Address,
+    string PhoneNumber
     );
 }

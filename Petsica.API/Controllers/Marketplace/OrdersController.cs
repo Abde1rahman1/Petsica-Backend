@@ -19,7 +19,7 @@ namespace Petsica.API.Controllers.Marketplace
         [HttpPost("create")]
         public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request, CancellationToken cancellationToken)
         {
-            var result = await _orderService.CreateOrderFromCartAsync(User.GetUserId()!, request.Address, cancellationToken);
+            var result = await _orderService.CreateOrderFromCartAsync(User.GetUserId()!, request, cancellationToken);
             return result.IsSuccess ? Created() : result.ToProblem();
         }
 
@@ -33,6 +33,13 @@ namespace Petsica.API.Controllers.Marketplace
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
+        [HttpGet("{orderId}")]
+        public async Task<IActionResult> GetOrderByIdForUser(int orderId, CancellationToken cancellationToken)
+        {
+            var result = await _orderService.GetOrderByIdForUserAsync(orderId, User.GetUserId()!, cancellationToken);
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+        }
+
         [HttpGet("sellerorders")]
         public async Task<IActionResult> GetOrdersForSeller(CancellationToken cancellationToken)
         {
@@ -41,40 +48,74 @@ namespace Petsica.API.Controllers.Marketplace
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
-        [HttpGet("{orderId:int}")]
-        public async Task<IActionResult> GetOrderByIdForUser(int orderId, CancellationToken cancellationToken)
-        {
-            var result = await _orderService.GetOrderByIdForUserAsync(orderId, User.GetUserId()!, cancellationToken);
-            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
-        }
-
-        [HttpGet("seller/{orderId:int}")]
+        [HttpGet("seller/{orderId}")]
         public async Task<IActionResult> GetOrderByIdForSeller(int orderId, CancellationToken cancellationToken)
         {
-            var result = await _orderService.GetOrderByIdForSellerAsync(orderId, User.GetUserId()!, cancellationToken);
+            var result = await _orderService.GetSellerOrderByIdAsync(orderId, User.GetUserId()!, cancellationToken);
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
-        [HttpPut("{orderId}/complete")]
+        [HttpPut("complete/{orderId}")]
         public async Task<IActionResult> MarkAsCompleted(int orderId, CancellationToken cancellationToken)
         {
-            var result = await _orderService.MarkOrderAsCompletedAsync(User.GetUserId()!, orderId, cancellationToken);
+            var result = await _orderService.MarkSellerOrderAsCompletedAsync(User.GetUserId()!, orderId, cancellationToken);
             return result.IsSuccess ? Ok() : result.ToProblem();
         }
 
-        [HttpPut("{id}/cancel")]
+        [HttpPut("admin/complete/{orderId}")]
+        public async Task<IActionResult> CompleteOrderByAdmin(int orderId, CancellationToken cancellationToken)
+        {
+            var result = await _orderService.MarkOrderAsCompletedByAdminAsync(orderId, cancellationToken);
+
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return Ok();
+        }
+
+        [HttpPut("cancel/{id}")]
         public async Task<IActionResult> CancelOrderByUser(int id, CancellationToken cancellationToken)
         {
             var result = await _orderService.CancelOrderByUserAsync(id, User.GetUserId()!, cancellationToken);
             return result.IsSuccess ? Ok() : result.ToProblem();
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllOrders(CancellationToken cancellationToken)
+        [HttpPut("admin/cancel/{orderId}")]
+        public async Task<IActionResult> CancelOrderByAdmin(int orderId, CancellationToken cancellationToken)
         {
-            var result = await _orderService.GetAllOrdersAsync(cancellationToken);
+            var result = await _orderService.CancelOrderByAdminAsync(orderId, cancellationToken);
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
+        }
+
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllOrdersForAdminAsync(CancellationToken cancellationToken)
+        {
+            var result = await _orderService.GetAllOrdersForAdminAsync(cancellationToken);
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
+        [HttpGet("all/sellerorders")]
+        public async Task<IActionResult> GetAllSellerOrdersForAdmin(CancellationToken cancellationToken)
+        {
+            var result = await _orderService.GetAllSellerOrdersForAdminAsync(cancellationToken);
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+        }
+
+        [HttpGet("admin/seller/{sellerOrderId}")]
+        public async Task<IActionResult> GetSellerOrderByIdForAdmin(int sellerOrderId, CancellationToken cancellationToken)
+        {
+            var result = await _orderService.GetSellerOrderByIdForAdminAsync( sellerOrderId,cancellationToken);
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+        }
+
+        [HttpGet("admin/{orderId}")]
+        public async Task<IActionResult> GetOrderByIdForAdmin(int orderId,CancellationToken cancellationToken)
+        {
+            var result = await _orderService.GetOrderByIdForAdminAsync(orderId,cancellationToken);
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+        }
     }
+
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petsica.Infrastructure;
 
@@ -11,9 +12,11 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250502010938_HandleOrder")]
+    partial class HandleOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -502,11 +505,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<bool>("IsCancelled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(11)
-                        .HasColumnType("nvarchar(11)");
-
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
@@ -557,12 +555,9 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-
                     b.HasIndex("SellerOrderId");
 
                     b.ToTable("OrderItems");
-
-
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Product", b =>
@@ -756,9 +751,6 @@ namespace Petsica.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PetID"));
 
-                    b.Property<bool>("Adoption")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Breed")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -766,12 +758,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Mating")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -831,6 +817,30 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("UserRemindPets");
+                });
+
+            modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRequestPet", b =>
+                {
+                    b.Property<int>("PetID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Adoption")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mating")
+                        .HasColumnType("bit");
+
+                    b.HasKey("PetID", "UserID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("UserRequestPets");
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Services.SitterService", b =>
@@ -908,7 +918,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationRole", b =>
@@ -1299,7 +1309,7 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasOne("Petsica.Core.Entities.Users.User", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
@@ -1375,6 +1385,25 @@ namespace Petsica.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRemindPet", b =>
+                {
+                    b.HasOne("Petsica.Core.Entities.Pets.Pet", "Pet")
+                        .WithMany()
+                        .HasForeignKey("PetID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Petsica.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Pet");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRequestPet", b =>
                 {
                     b.HasOne("Petsica.Core.Entities.Pets.Pet", "Pet")
                         .WithMany()
