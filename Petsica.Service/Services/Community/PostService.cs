@@ -120,4 +120,32 @@ public class PostService(
 		return Result.Success(response);
 	}
 
+    public async Task<Result<List<PostResponse>>> GetMyPostsAsync(string userId,CancellationToken cancellationToken = default)
+    {
+
+
+        var posts = await _context.Posts
+            .Include(p => p.User)
+            .Include(p => p.Likes)
+            .Include(p => p.Comments)
+            .Where(p => p.IsDeleted == false && p.UserID == userId)
+            .OrderBy(p => p.Date)
+            .ToListAsync(cancellationToken);
+
+
+
+        var response = posts.Select(post => new PostResponse
+        (
+            Id: post.PostID,
+            Content: post.Content,
+            userId: post.UserID,
+            Date: post.Date,
+            Photo: post.Photo,
+            LikesCount: post.Likes.Count,
+            CommentsCount: post.Comments.Count
+        )).ToList();
+        return Result.Success(response);
+
+    }
+
 }

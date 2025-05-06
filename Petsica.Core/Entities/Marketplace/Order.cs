@@ -9,17 +9,15 @@ public class Order
     public bool Status { get; set; } = false;
     public string Address { get; set; }
     public bool IsCancelled { get; set; } = false;
-
+    public string PhoneNumber { get; set; }
 
     #region Foreign Key
     public string UserID { get; set; }
-    public string SellerID { get; set; }
 
     #endregion
 
     #region Navigation Property
     public User User { get; set; }
-    public User Seller { get; set; }
-    public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+    public List<SellerOrder> SellerOrders { get; set; } = new List<SellerOrder>();
     #endregion
 }

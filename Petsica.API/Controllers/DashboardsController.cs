@@ -62,4 +62,38 @@ public class DashboardsController(IDashboardService dashboard) : ControllerBase
         return Ok(topContributors);
     }
 
+    [HttpGet("overview")]
+    public async Task<IActionResult> GetOverview()
+    {
+        var result = new
+        {
+            TotalOrders = await _dashboard.GetTotalOrdersAsync(),
+            TotalRevenue = await _dashboard.GetTotalRevenueAsync(),
+            ActiveProducts = await _dashboard.GetActiveProductsAsync(),
+            TotalSellers = await _dashboard.GetTotalSellersAsync(),
+            CancelledOrders = await _dashboard.GetCancelledOrdersAsync()
+        };
+
+        return Ok(result);
+    }
+    [HttpGet("GetTopSellingProducts")]
+    public async Task<IActionResult> GetTopSellingProducts()
+    {
+        var topSellingProducts = await _dashboard.GetTopSellingProductsAsync();
+        return Ok(topSellingProducts);
+    }
+
+    [HttpGet("GetTopSellingSellers")]
+    public async Task<IActionResult> GetTopSellingSellers()
+    {
+        var topSellingSellers = await _dashboard.GetTopSellingSellersAsync();
+        return Ok(topSellingSellers);
+    }
+
+    [HttpGet("GetCategoriesWithMostProducts")]
+    public async Task<IActionResult> GetCategoriesWithMostProducts()
+    {
+        var CategoriesWithMostProducts = await _dashboard.GetCategoriesWithMostProductsAsync();
+        return Ok(CategoriesWithMostProducts);
+    }
 }

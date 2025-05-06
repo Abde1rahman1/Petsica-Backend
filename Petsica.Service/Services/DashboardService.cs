@@ -123,6 +123,98 @@ public class DashboardService(ApplicationDbContext context, UserManager<Applicat
         return topPosts;
     }
 
+
+    public async Task<int> GetTotalOrdersAsync()
+    {
+        return await _context.Orders.CountAsync();
+    }
+
+    public async Task<decimal> GetTotalRevenueAsync()
+    {
+        return await _context.Orders
+            .Where(o => !o.IsCancelled)
+            .SumAsync(o => o.TotalPrice);
+    }
+
+    public async Task<int> GetActiveProductsAsync()
+    {
+        return await _context.Products
+            .Where(p => p.IsAvailable && !p.IsDeleted)
+            .CountAsync();
+    }
+
+    public async Task<int> GetTotalSellersAsync()
+    {
+        return await _context.Products
+            .Select(p => p.SellerID)
+            .Distinct()
+            .CountAsync();
+    }
+
+    public async Task<int> GetCancelledOrdersAsync()
+    {
+        return await _context.Orders
+            .Where(o => o.IsCancelled)
+            .CountAsync();
+    }
+    public async Task<List<TopSellingProduct>> GetTopSellingProductsAsync()
+    {
+        var groupedData = await _context.OrderItems
+            .Include(oi => oi.Product) 
+            .GroupBy(oi => new { oi.ProductId, oi.Product.Name })
+            .ToListAsync(); 
+
+        return groupedData
+            .Select(group => new TopSellingProduct(
+                group.Key.ProductId,
+                group.Key.Name,
+                group.Sum(x => x.Quantity),
+                group.Sum(x => x.Quantity * x.Price)
+            ))
+            .OrderByDescending(p => p.TotalQuantitySold)
+            .Take(5)
+            .ToList();
+    }
+
+    public async Task<List<TopSellingSeller>> GetTopSellingSellersAsync()
+    {
+        var groupedData = await _context.OrderItems
+            .Include(oi => oi.Product)
+            .ThenInclude(p => p.Seller)
+            .GroupBy(oi => new
+            {
+                oi.Product.SellerID,
+                
+            })
+            .ToListAsync();
+
+        return groupedData
+            .Select(group => new TopSellingSeller(
+                SellerId: group.Key.SellerID,
+                TotalQuantitySold: group.Sum(x => x.Quantity),
+                TotalSales: group.Sum(x => x.Quantity * x.Price)
+            ))
+            .OrderByDescending(s => s.TotalQuantitySold)
+            .Take(5)
+            .ToList();
+    }
+
+    public async Task<List<CategoryWithProductCount>> GetCategoriesWithMostProductsAsync()
+    {
+        // First, get all products from the database
+        var products = await _context.Products
+            .Where(p => !p.IsDeleted)  // Ensure you are not fetching deleted products
+            .ToListAsync();  // Fetch all products to perform the operation in-memory
+
+        // Now perform the GroupBy and Count operations in-memory
+        var categoryCounts = products
+            .GroupBy(p => p.Category)
+            .OrderByDescending(g => g.Count())
+            .Select(g => new CategoryWithProductCount(g.Key.ToString(), g.Count()))
+            .ToList();
+
+        return categoryCounts;
+    }
 }
 
 

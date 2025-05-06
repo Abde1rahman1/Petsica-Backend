@@ -9,6 +9,7 @@ namespace Petsica.Shared.Contracts.Marketplace.Response
     public record OrderItemResponse(
     int ProductId,
     string ProductName,
+    String Photo,
     int Quantity,
     decimal Price,
     decimal TotalPrice

@@ -35,7 +35,7 @@ public class ClinicChatHub : Hub
         catch (Exception ex)
         {
             Console.WriteLine($"SendMessage Error: {ex.Message}");
-            throw; // Re-throw to let SignalR handle it
+            throw; 
         }
     }
 

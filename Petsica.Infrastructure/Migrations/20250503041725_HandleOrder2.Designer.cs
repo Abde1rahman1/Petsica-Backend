@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Petsica.Infrastructure;
 
@@ -11,9 +12,11 @@ using Petsica.Infrastructure;
 namespace Petsica.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250503041725_HandleOrder2")]
+    partial class HandleOrder2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -557,16 +560,9 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-
-                    b.ToTable("OrderItems");
-
-
                     b.HasIndex("SellerOrderId");
 
                     b.ToTable("OrderItems");
-
-
-
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Product", b =>
@@ -652,7 +648,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasIndex("SellerId");
 
                     b.ToTable("SellerOrder");
-
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.ClinicMessageClinic", b =>
@@ -761,9 +756,6 @@ namespace Petsica.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PetID"));
 
-                    b.Property<bool>("Adoption")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Breed")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -771,12 +763,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Mating")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -838,6 +824,30 @@ namespace Petsica.Infrastructure.Migrations
                     b.ToTable("UserRemindPets");
                 });
 
+            modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRequestPet", b =>
+                {
+                    b.Property<int>("PetID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("Adoption")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Mating")
+                        .HasColumnType("bit");
+
+                    b.HasKey("PetID", "UserID");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("UserRequestPets");
+                });
+
             modelBuilder.Entity("Petsica.Core.Entities.Services.SitterService", b =>
                 {
                     b.Property<int>("ServiceID")
@@ -849,12 +859,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -919,7 +923,7 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Petsica.Infrastructure.DBModel.ApplicationRole", b =>
@@ -1199,9 +1203,9 @@ namespace Petsica.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Petsica.Core.Entities.Users.User", "User")
-                        .WithMany("UserFollowers")
+                        .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("FollowedUser");
@@ -1404,6 +1408,25 @@ namespace Petsica.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Petsica.Core.Entities.Pets.UserRequestPet", b =>
+                {
+                    b.HasOne("Petsica.Core.Entities.Pets.Pet", "Pet")
+                        .WithMany()
+                        .HasForeignKey("PetID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Petsica.Core.Entities.Users.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Pet");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Petsica.Core.Entities.Services.SitterService", b =>
                 {
                     b.HasOne("Petsica.Core.Entities.Users.User", "Sitter")
@@ -1525,8 +1548,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("RequestedServices");
-
-                    b.Navigation("UserFollowers");
                 });
 #pragma warning restore 612, 618
         }

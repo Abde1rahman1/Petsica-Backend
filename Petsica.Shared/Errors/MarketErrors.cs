@@ -48,6 +48,21 @@ namespace Petsica.Shared.Error
         public static readonly Errors OrderAlreadyCancelled =
 		new("Order.AlreadyCancelled", "This order has already been cancelled.", StatusCodes.Status400BadRequest);
 
+        public static readonly Errors SellerOrderIsCancelled =
+        new("SellerOrder.IsCancelled", "The order cannot be marked as completed because it has been cancelled.", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors SellerOrderAlreadyCompleted =
+            new("SellerOrder.AlreadyCompleted", "This order has already been marked as completed.", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors NotAllSellerOrdersCompleted =
+        new("Order.NotAllSellerOrdersCompleted", "Cannot complete the order until all seller orders are marked as completed.", StatusCodes.Status400BadRequest);
+
+        public static readonly Errors OrderPartiallyCompleted =
+        new("Order.PartiallyCompleted", "Cannot cancel the order because one or more seller orders have already been completed.", StatusCodes.Status400BadRequest);
+
+        public static Errors SellerOrdersNotFound =>
+        new("SellerOrders.NotFound", "No seller orders were found.",StatusCodes.Status404NotFound);
+
 
     }
 }

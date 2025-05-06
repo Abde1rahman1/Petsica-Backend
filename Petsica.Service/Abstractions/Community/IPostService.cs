@@ -18,4 +18,6 @@ public interface IPostService
 
 	Task<Result<List<PostResponse>>> GetPostById(int postId, CancellationToken cancellationToken = default);
 
+    Task<Result<List<PostResponse>>> GetMyPostsAsync(string userId, CancellationToken cancellationToken = default);
+
 }
