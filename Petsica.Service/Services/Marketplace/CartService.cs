@@ -2,11 +2,6 @@
 using Petsica.Service.Abstractions.Marketplace;
 using Petsica.Shared.Contracts.Marketplace.Request;
 using Petsica.Shared.Contracts.Marketplace.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Petsica.Service.Services.Marketplace
 {
@@ -156,7 +151,7 @@ namespace Petsica.Service.Services.Marketplace
 
             if (cart.CartItems.Any())
             {
-                _context.CartItems.RemoveRange(cart.CartItems); 
+                _context.CartItems.RemoveRange(cart.CartItems);
                 cart.CartItems.Clear();
             }
 

@@ -557,16 +557,9 @@ namespace Petsica.Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-
-                    b.ToTable("OrderItems");
-
-
                     b.HasIndex("SellerOrderId");
 
                     b.ToTable("OrderItems");
-
-
-
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Marketplace.Product", b =>
@@ -652,7 +645,6 @@ namespace Petsica.Infrastructure.Migrations
                     b.HasIndex("SellerId");
 
                     b.ToTable("SellerOrder");
-
                 });
 
             modelBuilder.Entity("Petsica.Core.Entities.Messages.ClinicMessageClinic", b =>

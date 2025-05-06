@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Petsica.Core.Entities.Community;
+﻿using Microsoft.AspNetCore.Mvc;
 using Petsica.Service.Abstractions.Dashboard;
-using Petsica.Service.Services;
-using System.Threading;
 
 namespace Petsica.API.Controllers;
 [Route("api/[controller]")]
@@ -13,9 +9,9 @@ public class DashboardsController(IDashboardService dashboard) : ControllerBase
     private readonly IDashboardService _dashboard = dashboard;
 
     [HttpGet("GetNumberUsers")]
-    public async Task<IActionResult> GetNumberUsers( CancellationToken cancellationToken)
+    public async Task<IActionResult> GetNumberUsers(CancellationToken cancellationToken)
     {
-        var users = await _dashboard.GetUserCountsByRole( cancellationToken);
+        var users = await _dashboard.GetUserCountsByRole(cancellationToken);
 
         return users.IsSuccess ? Ok(users.Value) : BadRequest();
     }
@@ -37,15 +33,14 @@ public class DashboardsController(IDashboardService dashboard) : ControllerBase
     [HttpGet("GetAllTimeUserActivity")]
     public async Task<IActionResult> GetAllTimeUserActivity(CancellationToken cancellationToken)
     {
-        int days = 30;
-        var users = await _dashboard.GetAllTimeUserActivityAsync( cancellationToken);
+        var users = await _dashboard.GetAllTimeUserActivityAsync(cancellationToken);
 
         if (users != null && users.Any())
         {
             return Ok(users); // Return the active users list
         }
 
-        return BadRequest("No active users found"); 
+        return BadRequest("No active users found");
     }
 
     [HttpGet("GetTopContributors")]

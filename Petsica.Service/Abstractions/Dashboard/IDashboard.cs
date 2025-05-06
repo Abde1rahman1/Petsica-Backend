@@ -1,10 +1,4 @@
-﻿using Petsica.Core.Entities.Community;
-using Petsica.Shared.Contracts.Dashboard.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Petsica.Shared.Contracts.Dashboard.Response;
 
 namespace Petsica.Service.Abstractions.Dashboard;
 public interface IDashboardService
@@ -22,10 +16,10 @@ public interface IDashboardService
     Task<int> GetCancelledOrdersAsync();
     Task<int> GetTotalSellersAsync();
 
-   Task<List<TopSellingProduct>> GetTopSellingProductsAsync();
+    Task<List<TopSellingProduct>> GetTopSellingProductsAsync();
 
-   Task<List<TopSellingSeller>> GetTopSellingSellersAsync();
+    Task<List<TopSellingSeller>> GetTopSellingSellersAsync();
 
-   Task<List<CategoryWithProductCount>> GetCategoriesWithMostProductsAsync();
+    Task<List<CategoryWithProductCount>> GetCategoriesWithMostProductsAsync();
 
 }

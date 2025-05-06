@@ -160,9 +160,9 @@ public class DashboardService(ApplicationDbContext context, UserManager<Applicat
     public async Task<List<TopSellingProduct>> GetTopSellingProductsAsync()
     {
         var groupedData = await _context.OrderItems
-            .Include(oi => oi.Product) 
+            .Include(oi => oi.Product)
             .GroupBy(oi => new { oi.ProductId, oi.Product.Name })
-            .ToListAsync(); 
+            .ToListAsync();
 
         return groupedData
             .Select(group => new TopSellingProduct(
@@ -184,7 +184,7 @@ public class DashboardService(ApplicationDbContext context, UserManager<Applicat
             .GroupBy(oi => new
             {
                 oi.Product.SellerID,
-                
+
             })
             .ToListAsync();
 

@@ -5,7 +5,7 @@
 namespace Petsica.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class HandleOrder : Migration
+    public partial class temp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,12 @@ namespace Petsica.Infrastructure.Migrations
                 table: "OrderItems");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Orders_Users_SellerID",
+                name: "FK_Orders_User_SellerID",
                 table: "Orders");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_UserFollows_User_UserId",
+                table: "UserFollows");
 
             migrationBuilder.DropIndex(
                 name: "IX_Orders_SellerID",
@@ -25,6 +29,11 @@ namespace Petsica.Infrastructure.Migrations
             migrationBuilder.DropColumn(
                 name: "SellerID",
                 table: "Orders");
+
+            migrationBuilder.RenameColumn(
+                name: "IsActive",
+                table: "Pets",
+                newName: "IsDelete");
 
             migrationBuilder.RenameColumn(
                 name: "OrderId",
@@ -36,6 +45,20 @@ namespace Petsica.Infrastructure.Migrations
                 table: "OrderItems",
                 newName: "IX_OrderItems_SellerOrderId");
 
+            migrationBuilder.AddColumn<bool>(
+                name: "IsActive",
+                table: "Services",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsDelete",
+                table: "Services",
+                type: "bit",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
                 table: "Orders",
@@ -44,6 +67,14 @@ namespace Petsica.Infrastructure.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "nvarchar(max)");
+
+            migrationBuilder.AddColumn<string>(
+                name: "PhoneNumber",
+                table: "Orders",
+                type: "nvarchar(11)",
+                maxLength: 11,
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.AddColumn<decimal>(
                 name: "Discount",
@@ -76,11 +107,10 @@ namespace Petsica.Infrastructure.Migrations
                         principalColumn: "OrderID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SellerOrder_Users_SellerId",
+                        name: "FK_SellerOrder_User_SellerId",
                         column: x => x.SellerId,
-                        principalTable: "Users",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "User",
+                        principalColumn: "UserID");
                 });
 
             migrationBuilder.CreateIndex(
@@ -100,6 +130,13 @@ namespace Petsica.Infrastructure.Migrations
                 principalTable: "SellerOrder",
                 principalColumn: "SellerOrderId",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_UserFollows_User_UserId",
+                table: "UserFollows",
+                column: "UserId",
+                principalTable: "User",
+                principalColumn: "UserID");
         }
 
         /// <inheritdoc />
@@ -109,12 +146,33 @@ namespace Petsica.Infrastructure.Migrations
                 name: "FK_OrderItems_SellerOrder_SellerOrderId",
                 table: "OrderItems");
 
+            migrationBuilder.DropForeignKey(
+                name: "FK_UserFollows_User_UserId",
+                table: "UserFollows");
+
             migrationBuilder.DropTable(
                 name: "SellerOrder");
 
             migrationBuilder.DropColumn(
+                name: "IsActive",
+                table: "Services");
+
+            migrationBuilder.DropColumn(
+                name: "IsDelete",
+                table: "Services");
+
+            migrationBuilder.DropColumn(
+                name: "PhoneNumber",
+                table: "Orders");
+
+            migrationBuilder.DropColumn(
                 name: "Discount",
                 table: "OrderItems");
+
+            migrationBuilder.RenameColumn(
+                name: "IsDelete",
+                table: "Pets",
+                newName: "IsActive");
 
             migrationBuilder.RenameColumn(
                 name: "SellerOrderId",
@@ -155,11 +213,19 @@ namespace Petsica.Infrastructure.Migrations
                 principalColumn: "OrderID");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Orders_Users_SellerID",
+                name: "FK_Orders_User_SellerID",
                 table: "Orders",
                 column: "SellerID",
-                principalTable: "Users",
+                principalTable: "User",
                 principalColumn: "UserID");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_UserFollows_User_UserId",
+                table: "UserFollows",
+                column: "UserId",
+                principalTable: "User",
+                principalColumn: "UserID",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

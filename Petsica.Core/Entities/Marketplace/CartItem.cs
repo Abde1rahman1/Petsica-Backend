@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Petsica.Core.Entities.Marketplace
+﻿namespace Petsica.Core.Entities.Marketplace
 {
     public class CartItem
     {

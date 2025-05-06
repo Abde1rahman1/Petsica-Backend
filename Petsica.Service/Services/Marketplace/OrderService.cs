@@ -1,14 +1,7 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using Petsica.Core.Entities.Marketplace;
+﻿using Petsica.Core.Entities.Marketplace;
 using Petsica.Service.Abstractions.Marketplace;
 using Petsica.Shared.Contracts.Marketplace.Request;
 using Petsica.Shared.Contracts.Marketplace.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Petsica.Service.Services.Marketplace
 {
