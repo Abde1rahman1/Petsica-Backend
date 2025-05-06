@@ -13,6 +13,6 @@
             public const string SecurityStamp = "6B5AD15259FF426FBDC89A431C9541A2";
             public const string ConcurrencyStamp = "7fa50e48-4080-4d01-8903-7c18c2e65392";
         }
-
+        // Password = P@ssword123
     }
 }

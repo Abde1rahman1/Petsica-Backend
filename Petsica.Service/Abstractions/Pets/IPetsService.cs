@@ -12,8 +12,7 @@ namespace Petsica.Service.Abstractions.Pets
         Task<Result> PetAdoptionToggle(string userId, int petId, CancellationToken cancellationToken);
         Task<Result<IEnumerable<PetsMatingResponse>>> GetPetMatingList(CancellationToken CancellationToken);
         Task<Result<IEnumerable<PetsAdoptionResponse>>> GetPetAdoptionList(CancellationToken CancellationToken);
-
-
-
+        Task<Result> UpdatePet(string userId, UpdatePetRequest request, CancellationToken cancellationToken = default);
+        Task<Result> DeletePet(string userId, int petId, CancellationToken cancellationToken = default);
     }
 }

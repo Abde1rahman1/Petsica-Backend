@@ -81,6 +81,7 @@ namespace Petsica.Infrastructure
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
 
+            modelBuilder.ApplyConfiguration(new UserFollowConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }

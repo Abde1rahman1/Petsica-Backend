@@ -43,10 +43,10 @@ namespace Petsica.API.Controllers
 
 
 
-        [HttpPost("AddService")]
+        [HttpPost("AddSitterService")]
         public async Task<IActionResult> AddService([FromBody] ServiceRequest request, CancellationToken cancellationToken)
         {
-            var result = await _userService.AddService(User.GetUserId()!, request, cancellationToken);
+            var result = await _userService.AddSitterService(User.GetUserId()!, request, cancellationToken);
 
 
             return result.IsSuccess ? Created() : result.ToProblem();
@@ -56,7 +56,7 @@ namespace Petsica.API.Controllers
         [HttpGet("AllService")]
         public async Task<IActionResult> AllService(CancellationToken cancellationToken)
         {
-            var result = await _userService.GetServicesAsync(cancellationToken);
+            var result = await _userService.GetServicesAsync(User.GetUserId()!, cancellationToken);
 
 
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
@@ -73,7 +73,7 @@ namespace Petsica.API.Controllers
 
         }
 
-        [HttpGet("GetASitterService")]
+        [HttpGet("GetAllSitterService")]
         public async Task<IActionResult> GetAllSitterService(CancellationToken cancellationToken)
         {
             var result = await _userService.GetAllSitterService(User.GetUserId()!, cancellationToken);
@@ -92,6 +92,13 @@ namespace Petsica.API.Controllers
 
             return result.IsSuccess ? Ok() : result.ToProblem();
 
+        }
+
+        [HttpDelete("DeleteSitterService/{serviceId}")]
+        public async Task<IActionResult> DeleteSitterService([FromRoute] int serviceId, CancellationToken cancellationToken)
+        {
+            var result = await _userService.DeleteSitterService(User.GetUserId()!, serviceId, cancellationToken);
+            return result.IsSuccess ? Ok() : result.ToProblem();
         }
 
         [HttpGet("GetSellerApproval")]

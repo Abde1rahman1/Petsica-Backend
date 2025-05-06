@@ -9,6 +9,8 @@ public class SitterService
     public string Description { get; set; }
     public string Title { get; set; }
     public string Location { get; set; }
+    public bool IsDelete { get; set; } = false;
+    public bool IsActive { get; set; }
 
     #region Navigation Property
     public User? Sitter { get; set; }

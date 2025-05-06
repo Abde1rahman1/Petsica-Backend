@@ -12,5 +12,7 @@ public class User
     public List<UserLikePost>? Likes { get; set; }
     public List<Order>? Orders { get; set; }
     public List<UserRequestService>? RequestedServices { get; set; }
+    public List<UserFollow>? UserFollowers { get; set; }
+
     #endregion
 }

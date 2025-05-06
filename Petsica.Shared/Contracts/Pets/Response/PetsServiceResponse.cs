@@ -8,7 +8,7 @@
        string Gender,
        string Name,
        string Breed,
-       bool IsActive,
+       bool IsDelete,
        bool Mating,
        bool Adoption
     );

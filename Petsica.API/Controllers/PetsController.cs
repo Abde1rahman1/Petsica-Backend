@@ -22,30 +22,6 @@ namespace Petsica.API.Controllers
             return result.IsSuccess ? Created() : result.ToProblem();
         }
 
-        //[HttpPost("AddRemindPet")]
-        //public async Task<IActionResult> AddRemindPet([FromBody] AddRemindPetRequest request, CancellationToken cancellationToken)
-        //{
-        //    var result = await _service.AddRemindPetAsync(User.GetUserId()!, request, cancellationToken);
-
-        //    return result.IsSuccess ? Created() : result.ToProblem();
-        //}
-
-        //[HttpPut("UpdateRemindPet/{RemindID}")]
-        //public async Task<IActionResult> UpdateRemindPet([FromRoute] int RemindID, [FromBody] UpdateRemindPetRequest request, CancellationToken cancellationToken)
-        //{
-        //    var result = await _service.UpdateRemindPetAsync(RemindID, request, cancellationToken);
-
-        //    return result.IsSuccess ? Created() : result.ToProblem();
-        //}
-
-        //[HttpGet("GetAllRemind")]
-
-        //public async Task<IActionResult> GetAllRemind([FromQuery] int petId, CancellationToken cancellationToken)
-        //{
-        //    var result = await _service.GetAllRemindAsync(User.GetUserId()!, petId, cancellationToken);
-
-        //    return result.IsSuccess ? Ok(result) : result.ToProblem();
-        //}
 
         [HttpGet("GetAllPets")]
 
@@ -100,6 +76,27 @@ namespace Petsica.API.Controllers
             var result = await _service.GetPetAdoptionList(cancellationToken);
 
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+
+        }
+
+        [HttpPut("UpdatePet")]
+
+        public async Task<IActionResult> UpdatePet(UpdatePetRequest request)
+        {
+            var result = await _service.UpdatePet(User.GetUserId()!, request);
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
+
+        }
+
+
+        [HttpDelete("DeletePet/{petId}")]
+
+        public async Task<IActionResult> UpdatePet([FromRoute] int petId)
+        {
+            var result = await _service.DeletePet(User.GetUserId()!, petId);
+
+            return result.IsSuccess ? Ok() : result.ToProblem();
 
         }
     }

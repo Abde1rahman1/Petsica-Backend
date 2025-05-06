@@ -34,7 +34,7 @@ namespace Petsica.Service.Services.Pets
         public async Task<Result<IEnumerable<PetsResponse>>> GetAllPetsAsync(string userId, CancellationToken cancellationToken)
         {
             var response = await _context.Pets.
-                Where(x => x.UserID == userId)
+                Where(x => x.UserID == userId && !x.IsDelete)
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
@@ -62,6 +62,9 @@ namespace Petsica.Service.Services.Pets
             if (pet is null)
                 return Result.Failure(PetErrors.PetNotFound);
 
+            if (pet.IsDelete)
+                return Result.Failure<PetsProfilResponse>(PetErrors.PetNotFound);
+
             pet.Adoption = !pet.Adoption;
 
             var successService = Createservices(pet);
@@ -75,6 +78,8 @@ namespace Petsica.Service.Services.Pets
 
             if (pet is null)
                 return Result.Failure(PetErrors.PetNotFound);
+            if (pet.IsDelete)
+                return Result.Failure<PetsProfilResponse>(PetErrors.PetNotFound);
 
             pet.Mating = !pet.Mating;
 
@@ -94,6 +99,8 @@ namespace Petsica.Service.Services.Pets
             if (response is null)
                 return Result.Failure<PetsProfilResponse>(PetErrors.PetNotFound);
 
+            if (response.IsDelete)
+                return Result.Failure<PetsProfilResponse>(PetErrors.PetNotFound);
 
             var result = new PetsProfilResponse
                 (
@@ -103,7 +110,7 @@ namespace Petsica.Service.Services.Pets
                 response.Gender,
                 response.Name,
                 response.Breed,
-                response.IsActive,
+                response.IsDelete,
                 response.Mating,
                 response.Adoption
                 );
@@ -115,7 +122,7 @@ namespace Petsica.Service.Services.Pets
         public async Task<Result<IEnumerable<PetsMatingResponse>>> GetPetMatingList(CancellationToken CancellationToken)
         {
             var matingList = await _context.Pets
-                .Where(x => x.Mating == true)
+                .Where(x => x.Mating && !x.IsDelete)
                 .ToListAsync(cancellationToken: CancellationToken);
 
 
@@ -141,7 +148,7 @@ namespace Petsica.Service.Services.Pets
         public async Task<Result<IEnumerable<PetsAdoptionResponse>>> GetPetAdoptionList(CancellationToken CancellationToken)
         {
             var AdoptionList = await _context.Pets
-                .Where(x => x.Adoption == true)
+                .Where(x => x.Adoption && !x.IsDelete)
                 .ToListAsync(cancellationToken: CancellationToken);
 
             if (AdoptionList is null)
@@ -164,6 +171,49 @@ namespace Petsica.Service.Services.Pets
 
         }
 
+        public async Task<Result> DeletePet(string userId, int petId, CancellationToken cancellationToken = default)
+        {
+
+
+            try
+            {
+                await _context.Pets
+                  .Where(p => p.UserID == userId && p.PetID == petId)
+                  .ExecuteUpdateAsync(pet =>
+                  pet.SetProperty(p => p.IsDelete, true), cancellationToken
+                    );
+            }
+            catch
+            {
+                return Result.Failure(PetErrors.PetNotFound);
+            }
+
+            return Result.Success();
+        }
+
+
+        public async Task<Result> UpdatePet(string userId, UpdatePetRequest request, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await _context.Pets
+                  .Where(p => p.UserID == userId && p.PetID == request.PetId)
+                  .ExecuteUpdateAsync(pet =>
+                  pet.SetProperty(p => p.Name, request.Name)
+                  .SetProperty(p => p.Species, request.Species)
+                  .SetProperty(p => p.Photo, request.Photo)
+                  .SetProperty(p => p.Gender, request.Gender)
+                  .SetProperty(p => p.Breed, request.Breed), cancellationToken
+                    );
+            }
+            catch
+            {
+                return Result.Failure(PetErrors.PetNotFound);
+            }
+
+            return Result.Success();
+
+        }
         public bool Createservices(Pet request)
         {
             try

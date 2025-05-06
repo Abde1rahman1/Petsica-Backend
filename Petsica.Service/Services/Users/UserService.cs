@@ -19,6 +19,8 @@ namespace Petsica.Service.Services.Users
         private readonly IEmailSender _emailSender = emailSender;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
+        #region User 
+
         public async Task<Result<UserProfileResponse>> GetProfileAsync(string userId)
         {
             var user = await _userManager.Users
@@ -57,9 +59,16 @@ namespace Petsica.Service.Services.Users
 
             return Result.Failure(new Errors(error.Code, error.Description, StatusCodes.Status400BadRequest));
         }
+        #endregion
 
-        public async Task<Result> AddService(string userId, ServiceRequest serviceRequest, CancellationToken cancellationToken)
+        #region Sitter Service
+        public async Task<Result> AddSitterService(string userId, ServiceRequest serviceRequest, CancellationToken cancellationToken)
         {
+            if (await _userManager.FindByIdAsync(userId) is not { } user)
+                return Result.Failure(UserErrors.UserNotFound);
+
+            if (user.Type != RoleName.Sitter)
+                return Result.Failure(UserErrors.InvalidType);
 
             var request = new SitterService
             {
@@ -83,9 +92,18 @@ namespace Petsica.Service.Services.Users
             return Result.Success();
         }
 
-        public async Task<Result<IEnumerable<AddSitterServiceResponse>>> GetServicesAsync(CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<AddSitterServiceResponse>>> GetServicesAsync(string userId, CancellationToken cancellationToken)
         {
-            var result = await _context.Services.ToListAsync(cancellationToken);
+
+            if (await _userManager.FindByIdAsync(userId) is not { } user)
+                return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.UserNotFound);
+
+            if (user.Type != RoleName.Sitter)
+                return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.InvalidType);
+
+            var result = await _context.Services
+                .Where(s => !s.IsDelete)
+                .ToListAsync(cancellationToken);
 
             //var serviceResponses = result.Adapt<List<ServiceResponse>>();
 
@@ -127,33 +145,48 @@ namespace Petsica.Service.Services.Users
 
         public async Task<Result<IEnumerable<AddSitterServiceResponse>>> GetAllSitterService(string userID, CancellationToken cancellationToken)
         {
+            if (await _userManager.FindByIdAsync(userID) is not { } user)
+                return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.UserNotFound);
+
+            if (user.Type != RoleName.Sitter)
+                return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.InvalidType);
 
             var serviceResponses = await _context.Services
-                .Where(x => x.SitterID == userID)
-                .ProjectToType<AddSitterServiceResponse>()
+                .Where(x => x.SitterID == userID && !x.IsDelete)
                 .ToListAsync(cancellationToken);
 
             if (serviceResponses is null)
                 return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.NoServicesYet);
 
-            return Result.Success<IEnumerable<AddSitterServiceResponse>>(serviceResponses);
+            var result = serviceResponses.Select(service => new AddSitterServiceResponse(
+                service.ServiceID,
+                service.SitterID,
+                service.Price,
+                service.Description,
+                service.Title,
+                service.Location
+                   )).ToList();
+
+
+            return Result.Success<IEnumerable<AddSitterServiceResponse>>(result);
         }
 
         public async Task<Result> UpdateSitterService(string userID, UpdateSitterServiceRequest request, CancellationToken cancellationToken)
         {
+            if (await _userManager.FindByIdAsync(userID) is not { } user)
+                return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.UserNotFound);
+
+            if (user.Type != RoleName.Sitter)
+                return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.InvalidType);
+
             var service = await _context.Services
                 .Where(x => x.ServiceID == request.ServiceID && x.SitterID == userID)
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (service is null)
                 return Result.Failure(UserErrors.ServiceNotFound);
-
-
-            service.Title = request.Title;
-            service.Description = request.Description;
-            service.Location = request.Location;
-            service.Price = request.Price;
-
+            if (service.IsDelete)
+                return Result.Failure(UserErrors.ServiceNotFound);
             try
             {
                 await _context.Services.Where(x => x.ServiceID == request.ServiceID).
@@ -175,8 +208,30 @@ namespace Petsica.Service.Services.Users
 
         }
 
+        public async Task<Result> DeleteSitterService(string userId, int serviceId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                await _context.Services.Where(x => x.ServiceID == serviceId && x.SitterID == userId).
+                     ExecuteUpdateAsync(service =>
+                        service.
+                        SetProperty(x => x.IsDelete, true)
+                        , cancellationToken
+
+                     );
+                return Result.Success();
+
+            }
+            catch
+            {
+                return Result.Failure(UserErrors.ServiceNotFound);
+            }
+        }
 
 
+        #endregion
+
+        #region Approval
         public async Task<Result<IEnumerable<UserApprovallistResponse>>> GetSellerApproval(string userId, CancellationToken cancellationToken = default)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -254,6 +309,7 @@ namespace Petsica.Service.Services.Users
 
         }
 
+        #endregion
 
         public async Task<Result<List<AllUsersResponse>>> GetAllUsers(string userId, CancellationToken cancellationToken = default)
         {
