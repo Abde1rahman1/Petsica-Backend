@@ -1,4 +1,3 @@
-using Hangfire;
 using MapsterMapper;
 using Petsica.Service.Abstractions.Community;
 using Petsica.Service.Abstractions.Dashboard;
@@ -58,19 +57,19 @@ namespace Petsica.Service
         }
 
 
-        public static IServiceCollection AddBackgroundJobsConfig(this IServiceCollection services,
-       IConfiguration configuration)
-        {
-            services.AddHangfire(config => config
-                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
+        // public static IServiceCollection AddBackgroundJobsConfig(this IServiceCollection services,
+        //IConfiguration configuration)
+        // {
+        //     services.AddHangfire(config => config
+        //         .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+        //         .UseSimpleAssemblyNameTypeSerializer()
+        //         .UseRecommendedSerializerSettings()
+        //         .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
 
-            services.AddHangfireServer();
+        //     services.AddHangfireServer();
 
-            return services;
-        }
+        //     return services;
+        // }
         public static IServiceCollection AddMapsterConfig(this IServiceCollection services)
         {
             var mappingConfig = TypeAdapterConfig.GlobalSettings;
