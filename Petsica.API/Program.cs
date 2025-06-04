@@ -48,7 +48,7 @@ namespace Petsica.API
                           Pass = app.Configuration.GetValue<string>("HangfireSettings:Password")
                      }
                     ],
-                DashboardTitle = "Survey Basket Dashboard",
+                DashboardTitle = "Petsica Dashboard",
             });
 
             app.UseCors("AllowFrontend");
