@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Hangfire;
+using Microsoft.EntityFrameworkCore;
 using Petsica.Infrastructure;
 using Petsica.Service;
 using Petsica.Service.Health;
@@ -59,6 +60,21 @@ namespace Petsica.API
         {
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
+            return services;
+        }
+
+
+        private static IServiceCollection AddBackgroundJobsConfig(this IServiceCollection services,
+       IConfiguration configuration)
+        {
+            services.AddHangfire(config => config
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(configuration.GetConnectionString("HangfireConnection")));
+
+            services.AddHangfireServer();
+
             return services;
         }
     }

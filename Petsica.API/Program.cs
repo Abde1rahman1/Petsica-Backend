@@ -1,4 +1,6 @@
-﻿using HealthChecks.UI.Client;
+﻿using Hangfire;
+using HangfireBasicAuthenticationFilter;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Petsica.Shared;
 using Petsica.Shared.Hubs;
@@ -32,13 +34,28 @@ namespace Petsica.API
             app.UseSerilogRequestLogging();
 
             app.UseHttpsRedirection();
-           
+
             app.UseRouting();
+
+
+            app.UseHangfireDashboard("/jobs", new DashboardOptions
+            {
+                Authorization =
+                [
+                     new HangfireCustomBasicAuthenticationFilter
+                     {
+                          User = app.Configuration.GetValue<string>("HangfireSettings:Username"),
+                          Pass = app.Configuration.GetValue<string>("HangfireSettings:Password")
+                     }
+                    ],
+                DashboardTitle = "Petsica Dashboard",
+            });
+
             app.UseCors("AllowFrontend");
-            app.UseAuthentication(); 
+            app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
-         
+
             //Map Health Checks
             app.MapHealthChecks("health", new HealthCheckOptions
             {
