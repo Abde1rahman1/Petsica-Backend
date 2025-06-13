@@ -36,9 +36,13 @@ namespace Petsica.Shared.Result
 
         public Result(TValue? value, bool isSuccess, Errors error) : base(isSuccess, error)
         {
+            if (isSuccess && value == null)
+                throw new ArgumentNullException(nameof(value), "Success results cannot have a null value.");
+
             _value = value;
         }
 
+ 
         public TValue Value => IsSuccess
             ? _value!
             : throw new InvalidOperationException("Failure results cannot have value");
