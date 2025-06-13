@@ -1,4 +1,5 @@
 ﻿using Hangfire;
+using Microsoft.EntityFrameworkCore;
 using Petsica.Core.Const;
 using Petsica.Core.Entities.Services;
 using Petsica.Service.Abstractions.Users;
@@ -375,7 +376,60 @@ namespace Petsica.Service.Services.Users
             return Result.Success(result);
         }
 
+        public async Task<Result<List<AllClinicsResponse>>> GetAllClinics(string userId, CancellationToken cancellationToken = default)
+        {
+            // Fetch all users from UserManager
+            var users = await _userManager.Users.ToListAsync(cancellationToken);
 
+            // Fetch roles sequentially to avoid concurrency
+            var rolesList = new List<string[]>();
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                rolesList.Add(roles.ToArray());
+            }
+
+            // Manually filter users with Clinic role
+            var clinicUsers = new List<ApplicationUser>();
+            for (int i = 0; i < users.Count; i++)
+            {
+                if (rolesList[i].Contains(RoleName.Clinic)) // Fixed typo: RoleNamee to RoleName
+                {
+                    clinicUsers.Add(users[i]);
+                }
+            }
+
+            // Fetch all clinics from the database
+            var clinics = await _context.Clinics.ToListAsync(cancellationToken);
+
+            // Manually map clinics to responses
+            var clinicResponses = new List<AllClinicsResponse>();
+            foreach (var clinic in clinics)
+            {
+                // Find matching user with Clinic role
+                var matchingUser = clinicUsers.FirstOrDefault(u => u.Id == clinic.ClinicID);
+                string name = matchingUser?.UserName ?? "Unknown";
+                string Address = matchingUser?.Address ?? string.Empty;
+                string Photo = matchingUser?.Photo ?? string.Empty;
+
+                var response = new AllClinicsResponse(
+                    name,
+                    Photo,
+                    Address, // From matchingUser
+                    clinic.ClinicID,
+                    clinic.WorkingHours ?? string.Empty,
+                    clinic.ContactInfo ?? string.Empty
+                );
+                clinicResponses.Add(response);
+            }
+
+            return Result<List<AllClinicsResponse>>.Success(clinicResponses);
+        }
+
+        public static class RoleNamee
+        {
+            public const string Clinic = "Clinic";
+        }
         private async Task SendApprovalEmail(ApplicationUser user)
         {
             var origin = _httpContextAccessor.HttpContext?.Request.Headers.Origin;

@@ -21,7 +21,7 @@ namespace Petsica.Service.Abstractions.Users
         Task<Result<List<AllUsersResponse>>> GetAllUsers(string userId, CancellationToken cancellationToken = default);
         Task<Result> SetAdmin(SetAdminEmailRequest request, CancellationToken cancellationToken = default);
         Task<Result<UserApprovalResponse>> UserRequsestsDetails(ApprovalUserRequest request, CancellationToken cancellationToken = default);
-
+        Task<Result<List<AllClinicsResponse>>> GetAllClinics(string userId, CancellationToken cancellationToken = default);
         Task<Result<ClinicApprovalResponse>> ClinicRequsestsDetails(ApprovalUserRequest request, CancellationToken cancellationToken = default);
     }
 }

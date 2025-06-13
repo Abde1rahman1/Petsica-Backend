@@ -150,6 +150,15 @@ namespace Petsica.API.Controllers
             return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
         }
 
+        [HttpGet("allClinics")]
+
+        public async Task<IActionResult> GetAllClinics(CancellationToken cancellationToken)
+        {
+            var result = await _userService.GetAllClinics(User.GetUserId()!, cancellationToken);
+
+            return result.IsSuccess ? Ok(result.Value) : result.ToProblem();
+        }
+
         [HttpGet("UserRequsestsDetails")]
 
         public async Task<IActionResult> RequsestsDetails([FromBody] ApprovalUserRequest request, CancellationToken cancellationToken)
