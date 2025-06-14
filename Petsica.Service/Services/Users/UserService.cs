@@ -99,8 +99,8 @@ namespace Petsica.Service.Services.Users
             if (await _userManager.FindByIdAsync(userId) is not { } user)
                 return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.UserNotFound);
 
-            if (user.Type != RoleName.Sitter)
-                return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.InvalidType);
+            //if (user.Type != RoleName.Sitter)
+            //    return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.InvalidType);
 
             var result = await _context.Services
                 .Where(s => !s.IsDelete)
@@ -149,8 +149,8 @@ namespace Petsica.Service.Services.Users
             if (await _userManager.FindByIdAsync(userID) is not { } user)
                 return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.UserNotFound);
 
-            if (user.Type != RoleName.Sitter)
-                return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.InvalidType);
+            //if (user.Type != RoleName.Sitter)
+            //    return Result.Failure<IEnumerable<AddSitterServiceResponse>>(UserErrors.InvalidType);
 
             var serviceResponses = await _context.Services
                 .Where(x => x.SitterID == userID && !x.IsDelete)
@@ -378,10 +378,9 @@ namespace Petsica.Service.Services.Users
 
         public async Task<Result<List<AllClinicsResponse>>> GetAllClinics(string userId, CancellationToken cancellationToken = default)
         {
-            // Fetch all users from UserManager
+    
             var users = await _userManager.Users.ToListAsync(cancellationToken);
 
-            // Fetch roles sequentially to avoid concurrency
             var rolesList = new List<string[]>();
             foreach (var user in users)
             {
@@ -389,24 +388,23 @@ namespace Petsica.Service.Services.Users
                 rolesList.Add(roles.ToArray());
             }
 
-            // Manually filter users with Clinic role
             var clinicUsers = new List<ApplicationUser>();
             for (int i = 0; i < users.Count; i++)
             {
-                if (rolesList[i].Contains(RoleName.Clinic)) // Fixed typo: RoleNamee to RoleName
+                if (rolesList[i].Contains(RoleName.Clinic)) 
                 {
                     clinicUsers.Add(users[i]);
                 }
             }
 
-            // Fetch all clinics from the database
+     
             var clinics = await _context.Clinics.ToListAsync(cancellationToken);
 
-            // Manually map clinics to responses
+            
             var clinicResponses = new List<AllClinicsResponse>();
             foreach (var clinic in clinics)
             {
-                // Find matching user with Clinic role
+                
                 var matchingUser = clinicUsers.FirstOrDefault(u => u.Id == clinic.ClinicID);
                 string name = matchingUser?.UserName ?? "Unknown";
                 string Address = matchingUser?.Address ?? string.Empty;
@@ -415,7 +413,7 @@ namespace Petsica.Service.Services.Users
                 var response = new AllClinicsResponse(
                     name,
                     Photo,
-                    Address, // From matchingUser
+                    Address, 
                     clinic.ClinicID,
                     clinic.WorkingHours ?? string.Empty,
                     clinic.ContactInfo ?? string.Empty
