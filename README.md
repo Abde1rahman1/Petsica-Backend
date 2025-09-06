@@ -6,7 +6,6 @@ Petsica is a comprehensive platform for pet lovers, providing a social network, 
 
 - **ASP.NET Core 8**: For building the web API.
 - **Entity Framework Core 8**: For data access and management.
-- **SignalR**: For real-time messaging features.
 - **JWT (JSON Web Tokens)**: For secure authentication.
 - **Clean Architecture**: To separate concerns and create a robust application structure.
 
@@ -27,7 +26,6 @@ The solution is organized into the following projects:
 - [Pets](#pets)
 - [Community](#community)
 - [Marketplace](#marketplace)
-- [Messaging](#messaging)
 - [Dashboard](#dashboard)
 
 ---
@@ -151,23 +149,6 @@ Manages the marketplace, including products, carts, and orders.
 - **GET** `/api/Orders/all`: Retrieves all orders for an admin.
 - **GET** `/api/Orders/all/sellerorders`: Retrieves all seller orders for an admin.
 
----
-
-## Messaging
-
-Handles real-time chat between users and clinics.
-
-### User Chats
-
-- **POST** `/api/UserChats/send`: Sends a message to another user.
-- **GET** `/api/UserChats/messages/{user1Id}/{user2Id}`: Retrieves the chat history between two users.
-
-### Clinic Chats
-
-- **POST** `/api/Chats/send-message`: Sends a message to a clinic.
-- **GET** `/api/Chats/get-messages/{clinicReceiverID}/{clinicSenderID}`: Retrieves the chat history between a user and a clinic.
-
----
 
 ## Dashboard
 
